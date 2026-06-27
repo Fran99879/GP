@@ -7,12 +7,22 @@ import androidx.room.RoomDatabase
 
 /**
  * Base de datos local de la aplicación (Frozen Spec 6, persistencia local).
- * En la Fase 2 contiene solo la tabla de trabajos; crecerá en fases siguientes.
+ * v2 agrega Ingresos y Egresos (Fase 3).
+ *
+ * Nota: se usa fallbackToDestructiveMigration durante el desarrollo para evitar
+ * migraciones manuales entre fases. Antes del release real se reemplazará por
+ * migraciones que preserven los datos.
  */
-@Database(entities = [TrabajoEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [TrabajoEntity::class, IngresoEntity::class, EgresoEntity::class],
+    version = 2,
+    exportSchema = false,
+)
 abstract class TallerDatabase : RoomDatabase() {
 
     abstract fun trabajoDao(): TrabajoDao
+    abstract fun ingresoDao(): IngresoDao
+    abstract fun egresoDao(): EgresoDao
 
     companion object {
         @Volatile
@@ -24,7 +34,10 @@ abstract class TallerDatabase : RoomDatabase() {
                     context.applicationContext,
                     TallerDatabase::class.java,
                     "tallerapp.db",
-                ).build().also { instancia = it }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also { instancia = it }
             }
     }
 }

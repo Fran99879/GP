@@ -18,6 +18,9 @@ import com.tallerapp.features.reportes.ReportesScreen
 import com.tallerapp.features.trabajos.TrabajoDetalleScreen
 import com.tallerapp.features.trabajos.TrabajoFormScreen
 import com.tallerapp.features.trabajos.TrabajosListScreen
+import com.tallerapp.features.finanzas.FinanzasViewModel
+import com.tallerapp.features.finanzas.egreso.EgresoFormViewModel
+import com.tallerapp.features.finanzas.ingreso.IngresoFormViewModel
 import com.tallerapp.features.trabajos.detalle.TrabajoDetalleViewModel
 import com.tallerapp.features.trabajos.form.TrabajoFormViewModel
 import com.tallerapp.features.trabajos.list.TrabajosListViewModel
@@ -125,19 +128,104 @@ fun TallerApp() {
         }
 
         composable(Destination.FINANZAS) {
+            val container = rememberAppContainer()
+            val vm: FinanzasViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        FinanzasViewModel(
+                            container.observarResumenDelDia,
+                            container.observarIngresosDelDia,
+                            container.observarEgresosDelDia,
+                            container.eliminarIngreso,
+                            container.eliminarEgreso,
+                        )
+                    }
+                },
+            )
             FinanzasScreen(
+                viewModel = vm,
                 onBack = { navController.popBackStack() },
                 onNuevoIngreso = { navController.navigate(Destination.NUEVO_INGRESO) },
                 onNuevoGasto = { navController.navigate(Destination.NUEVO_GASTO) },
+                onEditarIngreso = { id -> navController.navigate(Destination.ingresoEditar(id)) },
+                onEditarEgreso = { id -> navController.navigate(Destination.egresoEditar(id)) },
             )
         }
 
         composable(Destination.NUEVO_INGRESO) {
-            IngresoFormScreen(onBack = { navController.popBackStack() })
+            val container = rememberAppContainer()
+            val vm: IngresoFormViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        IngresoFormViewModel(
+                            container.registrarIngreso,
+                            container.editarIngreso,
+                            container.obtenerIngreso,
+                            ingresoId = null,
+                        )
+                    }
+                },
+            )
+            IngresoFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(
+            route = Destination.INGRESO_EDITAR,
+            arguments = listOf(navArgument(Destination.ARG_MOVIMIENTO_ID) { type = NavType.LongType }),
+        ) { entry ->
+            val id = entry.arguments?.getLong(Destination.ARG_MOVIMIENTO_ID) ?: 0L
+            val container = rememberAppContainer()
+            val vm: IngresoFormViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        IngresoFormViewModel(
+                            container.registrarIngreso,
+                            container.editarIngreso,
+                            container.obtenerIngreso,
+                            ingresoId = id,
+                        )
+                    }
+                },
+            )
+            IngresoFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
 
         composable(Destination.NUEVO_GASTO) {
-            EgresoFormScreen(onBack = { navController.popBackStack() })
+            val container = rememberAppContainer()
+            val vm: EgresoFormViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        EgresoFormViewModel(
+                            container.registrarEgreso,
+                            container.editarEgreso,
+                            container.obtenerEgreso,
+                            egresoId = null,
+                        )
+                    }
+                },
+            )
+            EgresoFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(
+            route = Destination.EGRESO_EDITAR,
+            arguments = listOf(navArgument(Destination.ARG_MOVIMIENTO_ID) { type = NavType.LongType }),
+        ) { entry ->
+            val id = entry.arguments?.getLong(Destination.ARG_MOVIMIENTO_ID) ?: 0L
+            val container = rememberAppContainer()
+            val vm: EgresoFormViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        EgresoFormViewModel(
+                            container.registrarEgreso,
+                            container.editarEgreso,
+                            container.obtenerEgreso,
+                            egresoId = id,
+                        )
+                    }
+                },
+            )
+            EgresoFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
 
         composable(Destination.REPORTES) {
