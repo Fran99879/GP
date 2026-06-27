@@ -16,6 +16,7 @@ import com.tallerapp.features.finanzas.EgresoFormScreen
 import com.tallerapp.features.finanzas.FinanzasScreen
 import com.tallerapp.features.finanzas.IngresoFormScreen
 import com.tallerapp.features.reportes.ReportesScreen
+import com.tallerapp.features.reportes.ReportesViewModel
 import com.tallerapp.features.trabajos.TrabajoDetalleScreen
 import com.tallerapp.features.trabajos.TrabajoFormScreen
 import com.tallerapp.features.trabajos.TrabajosListScreen
@@ -259,7 +260,18 @@ fun TallerApp() {
         }
 
         composable(Destination.REPORTES) {
-            ReportesScreen(onBack = { navController.popBackStack() })
+            val container = rememberAppContainer()
+            val vm: ReportesViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        ReportesViewModel(
+                            container.observarResumenDelDia,
+                            container.observarReporteMensual,
+                        )
+                    }
+                },
+            )
+            ReportesScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
     }
 }

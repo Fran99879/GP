@@ -22,6 +22,7 @@ import com.tallerapp.domain.usecase.EliminarTrabajoUseCase
 import com.tallerapp.domain.usecase.ObservarDashboardUseCase
 import com.tallerapp.domain.usecase.ObservarEgresosDelDiaUseCase
 import com.tallerapp.domain.usecase.ObservarIngresosDelDiaUseCase
+import com.tallerapp.domain.usecase.ObservarReporteMensualUseCase
 import com.tallerapp.domain.usecase.ObservarResumenDelDiaUseCase
 import com.tallerapp.domain.usecase.ObservarTrabajosUseCase
 import com.tallerapp.domain.usecase.ObtenerEgresoUseCase
@@ -79,4 +80,8 @@ class AppContainer(context: Context) {
     // Dashboard (Fase 5).
     val observarDashboard =
         ObservarDashboardUseCase(trabajoRepository, ingresoRepository, egresoRepository)
+
+    // Reportes (Fase 6). El reporte diario reusa observarResumenDelDia.
+    val observarReporteMensual =
+        ObservarReporteMensualUseCase(trabajoRepository, ingresoRepository, egresoRepository)
 }

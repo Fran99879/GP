@@ -46,7 +46,7 @@ public final class TrabajoDao_Impl implements TrabajoDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `trabajo` (`id`,`cliente`,`telefono`,`patente`,`marca`,`modelo`,`servicio`,`fechaIngreso`,`estadoReparacion`,`estadoCobro`,`problema`,`diagnostico`,`precioCentavos`,`cobroId`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR ABORT INTO `trabajo` (`id`,`cliente`,`telefono`,`patente`,`marca`,`modelo`,`servicio`,`fechaIngreso`,`estadoReparacion`,`estadoCobro`,`problema`,`diagnostico`,`precioCentavos`,`fechaEntrega`,`cobroId`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -81,10 +81,15 @@ public final class TrabajoDao_Impl implements TrabajoDao {
           statement.bindString(12, entity.getDiagnostico());
         }
         statement.bindLong(13, entity.getPrecioCentavos());
-        if (entity.getCobroId() == null) {
+        if (entity.getFechaEntrega() == null) {
           statement.bindNull(14);
         } else {
-          statement.bindLong(14, entity.getCobroId());
+          statement.bindLong(14, entity.getFechaEntrega());
+        }
+        if (entity.getCobroId() == null) {
+          statement.bindNull(15);
+        } else {
+          statement.bindLong(15, entity.getCobroId());
         }
       }
     };
@@ -92,7 +97,7 @@ public final class TrabajoDao_Impl implements TrabajoDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `trabajo` SET `id` = ?,`cliente` = ?,`telefono` = ?,`patente` = ?,`marca` = ?,`modelo` = ?,`servicio` = ?,`fechaIngreso` = ?,`estadoReparacion` = ?,`estadoCobro` = ?,`problema` = ?,`diagnostico` = ?,`precioCentavos` = ?,`cobroId` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `trabajo` SET `id` = ?,`cliente` = ?,`telefono` = ?,`patente` = ?,`marca` = ?,`modelo` = ?,`servicio` = ?,`fechaIngreso` = ?,`estadoReparacion` = ?,`estadoCobro` = ?,`problema` = ?,`diagnostico` = ?,`precioCentavos` = ?,`fechaEntrega` = ?,`cobroId` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -127,12 +132,17 @@ public final class TrabajoDao_Impl implements TrabajoDao {
           statement.bindString(12, entity.getDiagnostico());
         }
         statement.bindLong(13, entity.getPrecioCentavos());
-        if (entity.getCobroId() == null) {
+        if (entity.getFechaEntrega() == null) {
           statement.bindNull(14);
         } else {
-          statement.bindLong(14, entity.getCobroId());
+          statement.bindLong(14, entity.getFechaEntrega());
         }
-        statement.bindLong(15, entity.getId());
+        if (entity.getCobroId() == null) {
+          statement.bindNull(15);
+        } else {
+          statement.bindLong(15, entity.getCobroId());
+        }
+        statement.bindLong(16, entity.getId());
       }
     };
     this.__preparedStmtOfEliminar = new SharedSQLiteStatement(__db) {
@@ -230,6 +240,7 @@ public final class TrabajoDao_Impl implements TrabajoDao {
           final int _cursorIndexOfProblema = CursorUtil.getColumnIndexOrThrow(_cursor, "problema");
           final int _cursorIndexOfDiagnostico = CursorUtil.getColumnIndexOrThrow(_cursor, "diagnostico");
           final int _cursorIndexOfPrecioCentavos = CursorUtil.getColumnIndexOrThrow(_cursor, "precioCentavos");
+          final int _cursorIndexOfFechaEntrega = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaEntrega");
           final int _cursorIndexOfCobroId = CursorUtil.getColumnIndexOrThrow(_cursor, "cobroId");
           final List<TrabajoEntity> _result = new ArrayList<TrabajoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
@@ -276,13 +287,19 @@ public final class TrabajoDao_Impl implements TrabajoDao {
             }
             final long _tmpPrecioCentavos;
             _tmpPrecioCentavos = _cursor.getLong(_cursorIndexOfPrecioCentavos);
+            final Long _tmpFechaEntrega;
+            if (_cursor.isNull(_cursorIndexOfFechaEntrega)) {
+              _tmpFechaEntrega = null;
+            } else {
+              _tmpFechaEntrega = _cursor.getLong(_cursorIndexOfFechaEntrega);
+            }
             final Long _tmpCobroId;
             if (_cursor.isNull(_cursorIndexOfCobroId)) {
               _tmpCobroId = null;
             } else {
               _tmpCobroId = _cursor.getLong(_cursorIndexOfCobroId);
             }
-            _item = new TrabajoEntity(_tmpId,_tmpCliente,_tmpTelefono,_tmpPatente,_tmpMarca,_tmpModelo,_tmpServicio,_tmpFechaIngreso,_tmpEstadoReparacion,_tmpEstadoCobro,_tmpProblema,_tmpDiagnostico,_tmpPrecioCentavos,_tmpCobroId);
+            _item = new TrabajoEntity(_tmpId,_tmpCliente,_tmpTelefono,_tmpPatente,_tmpMarca,_tmpModelo,_tmpServicio,_tmpFechaIngreso,_tmpEstadoReparacion,_tmpEstadoCobro,_tmpProblema,_tmpDiagnostico,_tmpPrecioCentavos,_tmpFechaEntrega,_tmpCobroId);
             _result.add(_item);
           }
           return _result;
@@ -330,6 +347,7 @@ public final class TrabajoDao_Impl implements TrabajoDao {
           final int _cursorIndexOfProblema = CursorUtil.getColumnIndexOrThrow(_cursor, "problema");
           final int _cursorIndexOfDiagnostico = CursorUtil.getColumnIndexOrThrow(_cursor, "diagnostico");
           final int _cursorIndexOfPrecioCentavos = CursorUtil.getColumnIndexOrThrow(_cursor, "precioCentavos");
+          final int _cursorIndexOfFechaEntrega = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaEntrega");
           final int _cursorIndexOfCobroId = CursorUtil.getColumnIndexOrThrow(_cursor, "cobroId");
           final List<TrabajoEntity> _result = new ArrayList<TrabajoEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
@@ -376,13 +394,19 @@ public final class TrabajoDao_Impl implements TrabajoDao {
             }
             final long _tmpPrecioCentavos;
             _tmpPrecioCentavos = _cursor.getLong(_cursorIndexOfPrecioCentavos);
+            final Long _tmpFechaEntrega;
+            if (_cursor.isNull(_cursorIndexOfFechaEntrega)) {
+              _tmpFechaEntrega = null;
+            } else {
+              _tmpFechaEntrega = _cursor.getLong(_cursorIndexOfFechaEntrega);
+            }
             final Long _tmpCobroId;
             if (_cursor.isNull(_cursorIndexOfCobroId)) {
               _tmpCobroId = null;
             } else {
               _tmpCobroId = _cursor.getLong(_cursorIndexOfCobroId);
             }
-            _item = new TrabajoEntity(_tmpId,_tmpCliente,_tmpTelefono,_tmpPatente,_tmpMarca,_tmpModelo,_tmpServicio,_tmpFechaIngreso,_tmpEstadoReparacion,_tmpEstadoCobro,_tmpProblema,_tmpDiagnostico,_tmpPrecioCentavos,_tmpCobroId);
+            _item = new TrabajoEntity(_tmpId,_tmpCliente,_tmpTelefono,_tmpPatente,_tmpMarca,_tmpModelo,_tmpServicio,_tmpFechaIngreso,_tmpEstadoReparacion,_tmpEstadoCobro,_tmpProblema,_tmpDiagnostico,_tmpPrecioCentavos,_tmpFechaEntrega,_tmpCobroId);
             _result.add(_item);
           }
           return _result;
@@ -424,6 +448,7 @@ public final class TrabajoDao_Impl implements TrabajoDao {
           final int _cursorIndexOfProblema = CursorUtil.getColumnIndexOrThrow(_cursor, "problema");
           final int _cursorIndexOfDiagnostico = CursorUtil.getColumnIndexOrThrow(_cursor, "diagnostico");
           final int _cursorIndexOfPrecioCentavos = CursorUtil.getColumnIndexOrThrow(_cursor, "precioCentavos");
+          final int _cursorIndexOfFechaEntrega = CursorUtil.getColumnIndexOrThrow(_cursor, "fechaEntrega");
           final int _cursorIndexOfCobroId = CursorUtil.getColumnIndexOrThrow(_cursor, "cobroId");
           final TrabajoEntity _result;
           if (_cursor.moveToFirst()) {
@@ -469,13 +494,19 @@ public final class TrabajoDao_Impl implements TrabajoDao {
             }
             final long _tmpPrecioCentavos;
             _tmpPrecioCentavos = _cursor.getLong(_cursorIndexOfPrecioCentavos);
+            final Long _tmpFechaEntrega;
+            if (_cursor.isNull(_cursorIndexOfFechaEntrega)) {
+              _tmpFechaEntrega = null;
+            } else {
+              _tmpFechaEntrega = _cursor.getLong(_cursorIndexOfFechaEntrega);
+            }
             final Long _tmpCobroId;
             if (_cursor.isNull(_cursorIndexOfCobroId)) {
               _tmpCobroId = null;
             } else {
               _tmpCobroId = _cursor.getLong(_cursorIndexOfCobroId);
             }
-            _result = new TrabajoEntity(_tmpId,_tmpCliente,_tmpTelefono,_tmpPatente,_tmpMarca,_tmpModelo,_tmpServicio,_tmpFechaIngreso,_tmpEstadoReparacion,_tmpEstadoCobro,_tmpProblema,_tmpDiagnostico,_tmpPrecioCentavos,_tmpCobroId);
+            _result = new TrabajoEntity(_tmpId,_tmpCliente,_tmpTelefono,_tmpPatente,_tmpMarca,_tmpModelo,_tmpServicio,_tmpFechaIngreso,_tmpEstadoReparacion,_tmpEstadoCobro,_tmpProblema,_tmpDiagnostico,_tmpPrecioCentavos,_tmpFechaEntrega,_tmpCobroId);
           } else {
             _result = null;
           }
