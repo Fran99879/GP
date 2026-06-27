@@ -21,6 +21,8 @@ import com.tallerapp.features.trabajos.TrabajosListScreen
 import com.tallerapp.features.finanzas.FinanzasViewModel
 import com.tallerapp.features.finanzas.egreso.EgresoFormViewModel
 import com.tallerapp.features.finanzas.ingreso.IngresoFormViewModel
+import com.tallerapp.features.trabajos.CobroScreen
+import com.tallerapp.features.trabajos.cobro.CobroViewModel
 import com.tallerapp.features.trabajos.detalle.TrabajoDetalleViewModel
 import com.tallerapp.features.trabajos.form.TrabajoFormViewModel
 import com.tallerapp.features.trabajos.list.TrabajosListViewModel
@@ -115,6 +117,8 @@ fun TallerApp() {
                             container.obtenerTrabajo,
                             container.cambiarEstado,
                             container.eliminarTrabajo,
+                            container.anularCobro,
+                            container.obtenerIngreso,
                             trabajoId = id,
                         )
                     }
@@ -124,7 +128,24 @@ fun TallerApp() {
                 viewModel = vm,
                 onBack = { navController.popBackStack() },
                 onEditar = { navController.navigate(Destination.trabajoEditar(id)) },
+                onRegistrarCobro = { navController.navigate(Destination.trabajoCobro(id)) },
             )
+        }
+
+        composable(
+            route = Destination.TRABAJO_COBRO,
+            arguments = listOf(navArgument(Destination.ARG_TRABAJO_ID) { type = NavType.LongType }),
+        ) { entry ->
+            val id = entry.arguments?.getLong(Destination.ARG_TRABAJO_ID) ?: 0L
+            val container = rememberAppContainer()
+            val vm: CobroViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        CobroViewModel(container.obtenerTrabajo, container.registrarCobro, trabajoId = id)
+                    }
+                },
+            )
+            CobroScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
 
         composable(Destination.FINANZAS) {
@@ -138,6 +159,7 @@ fun TallerApp() {
                             container.observarEgresosDelDia,
                             container.eliminarIngreso,
                             container.eliminarEgreso,
+                            container.anularCobro,
                         )
                     }
                 },

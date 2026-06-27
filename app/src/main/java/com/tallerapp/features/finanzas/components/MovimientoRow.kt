@@ -18,19 +18,22 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Fila de un movimiento (ingreso o egreso) en el hub de Finanzas.
- * Solo los movimientos editables (registrados hoy, V-7) son clickeables y muestran "Anular".
+ * - [permiteEditar]: la fila es clickeable para editar (movimientos manuales de hoy, V-7).
+ * - [permiteAnular]: muestra el botón "Anular" (movimientos de hoy, incluidos cobros).
+ * Los ingresos por cobro no se editan sueltos; solo se anulan (revierte el cobro).
  */
 @Composable
 fun MovimientoRow(
     titulo: String,
     subtitulo: String,
     monto: String,
-    editable: Boolean,
+    permiteEditar: Boolean,
+    permiteAnular: Boolean,
     onEditar: () -> Unit,
     onEliminar: () -> Unit,
 ) {
     val base = Modifier.fillMaxWidth()
-    Card(modifier = if (editable) base.clickable { onEditar() } else base) {
+    Card(modifier = if (permiteEditar) base.clickable { onEditar() } else base) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -43,7 +46,7 @@ fun MovimientoRow(
                 Text(subtitulo, style = MaterialTheme.typography.bodySmall)
             }
             Text(monto, fontWeight = FontWeight.Bold)
-            if (editable) {
+            if (permiteAnular) {
                 TextButton(onClick = onEliminar) { Text("Anular") }
             }
         }

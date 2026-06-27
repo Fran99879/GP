@@ -11,6 +11,7 @@ object Destination {
     const val NUEVO_TRABAJO = "trabajos/nuevo"
     const val TRABAJO_DETALLE = "trabajos/detalle/{trabajoId}"
     const val TRABAJO_EDITAR = "trabajos/editar/{trabajoId}"
+    const val TRABAJO_COBRO = "trabajos/cobro/{trabajoId}"
     const val ARG_TRABAJO_ID = "trabajoId"
 
     const val FINANZAS = "finanzas"
@@ -27,6 +28,9 @@ object Destination {
 
     /** Ruta concreta de edición de un trabajo. */
     fun trabajoEditar(trabajoId: Long): String = "trabajos/editar/$trabajoId"
+
+    /** Ruta concreta de cobro de un trabajo. */
+    fun trabajoCobro(trabajoId: Long): String = "trabajos/cobro/$trabajoId"
 
     /** Rutas concretas de edición de movimientos de finanzas. */
     fun ingresoEditar(id: Long): String = "finanzas/ingreso/editar/$id"

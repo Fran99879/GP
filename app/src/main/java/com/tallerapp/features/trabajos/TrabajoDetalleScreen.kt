@@ -29,12 +29,14 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
+import com.tallerapp.domain.model.EstadoCobro
+import com.tallerapp.domain.model.EstadoReparacion
 import com.tallerapp.domain.model.Trabajo
 import com.tallerapp.features.trabajos.detalle.TrabajoDetalleViewModel
 
 /**
- * Detalle de un trabajo (Frozen Spec 7/8/9). Permite cambiar el estado con un toque
- * (solo transiciones válidas), editar y eliminar con confirmación. El cobro es Fase 4.
+ * Detalle de un trabajo (Frozen Spec 7/8/9). Permite cambiar estado (un toque),
+ * registrar/anular cobro cuando corresponde (Fase 4), editar y eliminar.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,11 +44,13 @@ fun TrabajoDetalleScreen(
     viewModel: TrabajoDetalleViewModel,
     onBack: () -> Unit,
     onEditar: () -> Unit,
+    onRegistrarCobro: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var mostrarConfirmacion by remember { mutableStateOf(false) }
+    var mostrarConfirmarEliminar by remember { mutableStateOf(false) }
+    var mostrarConfirmarAnular by remember { mutableStateOf(false) }
 
-    // Recarga al volver (p. ej. tras editar) para no mostrar datos obsoletos.
+    // Recarga al volver (tras editar o registrar el cobro) para no mostrar datos viejos.
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.recargar() }
 
     LaunchedEffect(state.eliminado) {
@@ -92,13 +96,20 @@ fun TrabajoDetalleScreen(
                         }
                     }
 
+                    SeccionCobro(
+                        trabajo = trabajo,
+                        cobroAnulable = state.cobroAnulable,
+                        onRegistrarCobro = onRegistrarCobro,
+                        onAnularCobro = { mostrarConfirmarAnular = true },
+                    )
+
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
                     OutlinedButton(onClick = onEditar, modifier = Modifier.fillMaxWidth()) {
                         Text("Editar datos")
                     }
                     OutlinedButton(
-                        onClick = { mostrarConfirmacion = true },
+                        onClick = { mostrarConfirmarEliminar = true },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text("Eliminar trabajo")
@@ -108,22 +119,78 @@ fun TrabajoDetalleScreen(
         }
     }
 
-    if (mostrarConfirmacion) {
-        AlertDialog(
-            onDismissRequest = { mostrarConfirmacion = false },
-            title = { Text("Eliminar trabajo") },
-            text = { Text("¿Eliminar este trabajo? Esta acción no se puede deshacer.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    mostrarConfirmacion = false
-                    viewModel.eliminar()
-                }) { Text("Eliminar") }
+    if (mostrarConfirmarEliminar) {
+        ConfirmacionDialog(
+            titulo = "Eliminar trabajo",
+            mensaje = "¿Eliminar este trabajo? Esta acción no se puede deshacer.",
+            textoConfirmar = "Eliminar",
+            onConfirmar = {
+                mostrarConfirmarEliminar = false
+                viewModel.eliminar()
             },
-            dismissButton = {
-                TextButton(onClick = { mostrarConfirmacion = false }) { Text("Cancelar") }
-            },
+            onCancelar = { mostrarConfirmarEliminar = false },
         )
     }
+
+    if (mostrarConfirmarAnular) {
+        ConfirmacionDialog(
+            titulo = "Anular cobro",
+            mensaje = "¿Anular el cobro? El ingreso se eliminará y el trabajo volverá a pendiente de cobro.",
+            textoConfirmar = "Anular",
+            onConfirmar = {
+                mostrarConfirmarAnular = false
+                viewModel.anularCobro()
+            },
+            onCancelar = { mostrarConfirmarAnular = false },
+        )
+    }
+}
+
+@Composable
+private fun SeccionCobro(
+    trabajo: Trabajo,
+    cobroAnulable: Boolean,
+    onRegistrarCobro: () -> Unit,
+    onAnularCobro: () -> Unit,
+) {
+    val puedeCobrar = trabajo.estadoReparacion == EstadoReparacion.ENTREGADO &&
+        trabajo.estadoCobro == EstadoCobro.PENDIENTE_DE_COBRO
+
+    if (!puedeCobrar && trabajo.estadoCobro != EstadoCobro.COBRADO) return
+
+    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+    Text("Cobro", style = MaterialTheme.typography.titleMedium)
+
+    when {
+        puedeCobrar -> OutlinedButton(onClick = onRegistrarCobro, modifier = Modifier.fillMaxWidth()) {
+            Text("Registrar cobro")
+        }
+        trabajo.estadoCobro == EstadoCobro.COBRADO -> {
+            Text("Cobrado")
+            if (cobroAnulable) {
+                OutlinedButton(onClick = onAnularCobro, modifier = Modifier.fillMaxWidth()) {
+                    Text("Anular cobro")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConfirmacionDialog(
+    titulo: String,
+    mensaje: String,
+    textoConfirmar: String,
+    onConfirmar: () -> Unit,
+    onCancelar: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onCancelar,
+        title = { Text(titulo) },
+        text = { Text(mensaje) },
+        confirmButton = { TextButton(onClick = onConfirmar) { Text(textoConfirmar) } },
+        dismissButton = { TextButton(onClick = onCancelar) { Text("Cancelar") } },
+    )
 }
 
 @Composable

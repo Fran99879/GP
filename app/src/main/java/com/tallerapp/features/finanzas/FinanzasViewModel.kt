@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.tallerapp.domain.model.Egreso
 import com.tallerapp.domain.model.Ingreso
 import com.tallerapp.domain.model.ResumenDelDia
+import com.tallerapp.domain.usecase.AnularCobroUseCase
 import com.tallerapp.domain.usecase.EliminarEgresoUseCase
 import com.tallerapp.domain.usecase.EliminarIngresoUseCase
 import com.tallerapp.domain.usecase.ObservarEgresosDelDiaUseCase
@@ -22,6 +23,7 @@ class FinanzasViewModel(
     observarEgresos: ObservarEgresosDelDiaUseCase,
     private val eliminarIngresoUC: EliminarIngresoUseCase,
     private val eliminarEgresoUC: EliminarEgresoUseCase,
+    private val anularCobroUC: AnularCobroUseCase,
 ) : ViewModel() {
 
     val resumen: StateFlow<ResumenDelDia> =
@@ -39,4 +41,7 @@ class FinanzasViewModel(
 
     fun eliminarIngreso(id: Long) = viewModelScope.launch { eliminarIngresoUC(id) }
     fun eliminarEgreso(id: Long) = viewModelScope.launch { eliminarEgresoUC(id) }
+
+    /** Anular un ingreso por cobro revierte el cobro del trabajo (Frozen Spec 9.7). */
+    fun anularCobro(trabajoId: Long) = viewModelScope.launch { anularCobroUC(trabajoId) }
 }

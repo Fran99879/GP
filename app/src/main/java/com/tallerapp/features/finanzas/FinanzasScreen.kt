@@ -29,9 +29,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
+import com.tallerapp.domain.model.OrigenIngreso
 import com.tallerapp.features.finanzas.components.MovimientoRow
 
-private data class PendienteEliminar(val esIngreso: Boolean, val id: Long)
+private enum class TipoMov { INGRESO_MANUAL, INGRESO_COBRO, EGRESO }
+
+private data class PendienteEliminar(val tipo: TipoMov, val id: Long, val trabajoId: Long?)
 
 /**
  * Hub de Finanzas (Frozen Spec 8): caja del día, ingresos y egresos de hoy con
@@ -90,13 +93,23 @@ fun FinanzasScreen(
                 Text("Sin ingresos hoy")
             } else {
                 ingresos.forEach { ingreso ->
+                    val esHoy = Fechas.esHoy(ingreso.fechaRegistro)
+                    val esCobro = ingreso.origen == OrigenIngreso.COBRO_DE_TRABAJO
                     MovimientoRow(
                         titulo = ingreso.concepto,
                         subtitulo = "${ingreso.metodo.etiqueta} · ${Fechas.formatear(ingreso.fecha)}",
                         monto = Dinero.formatear(ingreso.montoCentavos),
-                        editable = Fechas.esHoy(ingreso.fechaRegistro),
+                        // Los cobros no se editan sueltos (su monto = precio del trabajo); solo se anulan.
+                        permiteEditar = esHoy && !esCobro,
+                        permiteAnular = esHoy,
                         onEditar = { onEditarIngreso(ingreso.id) },
-                        onEliminar = { pendiente = PendienteEliminar(esIngreso = true, id = ingreso.id) },
+                        onEliminar = {
+                            pendiente = if (esCobro) {
+                                PendienteEliminar(TipoMov.INGRESO_COBRO, ingreso.id, ingreso.trabajoId)
+                            } else {
+                                PendienteEliminar(TipoMov.INGRESO_MANUAL, ingreso.id, null)
+                            }
+                        },
                     )
                 }
             }
@@ -108,13 +121,15 @@ fun FinanzasScreen(
                 Text("Sin gastos hoy")
             } else {
                 egresos.forEach { egreso ->
+                    val esHoy = Fechas.esHoy(egreso.fechaRegistro)
                     MovimientoRow(
                         titulo = egreso.concepto,
                         subtitulo = "${egreso.categoria.etiqueta} · ${Fechas.formatear(egreso.fecha)}",
                         monto = Dinero.formatear(egreso.montoCentavos),
-                        editable = Fechas.esHoy(egreso.fechaRegistro),
+                        permiteEditar = esHoy,
+                        permiteAnular = esHoy,
                         onEditar = { onEditarEgreso(egreso.id) },
-                        onEliminar = { pendiente = PendienteEliminar(esIngreso = false, id = egreso.id) },
+                        onEliminar = { pendiente = PendienteEliminar(TipoMov.EGRESO, egreso.id, null) },
                     )
                 }
             }
@@ -128,7 +143,11 @@ fun FinanzasScreen(
             text = { Text("¿Anular este movimiento? Esta acción no se puede deshacer.") },
             confirmButton = {
                 TextButton(onClick = {
-                    if (p.esIngreso) viewModel.eliminarIngreso(p.id) else viewModel.eliminarEgreso(p.id)
+                    when (p.tipo) {
+                        TipoMov.INGRESO_MANUAL -> viewModel.eliminarIngreso(p.id)
+                        TipoMov.INGRESO_COBRO -> p.trabajoId?.let { viewModel.anularCobro(it) }
+                        TipoMov.EGRESO -> viewModel.eliminarEgreso(p.id)
+                    }
                     pendiente = null
                 }) { Text("Anular") }
             },
