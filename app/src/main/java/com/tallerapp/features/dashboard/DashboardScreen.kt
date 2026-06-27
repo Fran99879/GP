@@ -13,18 +13,22 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.PlaceholderScaffold
 import com.tallerapp.core.ui.components.PrimaryButton
+import com.tallerapp.core.util.Dinero
 
 /**
- * Pantalla inicial (Frozen Spec 12.1). En Fase 1 los indicadores son placeholders ("—");
- * sus valores reales se conectarán en la Fase 5 (Dashboard) desde los módulos previos.
+ * Pantalla inicial (Frozen Spec 12.1). Los 6 indicadores provienen de los módulos
+ * de Trabajos y Finanzas (Fases 2–4), combinados en ObservarDashboardUseCase.
  */
 @Composable
 fun DashboardScreen(
+    viewModel: DashboardViewModel,
     onNuevoTrabajo: () -> Unit,
     onNuevoIngreso: () -> Unit,
     onNuevoGasto: () -> Unit,
@@ -32,6 +36,8 @@ fun DashboardScreen(
     onVerFinanzas: () -> Unit,
     onVerReportes: () -> Unit,
 ) {
+    val s by viewModel.state.collectAsStateWithLifecycle()
+
     PlaceholderScaffold(title = "TallerApp") { padding ->
         Column(
             modifier = Modifier
@@ -43,13 +49,12 @@ fun DashboardScreen(
         ) {
             Text("Resumen", style = MaterialTheme.typography.titleLarge)
 
-            // 6 indicadores del Dashboard (Frozen Spec 12.1) — sin datos en Fase 1.
-            IndicatorPlaceholder("Caja del día", "—")
-            IndicatorPlaceholder("Ganancia del mes", "—")
-            IndicatorPlaceholder("Vehículos en el taller", "—")
-            IndicatorPlaceholder("Esperando repuestos", "—")
-            IndicatorPlaceholder("Trabajos pendientes", "—")
-            IndicatorPlaceholder("Entregados hoy", "—")
+            Indicador("Caja del día", Dinero.formatear(s.cajaDelDiaCentavos))
+            Indicador("Ganancia del mes", Dinero.formatear(s.gananciaDelMesCentavos))
+            Indicador("Vehículos en el taller", s.vehiculosEnTaller.toString())
+            Indicador("Esperando repuestos", s.esperandoRepuestos.toString())
+            Indicador("Trabajos pendientes", s.pendientes.toString())
+            Indicador("Entregados hoy", s.entregadosHoy.toString())
 
             HorizontalDivider()
 
@@ -69,7 +74,7 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun IndicatorPlaceholder(label: String, value: String) {
+private fun Indicador(label: String, value: String) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier

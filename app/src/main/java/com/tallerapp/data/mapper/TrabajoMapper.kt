@@ -22,6 +22,7 @@ fun TrabajoEntity.toDomain(): Trabajo = Trabajo(
     problema = problema,
     diagnostico = diagnostico,
     precioCentavos = precioCentavos,
+    fechaEntrega = fechaEntrega,
     cobroId = cobroId,
 )
 
@@ -39,5 +40,6 @@ fun Trabajo.toEntity(): TrabajoEntity = TrabajoEntity(
     problema = problema,
     diagnostico = diagnostico,
     precioCentavos = precioCentavos,
+    fechaEntrega = fechaEntrega,
     cobroId = cobroId,
 )

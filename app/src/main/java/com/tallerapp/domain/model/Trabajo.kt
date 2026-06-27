@@ -6,6 +6,7 @@ package com.tallerapp.domain.model
  *
  * @param id 0 indica un trabajo aún no persistido.
  * @param precioCentavos importe a cobrar en centavos (Arquitectura AD-7, evita errores de redondeo).
+ * @param fechaEntrega instante en que pasó a Entregado; null si aún no se entregó.
  * @param cobroId referencia al cobro asociado; null hasta la Fase 4.
  */
 data class Trabajo(
@@ -22,6 +23,7 @@ data class Trabajo(
     val problema: String?,
     val diagnostico: String?,
     val precioCentavos: Long,
+    val fechaEntrega: Long? = null,
     val cobroId: Long? = null,
 ) {
     /**

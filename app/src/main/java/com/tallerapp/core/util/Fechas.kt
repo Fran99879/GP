@@ -27,6 +27,14 @@ object Fechas {
         return inicio to fin
     }
 
+    /** Rango [inicio, fin) del mes calendario actual (RN-7), para reportes/dashboard. */
+    fun rangoDelMesActual(): Pair<Long, Long> {
+        val primerDia = LocalDate.now(zona).withDayOfMonth(1)
+        val inicio = primerDia.atStartOfDay(zona).toInstant().toEpochMilli()
+        val fin = primerDia.plusMonths(1).atStartOfDay(zona).toInstant().toEpochMilli()
+        return inicio to fin
+    }
+
     /** True si [epochMillis] cae en el día de hoy (para la regla V-7). */
     fun esHoy(epochMillis: Long): Boolean =
         Instant.ofEpochMilli(epochMillis).atZone(zona).toLocalDate() == LocalDate.now(zona)

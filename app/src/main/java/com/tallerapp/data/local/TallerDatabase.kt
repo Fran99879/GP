@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 /**
  * Base de datos local de la aplicación (Frozen Spec 6, persistencia local).
- * v2 agrega Ingresos y Egresos (Fase 3).
+ * v2 agrega Ingresos y Egresos (Fase 3). v3 agrega fechaEntrega al trabajo (Fase 5).
  *
  * Nota: se usa fallbackToDestructiveMigration durante el desarrollo para evitar
  * migraciones manuales entre fases. Antes del release real se reemplazará por
@@ -15,7 +15,7 @@ import androidx.room.RoomDatabase
  */
 @Database(
     entities = [TrabajoEntity::class, IngresoEntity::class, EgresoEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false,
 )
 abstract class TallerDatabase : RoomDatabase() {

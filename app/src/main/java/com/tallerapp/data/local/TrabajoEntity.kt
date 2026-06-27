@@ -30,5 +30,6 @@ data class TrabajoEntity(
     val problema: String?,
     val diagnostico: String?,
     val precioCentavos: Long,
+    val fechaEntrega: Long?,
     val cobroId: Long?,
 )

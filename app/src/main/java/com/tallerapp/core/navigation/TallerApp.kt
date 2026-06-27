@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tallerapp.core.di.rememberAppContainer
 import com.tallerapp.features.dashboard.DashboardScreen
+import com.tallerapp.features.dashboard.DashboardViewModel
 import com.tallerapp.features.finanzas.EgresoFormScreen
 import com.tallerapp.features.finanzas.FinanzasScreen
 import com.tallerapp.features.finanzas.IngresoFormScreen
@@ -41,7 +42,14 @@ fun TallerApp() {
         startDestination = Destination.DASHBOARD,
     ) {
         composable(Destination.DASHBOARD) {
+            val container = rememberAppContainer()
+            val vm: DashboardViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer { DashboardViewModel(container.observarDashboard) }
+                },
+            )
             DashboardScreen(
+                viewModel = vm,
                 onNuevoTrabajo = { navController.navigate(Destination.NUEVO_TRABAJO) },
                 onNuevoIngreso = { navController.navigate(Destination.NUEVO_INGRESO) },
                 onNuevoGasto = { navController.navigate(Destination.NUEVO_GASTO) },

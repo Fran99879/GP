@@ -19,6 +19,7 @@ import com.tallerapp.domain.usecase.EditarTrabajoUseCase
 import com.tallerapp.domain.usecase.EliminarEgresoUseCase
 import com.tallerapp.domain.usecase.EliminarIngresoUseCase
 import com.tallerapp.domain.usecase.EliminarTrabajoUseCase
+import com.tallerapp.domain.usecase.ObservarDashboardUseCase
 import com.tallerapp.domain.usecase.ObservarEgresosDelDiaUseCase
 import com.tallerapp.domain.usecase.ObservarIngresosDelDiaUseCase
 import com.tallerapp.domain.usecase.ObservarResumenDelDiaUseCase
@@ -74,4 +75,8 @@ class AppContainer(context: Context) {
     // Cobros (Fase 4).
     val registrarCobro = RegistrarCobroUseCase(trabajoRepository, cobroRepository)
     val anularCobro = AnularCobroUseCase(trabajoRepository, ingresoRepository, cobroRepository)
+
+    // Dashboard (Fase 5).
+    val observarDashboard =
+        ObservarDashboardUseCase(trabajoRepository, ingresoRepository, egresoRepository)
 }

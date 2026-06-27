@@ -13,7 +13,11 @@ class CambiarEstadoUseCase(private val repository: TrabajoRepository) {
     suspend operator fun invoke(id: Long, destino: EstadoReparacion): Boolean {
         val trabajo = repository.obtener(id) ?: return false
         if (!TransicionesTrabajo.puedeTransicionar(trabajo.estadoReparacion, destino)) return false
-        repository.actualizar(trabajo.copy(estadoReparacion = destino))
+        // Registra el momento de entrega para el indicador "Entregados hoy" (Frozen Spec 12.1).
+        val fechaEntrega =
+            if (destino == EstadoReparacion.ENTREGADO) System.currentTimeMillis()
+            else trabajo.fechaEntrega
+        repository.actualizar(trabajo.copy(estadoReparacion = destino, fechaEntrega = fechaEntrega))
         return true
     }
 }
