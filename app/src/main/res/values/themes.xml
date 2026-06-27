@@ -1,0 +1,5 @@
+<resources>
+    <!-- Base theme for the Activity window. The real UI styling is handled by
+         Jetpack Compose (TallerAppTheme). Modo oscuro queda fuera de alcance (MVP). -->
+    <style name="Theme.TallerApp" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
