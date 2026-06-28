@@ -30,6 +30,7 @@ data class TrabajoFormState(
     val precioEditable: Boolean = true,
     val errores: TrabajoErrores = TrabajoErrores(),
     val titulo: String = "Nuevo Trabajo",
+    val procesando: Boolean = false,
     val guardadoId: Long? = null,
 )
 
@@ -85,8 +86,10 @@ class TrabajoFormViewModel(
     fun onPrecioChange(v: String) = _state.update { it.copy(precio = v) }
 
     fun guardar() {
+        if (_state.value.procesando) return
         val s = _state.value
         val precioCentavos = Dinero.parsearACentavos(s.precio)
+        _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
             val resultado = if (esEdicion) {
                 editarTrabajo(
@@ -116,7 +119,8 @@ class TrabajoFormViewModel(
             }
             when (resultado) {
                 is GuardarResultado.Exito -> _state.update { it.copy(guardadoId = resultado.id) }
-                is GuardarResultado.Invalido -> _state.update { it.copy(errores = resultado.errores) }
+                is GuardarResultado.Invalido ->
+                    _state.update { it.copy(errores = resultado.errores, procesando = false) }
             }
         }
     }

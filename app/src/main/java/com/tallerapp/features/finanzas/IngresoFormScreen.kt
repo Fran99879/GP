@@ -96,7 +96,7 @@ fun IngresoFormScreen(
 
             FechaPicker(fechaMillis = state.fecha, onFechaChange = viewModel::onFechaChange)
 
-            PrimaryButton("Guardar", viewModel::guardar)
+            PrimaryButton("Guardar", viewModel::guardar, enabled = !state.procesando)
         }
     }
 }

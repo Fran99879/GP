@@ -25,6 +25,7 @@ data class CobroState(
     val tarjeta: String = "",
     val mercadoPago: String = "",
     val errores: CobroErrores = CobroErrores(),
+    val procesando: Boolean = false,
     val cobradoOk: Boolean = false,
 ) {
     val esMixto: Boolean get() = metodo == MetodoPago.PAGO_MIXTO
@@ -60,6 +61,7 @@ class CobroViewModel(
     fun onMercadoPagoChange(v: String) = _state.update { it.copy(mercadoPago = v) }
 
     fun confirmar() {
+        if (_state.value.procesando) return
         val s = _state.value
         val reparto = if (s.esMixto) {
             RepartoPago(
@@ -70,10 +72,12 @@ class CobroViewModel(
             )
         } else null
 
+        _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
             when (val r = registrarCobro(trabajoId, s.metodo, reparto)) {
                 is CobroResultado.Exito -> _state.update { it.copy(cobradoOk = true) }
-                is CobroResultado.Invalido -> _state.update { it.copy(errores = r.errores) }
+                is CobroResultado.Invalido ->
+                    _state.update { it.copy(errores = r.errores, procesando = false) }
             }
         }
     }

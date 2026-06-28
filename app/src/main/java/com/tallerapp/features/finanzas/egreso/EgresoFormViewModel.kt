@@ -24,6 +24,7 @@ data class EgresoFormState(
     val editable: Boolean = true,
     val errores: EgresoErrores = EgresoErrores(),
     val titulo: String = "Nuevo Gasto",
+    val procesando: Boolean = false,
     val guardadoOk: Boolean = false,
 )
 
@@ -65,8 +66,10 @@ class EgresoFormViewModel(
     fun onFechaChange(v: Long) = _state.update { it.copy(fecha = v) }
 
     fun guardar() {
+        if (_state.value.procesando) return
         val s = _state.value
         val montoCentavos = Dinero.parsearACentavos(s.monto)
+        _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
             val resultado = if (esEdicion) {
                 editarEgreso(egresoId!!, montoCentavos, s.categoria, s.concepto, s.fecha)
@@ -75,7 +78,8 @@ class EgresoFormViewModel(
             }
             when (resultado) {
                 is EgresoResultado.Exito -> _state.update { it.copy(guardadoOk = true) }
-                is EgresoResultado.Invalido -> _state.update { it.copy(errores = resultado.errores) }
+                is EgresoResultado.Invalido ->
+                    _state.update { it.copy(errores = resultado.errores, procesando = false) }
             }
         }
     }

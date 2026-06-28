@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 
 /** Campo de texto reutilizable con etiqueta, error y tipo de teclado. */
@@ -28,6 +29,11 @@ fun CampoTexto(
     habilitado: Boolean = true,
     lineasMin: Int = 1,
 ) {
+    // Mayúscula inicial automática en campos de texto (no en numéricos).
+    val capitalizacion =
+        if (tipoTeclado == KeyboardType.Text) KeyboardCapitalization.Sentences
+        else KeyboardCapitalization.None
+
     OutlinedTextField(
         value = valor,
         onValueChange = onChange,
@@ -36,7 +42,7 @@ fun CampoTexto(
         enabled = habilitado,
         singleLine = lineasMin == 1,
         minLines = lineasMin,
-        keyboardOptions = KeyboardOptions(keyboardType = tipoTeclado),
+        keyboardOptions = KeyboardOptions(keyboardType = tipoTeclado, capitalization = capitalizacion),
         supportingText = error?.let { { Text(it) } },
         modifier = modifier.fillMaxWidth(),
     )

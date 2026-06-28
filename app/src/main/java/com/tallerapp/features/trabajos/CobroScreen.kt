@@ -85,7 +85,7 @@ fun CobroScreen(
                 CampoTexto(state.mercadoPago, viewModel::onMercadoPagoChange, "Mercado Pago", tipoTeclado = KeyboardType.Decimal)
             }
 
-            PrimaryButton("Confirmar cobro", viewModel::confirmar)
+            PrimaryButton("Confirmar cobro", viewModel::confirmar, enabled = !state.procesando)
         }
     }
 }

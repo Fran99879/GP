@@ -29,6 +29,7 @@ data class IngresoFormState(
     val editable: Boolean = true,
     val errores: IngresoErrores = IngresoErrores(),
     val titulo: String = "Nuevo Ingreso",
+    val procesando: Boolean = false,
     val guardadoOk: Boolean = false,
 ) {
     val esMixto: Boolean get() = metodo == MetodoPago.PAGO_MIXTO
@@ -80,6 +81,7 @@ class IngresoFormViewModel(
     fun onFechaChange(v: Long) = _state.update { it.copy(fecha = v) }
 
     fun guardar() {
+        if (_state.value.procesando) return
         val s = _state.value
         val montoCentavos = Dinero.parsearACentavos(s.monto)
         val reparto = if (s.esMixto) {
@@ -91,6 +93,7 @@ class IngresoFormViewModel(
             )
         } else null
 
+        _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
             val resultado = if (esEdicion) {
                 editarIngreso(ingresoId!!, montoCentavos, s.concepto, s.metodo, reparto, s.fecha)
@@ -99,7 +102,8 @@ class IngresoFormViewModel(
             }
             when (resultado) {
                 is IngresoResultado.Exito -> _state.update { it.copy(guardadoOk = true) }
-                is IngresoResultado.Invalido -> _state.update { it.copy(errores = resultado.errores) }
+                is IngresoResultado.Invalido ->
+                    _state.update { it.copy(errores = resultado.errores, procesando = false) }
             }
         }
     }
