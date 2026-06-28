@@ -2,6 +2,7 @@ package com.tallerapp.domain.usecase
 
 import com.tallerapp.domain.model.EstadoCobro
 import com.tallerapp.domain.model.EstadoReparacion
+import com.tallerapp.domain.model.Ingreso
 import com.tallerapp.domain.model.MetodoPago
 import com.tallerapp.domain.model.OrigenIngreso
 import com.tallerapp.domain.model.RepartoPago

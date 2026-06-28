@@ -1,9 +1,20 @@
 -- Merging decision tree log ---
+provider#androidx.core.content.FileProvider
+INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:22:9-30:20
+	android:grantUriPermissions
+		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:26:13-47
+	android:authorities
+		INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml
+		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:24:13-64
+	android:exported
+		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:25:13-37
+	android:name
+		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:23:13-62
 manifest
-ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-22:12
-INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-22:12
-INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-22:12
-INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-22:12
+ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-33:12
+INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-33:12
+INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-33:12
+INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:1-33:12
 MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\Fran9\.gradle\caches\8.14.5\transforms\120c5a2e2cc65012b4d0ef904e64d3fb\transformed\navigation-common-2.7.7\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-runtime:2.7.7] C:\Users\Fran9\.gradle\caches\8.14.5\transforms\9ef015d375dd42cdbb87fd06d3071c3b\transformed\navigation-runtime-2.7.7\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\Fran9\.gradle\caches\8.14.5\transforms\6eaedee2c8fa574ddc995fc95ede396a\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:2:1-7:12
@@ -67,8 +78,8 @@ MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\Fran9\.gradle\caches\8.14.
 	xmlns:android
 		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:4:5-20:19
-INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:4:5-20:19
+ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:4:5-31:19
+INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:4:5-31:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.6.8] C:\Users\Fran9\.gradle\caches\8.14.5\transforms\361a2754fef8af4a46843ec5daa58f65\transformed\ui-tooling-release\AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.6.8] C:\Users\Fran9\.gradle\caches\8.14.5\transforms\361a2754fef8af4a46843ec5daa58f65\transformed\ui-tooling-release\AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Fran9\.gradle\caches\8.14.5\transforms\fcb0e7a53c7c39b475e0f9d646c4eca9\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
@@ -117,6 +128,12 @@ category#android.intent.category.LAUNCHER
 ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:17:17-77
 	android:name
 		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:17:27-74
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:27:13-29:54
+	android:resource
+		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:29:17-51
+	android:name
+		ADDED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml:28:17-67
 uses-sdk
 INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Proyectos\GP\app\src\main\AndroidManifest.xml

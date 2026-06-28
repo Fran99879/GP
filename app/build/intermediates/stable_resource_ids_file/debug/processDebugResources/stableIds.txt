@@ -1,3 +1,4 @@
+com.tallerapp:xml/file_paths = 0x7f0b0000
 com.tallerapp:styleable/Navigator = 0x7f0a000d
 com.tallerapp:styleable/NavHost = 0x7f0a000b
 com.tallerapp:styleable/NavGraphNavigator = 0x7f0a000a

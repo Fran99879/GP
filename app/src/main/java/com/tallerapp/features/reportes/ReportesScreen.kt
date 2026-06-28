@@ -76,16 +76,22 @@ fun ReportesScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-            PrimaryButton("Exportar PDF") {
-                val secciones = ReporteContenido.construir(diario, mensual)
-                val uri = PdfExporter.generar(context, secciones)
-                Compartir.archivo(context, uri, "application/pdf")
-            }
-            PrimaryButton("Exportar Excel") {
-                val secciones = ReporteContenido.construir(diario, mensual)
-                val uri = CsvExporter.generar(context, secciones)
-                Compartir.archivo(context, uri, "text/csv")
-            }
+            PrimaryButton(
+                text = "Exportar PDF",
+                onClick = {
+                    val secciones = ReporteContenido.construir(diario, mensual)
+                    val uri = PdfExporter.generar(context, secciones)
+                    Compartir.archivo(context, uri, "application/pdf")
+                },
+            )
+            PrimaryButton(
+                text = "Exportar Excel",
+                onClick = {
+                    val secciones = ReporteContenido.construir(diario, mensual)
+                    val uri = CsvExporter.generar(context, secciones)
+                    Compartir.archivo(context, uri, "text/csv")
+                },
+            )
         }
     }
 }

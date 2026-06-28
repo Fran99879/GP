@@ -11,11 +11,12 @@ import java.io.File
  */
 object CsvExporter {
 
-    private const val BOM = "﻿"
+    // BOM UTF-8 (U+FEFF), construido por código para no meter un carácter invisible en el fuente.
+    private val bom: Char = Char(0xFEFF)
 
     fun generar(context: Context, secciones: List<SeccionReporte>): Uri {
         val sb = StringBuilder()
-        sb.append(BOM)
+        sb.append(bom)
 
         secciones.forEach { sec ->
             sb.append(escapar(sec.titulo)).append('\n')
