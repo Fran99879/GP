@@ -54,3 +54,33 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
         db.execSQL("ALTER TABLE `trabajo` ADD COLUMN `fechaEntrega` INTEGER")
     }
 }
+
+/**
+ * v3 → v4: la app deja de ser de taller. Se retira la tabla de trabajos y se agrega
+ * la de deudas a favor ("quién te debe"). Ingresos y egresos se conservan intactos.
+ */
+val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS `trabajo`")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `deuda` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `nombre` TEXT NOT NULL,
+                `montoCentavos` INTEGER NOT NULL,
+                `fecha` INTEGER NOT NULL,
+                `nota` TEXT NOT NULL,
+                `cobrada` INTEGER NOT NULL,
+                `fechaCobro` INTEGER,
+                `fechaRegistro` INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_deuda_cobrada` ON `deuda` (`cobrada`)")
+
+        // Remapea las categorías de gasto del taller a las de finanzas personales.
+        db.execSQL("UPDATE `egreso` SET `categoria` = 'TRANSPORTE' WHERE `categoria` = 'COMBUSTIBLE'")
+        db.execSQL("UPDATE `egreso` SET `categoria` = 'SERVICIOS' WHERE `categoria` = 'SERVICIOS_E_IMPUESTOS'")
+        db.execSQL("UPDATE `egreso` SET `categoria` = 'OTROS' WHERE `categoria` IN ('REPUESTOS', 'HERRAMIENTAS')")
+    }
+}

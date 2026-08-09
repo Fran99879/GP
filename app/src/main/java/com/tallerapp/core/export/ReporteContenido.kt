@@ -2,48 +2,43 @@ package com.tallerapp.core.export
 
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.ReporteMensual
-import com.tallerapp.domain.model.ResumenDelDia
 
 /** Una sección del reporte exportable: título y filas etiqueta/valor. */
 data class SeccionReporte(val titulo: String, val filas: List<Pair<String, String>>)
 
+/** Reporte listo para exportar: un encabezado y varias secciones. */
+data class ReporteExportable(val titulo: String, val secciones: List<SeccionReporte>)
+
 /**
- * Construye el contenido del reporte para exportar. PDF y CSV consumen esta misma
- * estructura, garantizando que el archivo coincida con lo mostrado en pantalla (CA-12).
+ * Construye el contenido del reporte mensual para exportar. PDF y CSV consumen esta
+ * misma estructura, garantizando que el archivo coincida con lo mostrado en pantalla.
  */
 object ReporteContenido {
 
-    fun construir(diario: ResumenDelDia, mensual: ReporteMensual): List<SeccionReporte> {
-        val dia = SeccionReporte(
-            titulo = "Reporte del día",
+    fun construir(mensual: ReporteMensual, etiquetaMes: String): ReporteExportable {
+        val resumen = SeccionReporte(
+            titulo = "Resumen",
             filas = listOf(
-                "Caja del día" to Dinero.formatear(diario.ingresosCentavos),
-                "Ingresos del día" to Dinero.formatear(diario.ingresosCentavos),
-                "Gastos del día" to Dinero.formatear(diario.gastosCentavos),
-                "Ganancia del día" to Dinero.formatear(diario.gananciaCentavos),
+                "Ingresos" to Dinero.formatear(mensual.ingresosCentavos),
+                "Gastos" to Dinero.formatear(mensual.gastosCentavos),
+                "Balance" to Dinero.formatear(mensual.gananciaCentavos),
             ),
         )
 
-        val mes = SeccionReporte(
-            titulo = "Reporte del mes",
-            filas = listOf(
-                "Ingresos del mes" to Dinero.formatear(mensual.ingresosCentavos),
-                "Gastos del mes" to Dinero.formatear(mensual.gastosCentavos),
-                "Ganancia del mes" to Dinero.formatear(mensual.gananciaCentavos),
-                "Trabajos realizados" to mensual.trabajosRealizados.toString(),
-                "Vehículos atendidos" to mensual.vehiculosAtendidos.toString(),
-            ),
-        )
-
-        val servicios = SeccionReporte(
-            titulo = "Servicios más realizados",
-            filas = if (mensual.serviciosMasRealizados.isEmpty()) {
-                listOf("Sin datos este mes" to "")
+        val gastos = SeccionReporte(
+            titulo = "Gastos por categoría",
+            filas = if (mensual.gastosPorCategoria.isEmpty()) {
+                listOf("Sin gastos este mes" to "")
             } else {
-                mensual.serviciosMasRealizados.map { it.servicio.etiqueta to it.cantidad.toString() }
+                mensual.gastosPorCategoria.map {
+                    it.categoria.etiqueta to Dinero.formatear(it.montoCentavos)
+                }
             },
         )
 
-        return listOf(dia, mes, servicios)
+        return ReporteExportable(
+            titulo = "Reporte de $etiquetaMes",
+            secciones = listOf(resumen, gastos),
+        )
     }
 }

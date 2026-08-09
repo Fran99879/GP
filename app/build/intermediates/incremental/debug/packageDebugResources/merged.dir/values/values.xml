@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TallerApp</string>
+    <string name="app_name">Mis Finanzas</string>
     <style name="Theme.TallerApp" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>

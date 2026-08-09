@@ -3,87 +3,139 @@ package com.tallerapp.features.dashboard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tallerapp.core.ui.components.PlaceholderScaffold
 import com.tallerapp.core.ui.components.PrimaryButton
+import com.tallerapp.core.ui.theme.Deuda
+import com.tallerapp.core.ui.theme.Gasto
+import com.tallerapp.core.ui.theme.Ingreso
 import com.tallerapp.core.util.Dinero
+import com.tallerapp.core.util.Fechas
 
-/**
- * Pantalla inicial (Frozen Spec 12.1). Los 6 indicadores provienen de los módulos
- * de Trabajos y Finanzas (Fases 2–4), combinados en ObservarDashboardUseCase.
- */
+/** Pantalla inicial: balance del mes, indicadores rápidos y accesos a los módulos. */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
-    onNuevoTrabajo: () -> Unit,
     onNuevoIngreso: () -> Unit,
     onNuevoGasto: () -> Unit,
-    onVerTrabajos: () -> Unit,
     onVerFinanzas: () -> Unit,
+    onVerDeudas: () -> Unit,
     onVerReportes: () -> Unit,
 ) {
     val s by viewModel.state.collectAsStateWithLifecycle()
+    val mes = Fechas.etiquetaMes(Fechas.mesActual())
 
-    PlaceholderScaffold(title = "TallerApp") { padding ->
+    androidx.compose.material3.Scaffold(
+        topBar = { TopAppBar(title = { Text("Mis Finanzas") }) },
+    ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Text("Resumen", style = MaterialTheme.typography.titleLarge)
+            // Balance del mes (hero).
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                ),
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Text("Balance de $mes", style = MaterialTheme.typography.labelLarge)
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        Dinero.formatear(s.balanceDelMesCentavos),
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Ingresos", style = MaterialTheme.typography.labelMedium)
+                            Text(
+                                Dinero.formatear(s.ingresosDelMesCentavos),
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Gastos", style = MaterialTheme.typography.labelMedium)
+                            Text(
+                                Dinero.formatear(s.gastosDelMesCentavos),
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                        }
+                    }
+                }
+            }
 
-            Indicador("Caja del día", Dinero.formatear(s.cajaDelDiaCentavos))
-            Indicador("Ganancia del mes", Dinero.formatear(s.gananciaDelMesCentavos))
-            Indicador("Vehículos en el taller", s.vehiculosEnTaller.toString())
-            Indicador("Esperando repuestos", s.esperandoRepuestos.toString())
-            Indicador("Trabajos pendientes", s.pendientes.toString())
-            Indicador("Entregados hoy", s.entregadosHoy.toString())
+            // Indicadores secundarios.
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                StatCard(
+                    titulo = "Ingresos hoy",
+                    valor = Dinero.formatear(s.cajaDelDiaCentavos),
+                    color = Ingreso,
+                    modifier = Modifier.weight(1f),
+                )
+                StatCard(
+                    titulo = if (s.cantidadDeudasPendientes == 1) "Te debe 1 persona" else "Te deben ${s.cantidadDeudasPendientes}",
+                    valor = Dinero.formatear(s.deudasPendientesCentavos),
+                    color = Deuda,
+                    modifier = Modifier.weight(1f),
+                )
+            }
 
-            HorizontalDivider()
+            Text("Registrar", style = MaterialTheme.typography.titleMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                PrimaryButton("+ Ingreso", onNuevoIngreso, modifier = Modifier.weight(1f))
+                PrimaryButton("− Gasto", onNuevoGasto, modifier = Modifier.weight(1f))
+            }
 
-            Text("Accesos rápidos", style = MaterialTheme.typography.titleMedium)
-            PrimaryButton("Nuevo Trabajo", onNuevoTrabajo)
-            PrimaryButton("Nuevo Ingreso", onNuevoIngreso)
-            PrimaryButton("Nuevo Gasto", onNuevoGasto)
-
-            HorizontalDivider()
-
-            Text("Módulos", style = MaterialTheme.typography.titleMedium)
-            PrimaryButton("Ver Trabajos", onVerTrabajos)
-            PrimaryButton("Ver Finanzas", onVerFinanzas)
-            PrimaryButton("Ver Reportes", onVerReportes)
+            Text("Ver", style = MaterialTheme.typography.titleMedium)
+            PrimaryButton("Movimientos del día", onVerFinanzas)
+            PrimaryButton("Quién te debe", onVerDeudas)
+            PrimaryButton("Reportes y gráficos", onVerReportes)
         }
     }
 }
 
 @Composable
-private fun Indicador(label: String, value: String) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(label)
-            Text(value, fontWeight = FontWeight.Bold)
+private fun StatCard(
+    titulo: String,
+    valor: String,
+    color: androidx.compose.ui.graphics.Color,
+    modifier: Modifier = Modifier,
+) {
+    Card(modifier = modifier) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                titulo,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(6.dp))
+            Text(valor, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = color)
         }
     }
 }

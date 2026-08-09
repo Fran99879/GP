@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.tallerapp.domain.validation.IngresoValidatorTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-09T17:07:50.315Z" hostname="PC-BLANCA" time="0.009">
+  <properties/>
+  <testcase name="pago mixto con un solo metodo es invalido" classname="com.tallerapp.domain.validation.IngresoValidatorTest" time="0.008"/>
+  <testcase name="ingreso simple valido" classname="com.tallerapp.domain.validation.IngresoValidatorTest" time="0.0"/>
+  <testcase name="pago mixto que no suma el total es invalido" classname="com.tallerapp.domain.validation.IngresoValidatorTest" time="0.0"/>
+  <testcase name="monto cero o concepto vacio o sin metodo es invalido" classname="com.tallerapp.domain.validation.IngresoValidatorTest" time="0.0"/>
+  <testcase name="pago mixto que suma el total es valido" classname="com.tallerapp.domain.validation.IngresoValidatorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

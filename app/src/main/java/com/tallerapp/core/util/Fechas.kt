@@ -2,15 +2,19 @@ package com.tallerapp.core.util
 
 import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 /** Utilidades de fecha. Usa la zona horaria del dispositivo (Frozen Spec 2.3). */
 object Fechas {
 
     private val formato = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     private val zona: ZoneId get() = ZoneId.systemDefault()
+    private val locale: Locale = Locale("es", "AR")
 
     fun formatear(epochMillis: Long): String =
         Instant.ofEpochMilli(epochMillis).atZone(zona).toLocalDate().format(formato)
@@ -28,11 +32,23 @@ object Fechas {
     }
 
     /** Rango [inicio, fin) del mes calendario actual (RN-7), para reportes/dashboard. */
-    fun rangoDelMesActual(): Pair<Long, Long> {
-        val primerDia = LocalDate.now(zona).withDayOfMonth(1)
-        val inicio = primerDia.atStartOfDay(zona).toInstant().toEpochMilli()
-        val fin = primerDia.plusMonths(1).atStartOfDay(zona).toInstant().toEpochMilli()
+    fun rangoDelMesActual(): Pair<Long, Long> = rangoDelMes(YearMonth.now(zona))
+
+    /** Rango [inicio, fin) de un mes calendario cualquiera. */
+    fun rangoDelMes(ym: YearMonth): Pair<Long, Long> {
+        val inicio = ym.atDay(1).atStartOfDay(zona).toInstant().toEpochMilli()
+        val fin = ym.plusMonths(1).atDay(1).atStartOfDay(zona).toInstant().toEpochMilli()
         return inicio to fin
+    }
+
+    /** Mes calendario actual. */
+    fun mesActual(): YearMonth = YearMonth.now(zona)
+
+    /** Etiqueta legible de un mes, ej. "Agosto 2026". */
+    fun etiquetaMes(ym: YearMonth): String {
+        val mes = ym.month.getDisplayName(TextStyle.FULL, locale)
+            .replaceFirstChar { it.titlecase(locale) }
+        return "$mes ${ym.year}"
     }
 
     /** True si [epochMillis] cae en el día de hoy (para la regla V-7). */

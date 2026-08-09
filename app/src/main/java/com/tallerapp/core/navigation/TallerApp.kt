@@ -12,27 +12,22 @@ import androidx.navigation.navArgument
 import com.tallerapp.core.di.rememberAppContainer
 import com.tallerapp.features.dashboard.DashboardScreen
 import com.tallerapp.features.dashboard.DashboardViewModel
+import com.tallerapp.features.deudas.DeudaFormScreen
+import com.tallerapp.features.deudas.DeudasScreen
+import com.tallerapp.features.deudas.DeudasViewModel
+import com.tallerapp.features.deudas.form.DeudaFormViewModel
 import com.tallerapp.features.finanzas.EgresoFormScreen
 import com.tallerapp.features.finanzas.FinanzasScreen
-import com.tallerapp.features.finanzas.IngresoFormScreen
-import com.tallerapp.features.reportes.ReportesScreen
-import com.tallerapp.features.reportes.ReportesViewModel
-import com.tallerapp.features.trabajos.TrabajoDetalleScreen
-import com.tallerapp.features.trabajos.TrabajoFormScreen
-import com.tallerapp.features.trabajos.TrabajosListScreen
 import com.tallerapp.features.finanzas.FinanzasViewModel
+import com.tallerapp.features.finanzas.IngresoFormScreen
 import com.tallerapp.features.finanzas.egreso.EgresoFormViewModel
 import com.tallerapp.features.finanzas.ingreso.IngresoFormViewModel
-import com.tallerapp.features.trabajos.CobroScreen
-import com.tallerapp.features.trabajos.cobro.CobroViewModel
-import com.tallerapp.features.trabajos.detalle.TrabajoDetalleViewModel
-import com.tallerapp.features.trabajos.form.TrabajoFormViewModel
-import com.tallerapp.features.trabajos.list.TrabajosListViewModel
+import com.tallerapp.features.reportes.ReportesScreen
+import com.tallerapp.features.reportes.ReportesViewModel
 
 /**
  * Grafo de navegación de toda la aplicación. Pantalla inicial: Dashboard.
  * Composición raíz: aquí se construyen los ViewModels con los casos de uso del contenedor.
- * Trabajos (Fase 2) ya tiene funcionalidad real; Finanzas/Reportes siguen como placeholders.
  */
 @Composable
 fun TallerApp() {
@@ -51,110 +46,12 @@ fun TallerApp() {
             )
             DashboardScreen(
                 viewModel = vm,
-                onNuevoTrabajo = { navController.navigate(Destination.NUEVO_TRABAJO) },
                 onNuevoIngreso = { navController.navigate(Destination.NUEVO_INGRESO) },
                 onNuevoGasto = { navController.navigate(Destination.NUEVO_GASTO) },
-                onVerTrabajos = { navController.navigate(Destination.TRABAJOS) },
                 onVerFinanzas = { navController.navigate(Destination.FINANZAS) },
+                onVerDeudas = { navController.navigate(Destination.DEUDAS) },
                 onVerReportes = { navController.navigate(Destination.REPORTES) },
             )
-        }
-
-        composable(Destination.TRABAJOS) {
-            val container = rememberAppContainer()
-            val vm: TrabajosListViewModel = viewModel(
-                factory = viewModelFactory {
-                    initializer { TrabajosListViewModel(container.observarTrabajos) }
-                },
-            )
-            TrabajosListScreen(
-                viewModel = vm,
-                onBack = { navController.popBackStack() },
-                onNuevoTrabajo = { navController.navigate(Destination.NUEVO_TRABAJO) },
-                onAbrirDetalle = { id -> navController.navigate(Destination.trabajoDetalle(id)) },
-            )
-        }
-
-        composable(Destination.NUEVO_TRABAJO) {
-            val container = rememberAppContainer()
-            val vm: TrabajoFormViewModel = viewModel(
-                factory = viewModelFactory {
-                    initializer {
-                        TrabajoFormViewModel(
-                            container.crearTrabajo,
-                            container.editarTrabajo,
-                            container.obtenerTrabajo,
-                            trabajoId = null,
-                        )
-                    }
-                },
-            )
-            TrabajoFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
-        }
-
-        composable(
-            route = Destination.TRABAJO_EDITAR,
-            arguments = listOf(navArgument(Destination.ARG_TRABAJO_ID) { type = NavType.LongType }),
-        ) { entry ->
-            val id = entry.arguments?.getLong(Destination.ARG_TRABAJO_ID) ?: 0L
-            val container = rememberAppContainer()
-            val vm: TrabajoFormViewModel = viewModel(
-                factory = viewModelFactory {
-                    initializer {
-                        TrabajoFormViewModel(
-                            container.crearTrabajo,
-                            container.editarTrabajo,
-                            container.obtenerTrabajo,
-                            trabajoId = id,
-                        )
-                    }
-                },
-            )
-            TrabajoFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
-        }
-
-        composable(
-            route = Destination.TRABAJO_DETALLE,
-            arguments = listOf(navArgument(Destination.ARG_TRABAJO_ID) { type = NavType.LongType }),
-        ) { entry ->
-            val id = entry.arguments?.getLong(Destination.ARG_TRABAJO_ID) ?: 0L
-            val container = rememberAppContainer()
-            val vm: TrabajoDetalleViewModel = viewModel(
-                factory = viewModelFactory {
-                    initializer {
-                        TrabajoDetalleViewModel(
-                            container.obtenerTrabajo,
-                            container.cambiarEstado,
-                            container.eliminarTrabajo,
-                            container.anularCobro,
-                            container.obtenerIngreso,
-                            trabajoId = id,
-                        )
-                    }
-                },
-            )
-            TrabajoDetalleScreen(
-                viewModel = vm,
-                onBack = { navController.popBackStack() },
-                onEditar = { navController.navigate(Destination.trabajoEditar(id)) },
-                onRegistrarCobro = { navController.navigate(Destination.trabajoCobro(id)) },
-            )
-        }
-
-        composable(
-            route = Destination.TRABAJO_COBRO,
-            arguments = listOf(navArgument(Destination.ARG_TRABAJO_ID) { type = NavType.LongType }),
-        ) { entry ->
-            val id = entry.arguments?.getLong(Destination.ARG_TRABAJO_ID) ?: 0L
-            val container = rememberAppContainer()
-            val vm: CobroViewModel = viewModel(
-                factory = viewModelFactory {
-                    initializer {
-                        CobroViewModel(container.obtenerTrabajo, container.registrarCobro, trabajoId = id)
-                    }
-                },
-            )
-            CobroScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
 
         composable(Destination.FINANZAS) {
@@ -168,7 +65,6 @@ fun TallerApp() {
                             container.observarEgresosDelDia,
                             container.eliminarIngreso,
                             container.eliminarEgreso,
-                            container.anularCobro,
                         )
                     }
                 },
@@ -257,6 +153,65 @@ fun TallerApp() {
                 },
             )
             EgresoFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(Destination.DEUDAS) {
+            val container = rememberAppContainer()
+            val vm: DeudasViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        DeudasViewModel(
+                            container.observarDeudas,
+                            container.marcarDeudaCobrada,
+                            container.eliminarDeuda,
+                        )
+                    }
+                },
+            )
+            DeudasScreen(
+                viewModel = vm,
+                onBack = { navController.popBackStack() },
+                onNuevaDeuda = { navController.navigate(Destination.NUEVA_DEUDA) },
+                onEditarDeuda = { id -> navController.navigate(Destination.deudaEditar(id)) },
+            )
+        }
+
+        composable(Destination.NUEVA_DEUDA) {
+            val container = rememberAppContainer()
+            val vm: DeudaFormViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        DeudaFormViewModel(
+                            container.registrarDeuda,
+                            container.editarDeuda,
+                            container.obtenerDeuda,
+                            deudaId = null,
+                        )
+                    }
+                },
+            )
+            DeudaFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(
+            route = Destination.DEUDA_EDITAR,
+            arguments = listOf(navArgument(Destination.ARG_DEUDA_ID) { type = NavType.LongType }),
+        ) { entry ->
+            val id = entry.arguments?.getLong(Destination.ARG_DEUDA_ID) ?: 0L
+            val container = rememberAppContainer()
+            val vm: DeudaFormViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        DeudaFormViewModel(
+                            container.registrarDeuda,
+                            container.editarDeuda,
+                            container.obtenerDeuda,
+                            deudaId = id,
+                        )
+                    }
+                },
+            )
+            DeudaFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
 
         composable(Destination.REPORTES) {

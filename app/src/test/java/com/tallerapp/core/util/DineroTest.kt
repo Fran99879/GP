@@ -24,8 +24,9 @@ class DineroTest {
     }
 
     @Test
-    fun `formatea centavos con dos decimales`() {
-        assertEquals("$ 1500.50", Dinero.formatear(150050L))
-        assertEquals("$ 0.05", Dinero.formatear(5L))
+    fun `formatea centavos con separador de miles y dos decimales`() {
+        assertEquals("$ 1.500,50", Dinero.formatear(150050L))
+        assertEquals("$ 0,05", Dinero.formatear(5L))
+        assertEquals("-$ 1.500,50", Dinero.formatear(-150050L))
     }
 }

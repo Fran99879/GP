@@ -25,6 +25,17 @@ object Dinero {
         return "$entero.${decimales.toString().padStart(2, '0')}"
     }
 
-    /** Formato de visualización, ej. "$ 1500.50". */
-    fun formatear(centavos: Long): String = "$ ${centavosAEntrada(centavos)}"
+    /** Formato de visualización con separador de miles, ej. "$ 1.500,50" o "-$ 1.500,50". */
+    fun formatear(centavos: Long): String {
+        val signo = if (centavos < 0) "-" else ""
+        val abs = abs(centavos)
+        val entero = abs / 100
+        val decimales = (abs % 100).toString().padStart(2, '0')
+        val enteroConMiles = entero.toString()
+            .reversed()
+            .chunked(3)
+            .joinToString(".")
+            .reversed()
+        return "$signo\$ $enteroConMiles,$decimales"
+    }
 }

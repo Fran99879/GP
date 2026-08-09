@@ -14,7 +14,7 @@ import java.io.FileOutputStream
  */
 object PdfExporter {
 
-    fun generar(context: Context, secciones: List<SeccionReporte>): Uri {
+    fun generar(context: Context, reporte: ReporteExportable): Uri {
         val documento = PdfDocument()
         // A4 en puntos (72 dpi): 595 x 842.
         val pagina = documento.startPage(PdfDocument.PageInfo.Builder(595, 842, 1).create())
@@ -25,10 +25,10 @@ object PdfExporter {
         val texto = Paint().apply { textSize = 12f }
 
         var y = 40f
-        canvas.drawText("TallerApp — Reporte", 40f, y, titulo)
+        canvas.drawText(reporte.titulo, 40f, y, titulo)
         y += 30f
 
-        secciones.forEach { sec ->
+        reporte.secciones.forEach { sec ->
             canvas.drawText(sec.titulo, 40f, y, seccion)
             y += 20f
             sec.filas.forEach { (etiqueta, valor) ->

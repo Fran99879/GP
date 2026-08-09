@@ -7,7 +7,8 @@ import com.tallerapp.domain.model.Egreso
 fun EgresoEntity.toDomain(): Egreso = Egreso(
     id = id,
     montoCentavos = montoCentavos,
-    categoria = CategoriaEgreso.valueOf(categoria),
+    // Resiliente ante categorías antiguas del taller que ya no existen.
+    categoria = runCatching { CategoriaEgreso.valueOf(categoria) }.getOrDefault(CategoriaEgreso.OTROS),
     concepto = concepto,
     fecha = fecha,
     fechaRegistro = fechaRegistro,

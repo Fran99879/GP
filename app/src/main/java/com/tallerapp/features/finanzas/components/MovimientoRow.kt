@@ -13,20 +13,21 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 /**
- * Fila de un movimiento (ingreso o egreso) en el hub de Finanzas.
- * - [permiteEditar]: la fila es clickeable para editar (movimientos manuales de hoy, V-7).
- * - [permiteAnular]: muestra el botón "Anular" (movimientos de hoy, incluidos cobros).
- * Los ingresos por cobro no se editan sueltos; solo se anulan (revierte el cobro).
+ * Fila de un movimiento (ingreso o gasto) en el hub de Finanzas.
+ * - [permiteEditar]: la fila es clickeable para editar (movimientos de hoy, V-7).
+ * - [permiteAnular]: muestra el botón "Anular" (movimientos de hoy).
  */
 @Composable
 fun MovimientoRow(
     titulo: String,
     subtitulo: String,
     monto: String,
+    montoColor: Color,
     permiteEditar: Boolean,
     permiteAnular: Boolean,
     onEditar: () -> Unit,
@@ -37,15 +38,19 @@ fun MovimientoRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(titulo, fontWeight = FontWeight.Bold)
-                Text(subtitulo, style = MaterialTheme.typography.bodySmall)
+                Text(titulo, fontWeight = FontWeight.SemiBold)
+                Text(
+                    subtitulo,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
-            Text(monto, fontWeight = FontWeight.Bold)
+            Text(monto, fontWeight = FontWeight.Bold, color = montoColor)
             if (permiteAnular) {
                 TextButton(onClick = onEliminar) { Text("Anular") }
             }
