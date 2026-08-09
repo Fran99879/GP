@@ -26,6 +26,9 @@ import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.ui.theme.Deuda
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
+import com.tallerapp.core.ui.theme.Navy
+import com.tallerapp.core.ui.theme.Tostado
+import com.tallerapp.core.ui.theme.White
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
 
@@ -58,12 +61,12 @@ fun DashboardScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = Navy,
+                    contentColor = White,
                 ),
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    Text("Balance de $mes", style = MaterialTheme.typography.labelLarge)
+                    Text("Balance de $mes", style = MaterialTheme.typography.labelLarge, color = Tostado)
                     Spacer(Modifier.height(4.dp))
                     Text(
                         Dinero.formatear(s.balanceDelMesCentavos),
