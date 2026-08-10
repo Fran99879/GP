@@ -1,8 +1,19 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
 }
+
+// Config del sistema de licencias. Vive en app/licensing.properties, que está gitignored:
+// nunca se sube a GitHub. Si el archivo no existe, quedan valores vacíos (la app pide activación).
+val licensingProps = Properties().apply {
+    val f = rootProject.file("app/licensing.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+fun lic(key: String, default: String): String = licensingProps.getProperty(key, default)
 
 android {
     namespace = "com.tallerapp"
@@ -14,6 +25,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        // Config de licencias inyectada en BuildConfig (desde app/licensing.properties, fuera de git).
+        buildConfigField("String", "LICENSE_PRODUCT_ID", "\"${lic("PRODUCT_ID", "mis_finanzas")}\"")
+        buildConfigField("String", "LICENSE_PUBLIC_KEY", "\"${lic("PUBLIC_KEY_HEX", "")}\"")
+        // Bypass de desarrollo: si es true, la app NO exige licencia (para probar sin backend).
+        buildConfigField("boolean", "LICENSE_DEV_BYPASS", lic("DEV_BYPASS", "true"))
     }
 
     buildTypes {
@@ -24,12 +41,11 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
-    composeOptions {
-        // Matches Kotlin 1.9.24
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
+    // En Kotlin 2.0 el compilador de Compose se aplica con el plugin org.jetbrains.kotlin.plugin.compose
+    // (ya no se usa composeOptions.kotlinCompilerExtensionVersion).
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -56,6 +72,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    // SDK de licencias (módulo referenciado en settings.gradle.kts).
+    implementation(project(":licensesdk"))
 
     // Persistencia local (Frozen Spec 6 / Arquitectura AD-4)
     implementation("androidx.room:room-runtime:2.6.1")

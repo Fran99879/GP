@@ -1,0 +1,15 @@
+# === Sistema de licencias — NUNCA subir a GitHub ===
+app/licensing.properties
+LICENSING-SETUP.md
+*.jks
+*.keystore
+
+# === Android / Gradle estándar ===
+*.iml
+.gradle/
+/local.properties
+.idea/
+build/
+/captures
+.externalNativeBuild
+.cxx
