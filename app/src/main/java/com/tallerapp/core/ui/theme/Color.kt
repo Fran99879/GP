@@ -33,3 +33,6 @@ val CategoriaColores = listOf(
     Color(0xFF4A7C59),  // verde apagado
     Color(0xFF8A8D91),  // gris (Otros)
 )
+
+/** Verde de "meta cumplida" (mismo que el escritorio: #27AE60). */
+val MetaCompleta = Color(0xFF27AE60)

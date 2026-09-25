@@ -1,7 +1,6 @@
 package com.tallerapp.domain.usecase
 
 import com.tallerapp.core.util.Fechas
-import com.tallerapp.domain.model.CategoriaEgreso
 import com.tallerapp.domain.repository.EgresoRepository
 import com.tallerapp.domain.validation.EgresoErrores
 import com.tallerapp.domain.validation.EgresoValidator
@@ -12,8 +11,9 @@ class EditarEgresoUseCase(private val repository: EgresoRepository) {
     suspend operator fun invoke(
         id: Long,
         montoCentavos: Long?,
-        categoria: CategoriaEgreso?,
+        categoria: String?,
         concepto: String,
+        cuenta: String,
         fecha: Long,
     ): EgresoResultado {
         val existente = repository.obtener(id)
@@ -32,6 +32,7 @@ class EditarEgresoUseCase(private val repository: EgresoRepository) {
             montoCentavos = montoCentavos!!,
             categoria = categoria!!,
             concepto = concepto.trim(),
+            cuenta = cuenta,
             fecha = fecha,
         )
         repository.actualizar(actualizado)

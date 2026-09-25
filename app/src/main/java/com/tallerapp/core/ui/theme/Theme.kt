@@ -53,8 +53,12 @@ fun TallerAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    val base = if (darkTheme) DarkColors else LightColors
+    // Color de acento elegido por el usuario (afecta botones y resaltados).
+    val acento = androidx.compose.ui.graphics.Color(com.tallerapp.core.ui.theme.TemaApp.accentColor)
+    val esquema = if (darkTheme) base else base.copy(primary = acento, onPrimary = White, secondary = acento)
     MaterialTheme(
-        colorScheme = if (darkTheme) DarkColors else LightColors,
+        colorScheme = esquema,
         typography = TallerTypography,
         content = content,
     )

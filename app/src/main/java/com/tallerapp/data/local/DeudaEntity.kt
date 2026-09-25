@@ -1,5 +1,6 @@
 package com.tallerapp.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -15,4 +16,6 @@ data class DeudaEntity(
     val cobrada: Boolean,
     val fechaCobro: Long?,
     val fechaRegistro: Long,
+    val fechaLimite: Long? = null,
+    @ColumnInfo(defaultValue = "1") val negocioId: Long = 1,
 )

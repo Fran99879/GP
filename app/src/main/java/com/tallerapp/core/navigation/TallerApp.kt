@@ -1,15 +1,42 @@
 package com.tallerapp.core.navigation
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import kotlinx.coroutines.launch
 import com.tallerapp.core.di.rememberAppContainer
+import com.tallerapp.features.agenda.AgendaScreen
+import com.tallerapp.features.agenda.AgendaViewModel
+import com.tallerapp.features.ajustes.AjustesScreen
+import com.tallerapp.features.calculadora.CalculadoraScreen
+import com.tallerapp.features.categorias.CategoriasScreen
+import com.tallerapp.features.categorias.CategoriasViewModel
+import com.tallerapp.features.cuentas.CuentasScreen
+import com.tallerapp.features.cuentas.CuentasViewModel
+import com.tallerapp.features.metas.MetasScreen
+import com.tallerapp.features.metas.MetasViewModel
+import com.tallerapp.features.negocios.NegociosScreen
+import com.tallerapp.features.negocios.NegociosViewModel
+import com.tallerapp.features.negocios.recordarNombreNegocioActual
+import com.tallerapp.features.remito.RemitoScreen
+import com.tallerapp.features.perfil.PerfilScreen
+import com.tallerapp.features.recurrentes.RecurrentesScreen
+import com.tallerapp.features.recurrentes.RecurrentesViewModel
 import com.tallerapp.features.dashboard.DashboardScreen
 import com.tallerapp.features.dashboard.DashboardViewModel
 import com.tallerapp.features.deudas.DeudaFormScreen
@@ -32,26 +59,185 @@ import com.tallerapp.features.reportes.ReportesViewModel
 @Composable
 fun TallerApp() {
     val navController = rememberNavController()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    val rutaActual by navController.currentBackStackEntryAsState()
+    val ruta = rutaActual?.destination?.route
+    // Destinos con barra inferior (los mismos que la barra lateral del escritorio).
+    val rutasRaiz = DESTINOS_RAIZ.map { it.ruta }.toSet()
+    val nivelesRaiz = rutasRaiz + Destination.AJUSTES
 
-    NavHost(
-        navController = navController,
-        startDestination = Destination.DASHBOARD,
+    val abrirMenu: () -> Unit = { scope.launch { drawerState.open() } }
+    fun irA(destino: String) {
+        scope.launch { drawerState.close() }
+        navController.navigate(destino) {
+            popUpTo(Destination.DASHBOARD) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = ruta in nivelesRaiz,
+        drawerContent = { AppDrawer(ruta) { irA(it) } },
     ) {
+        Scaffold(
+            bottomBar = { if (ruta in rutasRaiz) BarraInferior(ruta) { irA(it) } },
+        ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Destination.DASHBOARD,
+            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+        ) {
         composable(Destination.DASHBOARD) {
             val container = rememberAppContainer()
             val vm: DashboardViewModel = viewModel(
                 factory = viewModelFactory {
-                    initializer { DashboardViewModel(container.observarDashboard) }
+                    initializer { DashboardViewModel(container.observarDashboard, container.observarMetas) }
                 },
             )
             DashboardScreen(
                 viewModel = vm,
+                onOpenMenu = abrirMenu,
                 onNuevoIngreso = { navController.navigate(Destination.NUEVO_INGRESO) },
                 onNuevoGasto = { navController.navigate(Destination.NUEVO_GASTO) },
                 onVerFinanzas = { navController.navigate(Destination.FINANZAS) },
                 onVerDeudas = { navController.navigate(Destination.DEUDAS) },
                 onVerReportes = { navController.navigate(Destination.REPORTES) },
+                onVerAjustes = { navController.navigate(Destination.AJUSTES) },
+                onVerPerfil = { navController.navigate(Destination.PERFIL) },
+                onVerNegocios = { navController.navigate(Destination.NEGOCIOS) },
+                onVerCalculadora = { navController.navigate(Destination.CALCULADORA) },
+                onVerMetas = { navController.navigate(Destination.METAS) },
+                onVerAgenda = { navController.navigate(Destination.AGENDA) },
             )
+        }
+
+        composable(Destination.PERFIL) {
+            PerfilScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Destination.AGENDA) {
+            val container = rememberAppContainer()
+            val vm: AgendaViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        AgendaViewModel(
+                            container.observarAgenda,
+                            container.guardarAgendaItem,
+                            container.marcarAgendaHecho,
+                            container.eliminarAgendaItem,
+                        )
+                    }
+                },
+            )
+            AgendaScreen(
+                viewModel = vm,
+                onOpenMenu = abrirMenu,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Destination.REMITO) {
+            RemitoScreen(
+                negocioNombre = recordarNombreNegocioActual(),
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Destination.CALCULADORA) {
+            CalculadoraScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Destination.AJUSTES) {
+            AjustesScreen(
+                onBack = { navController.popBackStack() },
+                onVerCategorias = { navController.navigate(Destination.CATEGORIAS) },
+                onVerCuentas = { navController.navigate(Destination.CUENTAS) },
+                onVerMetas = { navController.navigate(Destination.METAS) },
+                onVerRecurrentes = { navController.navigate(Destination.RECURRENTES) },
+                onVerNegocios = { navController.navigate(Destination.NEGOCIOS) },
+                onVerAgenda = { navController.navigate(Destination.AGENDA) },
+            )
+        }
+
+        composable(Destination.NEGOCIOS) {
+            val container = rememberAppContainer()
+            val vm: NegociosViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        NegociosViewModel(
+                            container.observarNegocios,
+                            container.crearNegocio,
+                            container.renombrarNegocio,
+                        )
+                    }
+                },
+            )
+            NegociosScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(Destination.METAS) {
+            val container = rememberAppContainer()
+            val vm: MetasViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        MetasViewModel(container.observarMetas, container.guardarMeta, container.eliminarMeta)
+                    }
+                },
+            )
+            MetasScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(Destination.RECURRENTES) {
+            val container = rememberAppContainer()
+            val vm: RecurrentesViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        RecurrentesViewModel(
+                            container.observarRecurrentes,
+                            container.observarCategorias,
+                            container.observarCuentas,
+                            container.guardarRecurrente,
+                            container.eliminarRecurrente,
+                        )
+                    }
+                },
+            )
+            RecurrentesScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(Destination.CUENTAS) {
+            val container = rememberAppContainer()
+            val vm: CuentasViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        CuentasViewModel(
+                            container.saldosCuentas,
+                            container.guardarCuenta,
+                            container.eliminarCuenta,
+                        )
+                    }
+                },
+            )
+            CuentasScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+
+        composable(Destination.CATEGORIAS) {
+            val container = rememberAppContainer()
+            val vm: CategoriasViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        CategoriasViewModel(
+                            container.observarCategorias,
+                            container.guardarCategoria,
+                            container.eliminarCategoria,
+                        )
+                    }
+                },
+            )
+            CategoriasScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
 
         composable(Destination.FINANZAS) {
@@ -60,9 +246,9 @@ fun TallerApp() {
                 factory = viewModelFactory {
                     initializer {
                         FinanzasViewModel(
-                            container.observarResumenDelDia,
-                            container.observarIngresosDelDia,
-                            container.observarEgresosDelDia,
+                            container.observarIngresosRango,
+                            container.observarEgresosRango,
+                            container.observarCategorias,
                             container.eliminarIngreso,
                             container.eliminarEgreso,
                         )
@@ -71,11 +257,17 @@ fun TallerApp() {
             )
             FinanzasScreen(
                 viewModel = vm,
+                onOpenMenu = abrirMenu,
                 onBack = { navController.popBackStack() },
                 onNuevoIngreso = { navController.navigate(Destination.NUEVO_INGRESO) },
                 onNuevoGasto = { navController.navigate(Destination.NUEVO_GASTO) },
                 onEditarIngreso = { id -> navController.navigate(Destination.ingresoEditar(id)) },
                 onEditarEgreso = { id -> navController.navigate(Destination.egresoEditar(id)) },
+                onVerCuentas = { navController.navigate(Destination.CUENTAS) },
+                onVerCategorias = { navController.navigate(Destination.CATEGORIAS) },
+                onVerRecurrentes = { navController.navigate(Destination.RECURRENTES) },
+                onVerMetas = { navController.navigate(Destination.METAS) },
+                onVerRemito = { navController.navigate(Destination.REMITO) },
             )
         }
 
@@ -88,6 +280,7 @@ fun TallerApp() {
                             container.registrarIngreso,
                             container.editarIngreso,
                             container.obtenerIngreso,
+                            container.observarCuentas,
                             ingresoId = null,
                         )
                     }
@@ -109,6 +302,7 @@ fun TallerApp() {
                             container.registrarIngreso,
                             container.editarIngreso,
                             container.obtenerIngreso,
+                            container.observarCuentas,
                             ingresoId = id,
                         )
                     }
@@ -126,6 +320,8 @@ fun TallerApp() {
                             container.registrarEgreso,
                             container.editarEgreso,
                             container.obtenerEgreso,
+                            container.observarCategorias,
+                            container.observarCuentas,
                             egresoId = null,
                         )
                     }
@@ -147,6 +343,8 @@ fun TallerApp() {
                             container.registrarEgreso,
                             container.editarEgreso,
                             container.obtenerEgreso,
+                            container.observarCategorias,
+                            container.observarCuentas,
                             egresoId = id,
                         )
                     }
@@ -170,6 +368,7 @@ fun TallerApp() {
             )
             DeudasScreen(
                 viewModel = vm,
+                onOpenMenu = abrirMenu,
                 onBack = { navController.popBackStack() },
                 onNuevaDeuda = { navController.navigate(Destination.NUEVA_DEUDA) },
                 onEditarDeuda = { id -> navController.navigate(Destination.deudaEditar(id)) },
@@ -185,6 +384,8 @@ fun TallerApp() {
                             container.registrarDeuda,
                             container.editarDeuda,
                             container.obtenerDeuda,
+                            container.observarContactos,
+                            container.agregarContacto,
                             deudaId = null,
                         )
                     }
@@ -206,6 +407,8 @@ fun TallerApp() {
                             container.registrarDeuda,
                             container.editarDeuda,
                             container.obtenerDeuda,
+                            container.observarContactos,
+                            container.agregarContacto,
                             deudaId = id,
                         )
                     }
@@ -222,11 +425,16 @@ fun TallerApp() {
                         ReportesViewModel(
                             container.observarResumenDelDia,
                             container.observarReporteMensual,
+                            container.observarCategorias,
+                            container.observarEvolucion,
+                            container.observarComparativaNegocios,
                         )
                     }
                 },
             )
-            ReportesScreen(viewModel = vm, onBack = { navController.popBackStack() })
+            ReportesScreen(viewModel = vm, onOpenMenu = abrirMenu, onBack = { navController.popBackStack() })
+        }
+        }
         }
     }
 }

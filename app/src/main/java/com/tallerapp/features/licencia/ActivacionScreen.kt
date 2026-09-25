@@ -22,11 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.licensemanager.sdk.core.LicenseStatus
 import com.tallerapp.core.license.Licencia
@@ -86,11 +88,20 @@ fun ActivacionScreen(onActivada: () -> Unit) {
                 onValueChange = { licencia = it },
                 label = { Text("Licencia") },
                 minLines = 3,
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = false,
+                    capitalization = KeyboardCapitalization.None,
+                ),
                 modifier = Modifier.fillMaxWidth(),
             )
 
             PrimaryButton("Activar", onClick = {
-                val importada = sdk.importLicense(licencia.trim())
+                // Limpia la licencia pegada: saca espacios/saltos y normaliza base64 url-safe.
+                val limpia = licencia
+                    .filterNot { it.isWhitespace() }
+                    .replace('-', '+')
+                    .replace('_', '/')
+                val importada = sdk.importLicense(limpia)
                 if (importada.isFailure) {
                     esError = true
                     mensaje = "No se pudo leer la licencia. Revisá que esté completa."

@@ -42,6 +42,7 @@ import com.tallerapp.domain.model.Deuda as DeudaModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeudasScreen(
+    onOpenMenu: () -> Unit = {},
     viewModel: DeudasViewModel,
     onBack: () -> Unit,
     onNuevaDeuda: () -> Unit,
@@ -54,8 +55,8 @@ fun DeudasScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Quién te debe") },
-                navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
+                title = { Text("Quién me debe") },
+                navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
             )
         },
         floatingActionButton = {
@@ -157,6 +158,23 @@ private fun DeudaRow(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                if (!deuda.cobrada && deuda.fechaLimite != null) {
+                    val dias = ((deuda.fechaLimite!! - Fechas.hoyInicioMillis()) / 86_400_000L).toInt()
+                    val aviso = when {
+                        dias < 0 -> "⚠ Cobro vencido (hace ${-dias} día${if (-dias == 1) "" else "s"})"
+                        dias == 0 -> "🔔 Hoy es la fecha para cobrar"
+                        dias <= 7 -> "🔔 Falta${if (dias == 1) "" else "n"} $dias día${if (dias == 1) "" else "s"} para cobrar"
+                        else -> ""
+                    }
+                    if (aviso.isNotEmpty()) {
+                        Text(
+                            aviso,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (dias < 0) com.tallerapp.core.ui.theme.Gasto else Deuda,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
+                }
             }
             Text(
                 Dinero.formatear(deuda.montoCentavos),

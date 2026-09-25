@@ -9,6 +9,14 @@ import kotlin.math.roundToLong
  */
 object Dinero {
 
+    /** Símbolo de moneda para mostrar (configurable). */
+    var simbolo: String = "$"
+    /** Moneda secundaria para el equivalente (ej. "US$"). */
+    var simboloSecundario: String = "US$"
+    /** Cuántas unidades de la principal equivalen a 1 de la secundaria (0 = desactivado). */
+    var tasa: Double = 0.0
+    var mostrarEquivalente: Boolean = false
+
     /** Convierte el texto del usuario a centavos. Devuelve null si es inválido o negativo. */
     fun parsearACentavos(texto: String): Long? {
         val limpio = texto.trim().replace(",", ".")
@@ -36,6 +44,17 @@ object Dinero {
             .chunked(3)
             .joinToString(".")
             .reversed()
-        return "$signo\$ $enteroConMiles,$decimales"
+        return "$signo$simbolo $enteroConMiles,$decimales"
+    }
+
+    /** Equivalente en la moneda secundaria, ej. "≈ US$ 12,50". "" si está desactivado o sin tasa. */
+    fun equivalente(centavos: Long): String {
+        if (!mostrarEquivalente || tasa <= 0) return ""
+        val signo = if (centavos < 0) "-" else ""
+        val valor = abs(centavos) / 100.0 / tasa
+        val entero = valor.toLong()
+        val dec = ((abs(valor) - abs(entero.toDouble())) * 100).roundToLong().toString().padStart(2, '0')
+        val enteroConMiles = entero.toString().reversed().chunked(3).joinToString(".").reversed()
+        return "≈ $signo$simboloSecundario $enteroConMiles,$dec"
     }
 }

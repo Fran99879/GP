@@ -10,8 +10,10 @@ package com.tallerapp.domain.model
 data class Egreso(
     val id: Long = 0,
     val montoCentavos: Long,
-    val categoria: CategoriaEgreso,
+    /** Nombre de la categoría (personalizable). */
+    val categoria: String,
     val concepto: String,
+    val cuenta: String = "Efectivo",
     val fecha: Long,
     val fechaRegistro: Long,
 )

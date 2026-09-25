@@ -13,6 +13,7 @@ class EditarDeudaUseCase(private val repository: DeudaRepository) {
         montoCentavos: Long?,
         fecha: Long,
         nota: String,
+        fechaLimite: Long? = null,
     ): DeudaResultado {
         val existente = repository.obtener(id)
             ?: return DeudaResultado.Invalido(DeudaErrores(general = "La deuda no existe"))
@@ -26,6 +27,7 @@ class EditarDeudaUseCase(private val repository: DeudaRepository) {
                 montoCentavos = montoCentavos!!,
                 fecha = fecha,
                 nota = nota.trim(),
+                fechaLimite = fechaLimite,
             ),
         )
         return DeudaResultado.Exito(id)

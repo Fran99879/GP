@@ -12,6 +12,7 @@ class RegistrarDeudaUseCase(private val repository: DeudaRepository) {
         montoCentavos: Long?,
         fecha: Long,
         nota: String,
+        fechaLimite: Long? = null,
     ): DeudaResultado {
         val errores = DeudaValidator.validar(nombre, montoCentavos)
         if (!errores.esValido) return DeudaResultado.Invalido(errores)
@@ -24,6 +25,7 @@ class RegistrarDeudaUseCase(private val repository: DeudaRepository) {
             cobrada = false,
             fechaCobro = null,
             fechaRegistro = System.currentTimeMillis(),
+            fechaLimite = fechaLimite,
         )
         return DeudaResultado.Exito(repository.crear(deuda))
     }

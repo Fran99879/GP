@@ -13,6 +13,7 @@ data class Ingreso(
     val montoCentavos: Long,
     val concepto: String,
     val metodo: MetodoPago,
+    val cuenta: String = "Efectivo",
     val reparto: RepartoPago?,
     val fecha: Long,
     val fechaRegistro: Long,

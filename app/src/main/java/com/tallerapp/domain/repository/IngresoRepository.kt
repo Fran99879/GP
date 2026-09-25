@@ -11,6 +11,12 @@ interface IngresoRepository {
     /** Suma de montos (centavos) en [inicio, fin); 0 si no hay. */
     fun sumaRango(inicio: Long, fin: Long): Flow<Long>
 
+    /** Suma del rango sumando TODOS los negocios (vista combinada de Reportes). */
+    fun sumaRangoTodos(inicio: Long, fin: Long): Flow<Long>
+
+    /** Total del rango por cada negocio (comparativa entre negocios). */
+    fun totalesPorNegocio(inicio: Long, fin: Long): Flow<Map<Long, Long>>
+
     suspend fun obtener(id: Long): Ingreso?
     suspend fun crear(ingreso: Ingreso): Long
     suspend fun actualizar(ingreso: Ingreso)

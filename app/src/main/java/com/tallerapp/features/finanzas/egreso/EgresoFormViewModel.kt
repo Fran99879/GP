@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
-import com.tallerapp.domain.model.CategoriaEgreso
+import com.tallerapp.domain.model.Categoria
+import com.tallerapp.domain.model.Cuenta
 import com.tallerapp.domain.usecase.EditarEgresoUseCase
 import com.tallerapp.domain.usecase.EgresoResultado
+import com.tallerapp.domain.usecase.ObservarCategoriasUseCase
+import com.tallerapp.domain.usecase.ObservarCuentasUseCase
 import com.tallerapp.domain.usecase.ObtenerEgresoUseCase
 import com.tallerapp.domain.usecase.RegistrarEgresoUseCase
 import com.tallerapp.domain.validation.EgresoErrores
@@ -18,7 +21,10 @@ import kotlinx.coroutines.launch
 
 data class EgresoFormState(
     val monto: String = "",
-    val categoria: CategoriaEgreso? = null,
+    val categoria: String? = null,
+    val categorias: List<Categoria> = emptyList(),
+    val cuenta: String? = null,
+    val cuentas: List<Cuenta> = emptyList(),
     val concepto: String = "",
     val fecha: Long = Fechas.hoyInicioMillis(),
     val editable: Boolean = true,
@@ -32,6 +38,8 @@ class EgresoFormViewModel(
     private val registrarEgreso: RegistrarEgresoUseCase,
     private val editarEgreso: EditarEgresoUseCase,
     private val obtenerEgreso: ObtenerEgresoUseCase,
+    private val observarCategorias: ObservarCategoriasUseCase,
+    private val observarCuentas: ObservarCuentasUseCase,
     private val egresoId: Long?,
 ) : ViewModel() {
 
@@ -41,6 +49,22 @@ class EgresoFormViewModel(
     private val esEdicion: Boolean = egresoId != null
 
     init {
+        viewModelScope.launch {
+            observarCategorias("egreso").collect { cats ->
+                _state.update { st ->
+                    val cat = st.categoria ?: cats.firstOrNull()?.nombre
+                    st.copy(categorias = cats, categoria = cat)
+                }
+            }
+        }
+        viewModelScope.launch {
+            observarCuentas().collect { cts ->
+                _state.update { st ->
+                    val cu = st.cuenta ?: cts.firstOrNull()?.nombre
+                    st.copy(cuentas = cts, cuenta = cu)
+                }
+            }
+        }
         if (egresoId != null) cargar(egresoId)
     }
 
@@ -51,6 +75,7 @@ class EgresoFormViewModel(
                 it.copy(
                     monto = Dinero.centavosAEntrada(e.montoCentavos),
                     categoria = e.categoria,
+                    cuenta = e.cuenta,
                     concepto = e.concepto,
                     fecha = e.fecha,
                     editable = Fechas.esHoy(e.fechaRegistro),
@@ -61,7 +86,8 @@ class EgresoFormViewModel(
     }
 
     fun onMontoChange(v: String) = _state.update { it.copy(monto = v) }
-    fun onCategoriaChange(v: CategoriaEgreso) = _state.update { it.copy(categoria = v) }
+    fun onCategoriaChange(v: String) = _state.update { it.copy(categoria = v) }
+    fun onCuentaChange(v: String) = _state.update { it.copy(cuenta = v) }
     fun onConceptoChange(v: String) = _state.update { it.copy(concepto = v) }
     fun onFechaChange(v: Long) = _state.update { it.copy(fecha = v) }
 
@@ -71,10 +97,11 @@ class EgresoFormViewModel(
         val montoCentavos = Dinero.parsearACentavos(s.monto)
         _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
+            val cuenta = s.cuenta ?: "Efectivo"
             val resultado = if (esEdicion) {
-                editarEgreso(egresoId!!, montoCentavos, s.categoria, s.concepto, s.fecha)
+                editarEgreso(egresoId!!, montoCentavos, s.categoria, s.concepto, cuenta, s.fecha)
             } else {
-                registrarEgreso(montoCentavos, s.categoria, s.concepto, s.fecha)
+                registrarEgreso(montoCentavos, s.categoria, s.concepto, cuenta, s.fecha)
             }
             when (resultado) {
                 is EgresoResultado.Exito -> _state.update { it.copy(guardadoOk = true) }

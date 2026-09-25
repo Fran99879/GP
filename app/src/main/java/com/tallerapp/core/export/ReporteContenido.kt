@@ -31,7 +31,7 @@ object ReporteContenido {
                 listOf("Sin gastos este mes" to "")
             } else {
                 mensual.gastosPorCategoria.map {
-                    it.categoria.etiqueta to Dinero.formatear(it.montoCentavos)
+                    it.categoria to Dinero.formatear(it.montoCentavos)
                 }
             },
         )

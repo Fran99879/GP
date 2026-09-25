@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
+import com.tallerapp.domain.model.Cuenta
 import com.tallerapp.domain.model.MetodoPago
 import com.tallerapp.domain.model.RepartoPago
 import com.tallerapp.domain.usecase.EditarIngresoUseCase
 import com.tallerapp.domain.usecase.IngresoResultado
+import com.tallerapp.domain.usecase.ObservarCuentasUseCase
 import com.tallerapp.domain.usecase.ObtenerIngresoUseCase
 import com.tallerapp.domain.usecase.RegistrarIngresoUseCase
 import com.tallerapp.domain.validation.IngresoErrores
@@ -21,6 +23,8 @@ data class IngresoFormState(
     val monto: String = "",
     val concepto: String = "",
     val metodo: MetodoPago? = null,
+    val cuenta: String? = null,
+    val cuentas: List<Cuenta> = emptyList(),
     val efectivo: String = "",
     val transferencia: String = "",
     val tarjeta: String = "",
@@ -39,6 +43,7 @@ class IngresoFormViewModel(
     private val registrarIngreso: RegistrarIngresoUseCase,
     private val editarIngreso: EditarIngresoUseCase,
     private val obtenerIngreso: ObtenerIngresoUseCase,
+    private val observarCuentas: ObservarCuentasUseCase,
     private val ingresoId: Long?,
 ) : ViewModel() {
 
@@ -48,6 +53,11 @@ class IngresoFormViewModel(
     private val esEdicion: Boolean = ingresoId != null
 
     init {
+        viewModelScope.launch {
+            observarCuentas().collect { cts ->
+                _state.update { st -> st.copy(cuentas = cts, cuenta = st.cuenta ?: cts.firstOrNull()?.nombre) }
+            }
+        }
         if (ingresoId != null) cargar(ingresoId)
     }
 
@@ -59,6 +69,7 @@ class IngresoFormViewModel(
                     monto = Dinero.centavosAEntrada(i.montoCentavos),
                     concepto = i.concepto,
                     metodo = i.metodo,
+                    cuenta = i.cuenta,
                     efectivo = i.reparto?.efectivoCentavos?.let(Dinero::centavosAEntrada).orEmpty(),
                     transferencia = i.reparto?.transferenciaCentavos?.let(Dinero::centavosAEntrada).orEmpty(),
                     tarjeta = i.reparto?.tarjetaCentavos?.let(Dinero::centavosAEntrada).orEmpty(),
@@ -74,6 +85,7 @@ class IngresoFormViewModel(
     fun onMontoChange(v: String) = _state.update { it.copy(monto = v) }
     fun onConceptoChange(v: String) = _state.update { it.copy(concepto = v) }
     fun onMetodoChange(v: MetodoPago) = _state.update { it.copy(metodo = v) }
+    fun onCuentaChange(v: String) = _state.update { it.copy(cuenta = v) }
     fun onEfectivoChange(v: String) = _state.update { it.copy(efectivo = v) }
     fun onTransferenciaChange(v: String) = _state.update { it.copy(transferencia = v) }
     fun onTarjetaChange(v: String) = _state.update { it.copy(tarjeta = v) }
@@ -95,10 +107,11 @@ class IngresoFormViewModel(
 
         _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
+            val cuenta = s.cuenta ?: "Efectivo"
             val resultado = if (esEdicion) {
-                editarIngreso(ingresoId!!, montoCentavos, s.concepto, s.metodo, reparto, s.fecha)
+                editarIngreso(ingresoId!!, montoCentavos, s.concepto, s.metodo, cuenta, reparto, s.fecha)
             } else {
-                registrarIngreso(montoCentavos, s.concepto, s.metodo, reparto, s.fecha)
+                registrarIngreso(montoCentavos, s.concepto, s.metodo, cuenta, reparto, s.fecha)
             }
             when (resultado) {
                 is IngresoResultado.Exito -> _state.update { it.copy(guardadoOk = true) }

@@ -1,5 +1,6 @@
 package com.tallerapp.data.mapper
 
+import com.tallerapp.core.NegocioActual
 import com.tallerapp.data.local.DeudaEntity
 import com.tallerapp.domain.model.Deuda
 
@@ -12,6 +13,7 @@ fun DeudaEntity.toDomain(): Deuda = Deuda(
     cobrada = cobrada,
     fechaCobro = fechaCobro,
     fechaRegistro = fechaRegistro,
+    fechaLimite = fechaLimite,
 )
 
 fun Deuda.toEntity(): DeudaEntity = DeudaEntity(
@@ -23,4 +25,6 @@ fun Deuda.toEntity(): DeudaEntity = DeudaEntity(
     cobrada = cobrada,
     fechaCobro = fechaCobro,
     fechaRegistro = fechaRegistro,
+    fechaLimite = fechaLimite,
+    negocioId = NegocioActual.value,
 )

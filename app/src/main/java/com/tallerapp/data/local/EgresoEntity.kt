@@ -1,5 +1,6 @@
 package com.tallerapp.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -11,6 +12,8 @@ data class EgresoEntity(
     val montoCentavos: Long,
     val categoria: String,
     val concepto: String,
+    @ColumnInfo(defaultValue = "Efectivo") val cuenta: String,
+    @ColumnInfo(defaultValue = "1") val negocioId: Long = 1,
     val fecha: Long,
     val fechaRegistro: Long,
 )

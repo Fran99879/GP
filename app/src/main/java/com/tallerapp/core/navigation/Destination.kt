@@ -21,6 +21,17 @@ object Destination {
 
     const val REPORTES = "reportes"
 
+    const val AJUSTES = "ajustes"
+    const val CATEGORIAS = "categorias"
+    const val CUENTAS = "cuentas"
+    const val METAS = "metas"
+    const val RECURRENTES = "recurrentes"
+    const val NEGOCIOS = "negocios"
+    const val CALCULADORA = "calculadora"
+    const val REMITO = "remito"
+    const val AGENDA = "agenda"
+    const val PERFIL = "perfil"
+
     fun ingresoEditar(id: Long): String = "finanzas/ingreso/editar/$id"
     fun egresoEditar(id: Long): String = "finanzas/egreso/editar/$id"
     fun deudaEditar(id: Long): String = "deudas/editar/$id"

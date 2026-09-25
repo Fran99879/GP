@@ -4,14 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
+import com.tallerapp.domain.usecase.AgregarContactoUseCase
 import com.tallerapp.domain.usecase.DeudaResultado
 import com.tallerapp.domain.usecase.EditarDeudaUseCase
+import com.tallerapp.domain.usecase.ObservarContactosUseCase
 import com.tallerapp.domain.usecase.ObtenerDeudaUseCase
 import com.tallerapp.domain.usecase.RegistrarDeudaUseCase
 import com.tallerapp.domain.validation.DeudaErrores
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -20,6 +24,7 @@ data class DeudaFormState(
     val monto: String = "",
     val nota: String = "",
     val fecha: Long = Fechas.hoyInicioMillis(),
+    val fechaLimite: Long? = null,
     val errores: DeudaErrores = DeudaErrores(),
     val titulo: String = "Nueva deuda",
     val procesando: Boolean = false,
@@ -30,11 +35,17 @@ class DeudaFormViewModel(
     private val registrarDeuda: RegistrarDeudaUseCase,
     private val editarDeuda: EditarDeudaUseCase,
     private val obtenerDeuda: ObtenerDeudaUseCase,
+    observarContactos: ObservarContactosUseCase,
+    private val agregarContacto: AgregarContactoUseCase,
     private val deudaId: Long?,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DeudaFormState())
     val state: StateFlow<DeudaFormState> = _state.asStateFlow()
+
+    /** Contactos frecuentes (para autocompletar "¿Quién te debe?"). */
+    val contactos: StateFlow<List<String>> =
+        observarContactos().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val esEdicion: Boolean = deudaId != null
 
@@ -51,6 +62,7 @@ class DeudaFormViewModel(
                     monto = Dinero.centavosAEntrada(d.montoCentavos),
                     nota = d.nota,
                     fecha = d.fecha,
+                    fechaLimite = d.fechaLimite,
                     titulo = "Editar deuda",
                 )
             }
@@ -61,6 +73,7 @@ class DeudaFormViewModel(
     fun onMontoChange(v: String) = _state.update { it.copy(monto = v) }
     fun onNotaChange(v: String) = _state.update { it.copy(nota = v) }
     fun onFechaChange(v: Long) = _state.update { it.copy(fecha = v) }
+    fun onFechaLimiteChange(v: Long?) = _state.update { it.copy(fechaLimite = v) }
 
     fun guardar() {
         if (_state.value.procesando) return
@@ -69,12 +82,15 @@ class DeudaFormViewModel(
         _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
             val resultado = if (esEdicion) {
-                editarDeuda(deudaId!!, s.nombre, montoCentavos, s.fecha, s.nota)
+                editarDeuda(deudaId!!, s.nombre, montoCentavos, s.fecha, s.nota, s.fechaLimite)
             } else {
-                registrarDeuda(s.nombre, montoCentavos, s.fecha, s.nota)
+                registrarDeuda(s.nombre, montoCentavos, s.fecha, s.nota, s.fechaLimite)
             }
             when (resultado) {
-                is DeudaResultado.Exito -> _state.update { it.copy(guardadoOk = true) }
+                is DeudaResultado.Exito -> {
+                    agregarContacto(s.nombre)
+                    _state.update { it.copy(guardadoOk = true) }
+                }
                 is DeudaResultado.Invalido ->
                     _state.update { it.copy(errores = resultado.errores, procesando = false) }
             }

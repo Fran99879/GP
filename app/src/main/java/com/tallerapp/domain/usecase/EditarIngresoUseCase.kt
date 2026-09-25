@@ -18,6 +18,7 @@ class EditarIngresoUseCase(private val repository: IngresoRepository) {
         montoCentavos: Long?,
         concepto: String,
         metodo: MetodoPago?,
+        cuenta: String,
         reparto: RepartoPago?,
         fecha: Long,
     ): IngresoResultado {
@@ -37,6 +38,7 @@ class EditarIngresoUseCase(private val repository: IngresoRepository) {
             montoCentavos = montoCentavos!!,
             concepto = concepto.trim(),
             metodo = metodo!!,
+            cuenta = cuenta,
             reparto = if (metodo == MetodoPago.PAGO_MIXTO) reparto else null,
             fecha = fecha,
         )

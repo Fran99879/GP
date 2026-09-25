@@ -1,15 +1,15 @@
 package com.tallerapp.data.mapper
 
+import com.tallerapp.core.NegocioActual
 import com.tallerapp.data.local.EgresoEntity
-import com.tallerapp.domain.model.CategoriaEgreso
 import com.tallerapp.domain.model.Egreso
 
 fun EgresoEntity.toDomain(): Egreso = Egreso(
     id = id,
     montoCentavos = montoCentavos,
-    // Resiliente ante categorías antiguas del taller que ya no existen.
-    categoria = runCatching { CategoriaEgreso.valueOf(categoria) }.getOrDefault(CategoriaEgreso.OTROS),
+    categoria = categoria,
     concepto = concepto,
+    cuenta = cuenta,
     fecha = fecha,
     fechaRegistro = fechaRegistro,
 )
@@ -17,8 +17,10 @@ fun EgresoEntity.toDomain(): Egreso = Egreso(
 fun Egreso.toEntity(): EgresoEntity = EgresoEntity(
     id = id,
     montoCentavos = montoCentavos,
-    categoria = categoria.name,
+    categoria = categoria,
     concepto = concepto,
+    cuenta = cuenta,
     fecha = fecha,
     fechaRegistro = fechaRegistro,
+    negocioId = NegocioActual.value,
 )

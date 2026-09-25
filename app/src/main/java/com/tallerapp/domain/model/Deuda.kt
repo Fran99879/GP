@@ -21,4 +21,6 @@ data class Deuda(
     val cobrada: Boolean = false,
     val fechaCobro: Long? = null,
     val fechaRegistro: Long = 0,
+    /** Fecha para cobrar (recordatorio), opcional. */
+    val fechaLimite: Long? = null,
 )

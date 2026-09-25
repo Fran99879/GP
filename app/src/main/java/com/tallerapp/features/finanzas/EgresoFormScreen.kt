@@ -23,7 +23,6 @@ import com.tallerapp.core.ui.components.CampoTexto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.ui.components.SelectorOpciones
-import com.tallerapp.domain.model.CategoriaEgreso
 import com.tallerapp.features.finanzas.egreso.EgresoFormViewModel
 
 /** Formulario de alta/edición de egreso (Frozen Spec 9.6, validación V-3). */
@@ -69,11 +68,18 @@ fun EgresoFormScreen(
             )
             SelectorOpciones(
                 etiqueta = "Categoría *",
-                seleccionado = state.categoria,
-                opciones = CategoriaEgreso.entries,
-                textoOpcion = { it.etiqueta },
-                onSeleccion = viewModel::onCategoriaChange,
+                seleccionado = state.categorias.firstOrNull { it.nombre == state.categoria },
+                opciones = state.categorias,
+                textoOpcion = { it.display },
+                onSeleccion = { viewModel.onCategoriaChange(it.nombre) },
                 error = state.errores.categoria,
+            )
+            SelectorOpciones(
+                etiqueta = "Cuenta / medio de pago",
+                seleccionado = state.cuentas.firstOrNull { it.nombre == state.cuenta },
+                opciones = state.cuentas,
+                textoOpcion = { it.display },
+                onSeleccion = { viewModel.onCuentaChange(it.nombre) },
             )
             CampoTexto(
                 valor = state.concepto,

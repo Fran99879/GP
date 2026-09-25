@@ -4,7 +4,7 @@
             "outputFile": "com.tallerapp-mergeDebugResources-2:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\4276b5ab520cff26e93c9037f6299200\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\acf435ed4e109ab17e93bde9c98cd3a3\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

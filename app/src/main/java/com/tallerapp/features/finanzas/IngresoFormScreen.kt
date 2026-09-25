@@ -82,6 +82,13 @@ fun IngresoFormScreen(
                 onSeleccion = viewModel::onMetodoChange,
                 error = state.errores.metodo,
             )
+            SelectorOpciones(
+                etiqueta = "Cuenta",
+                seleccionado = state.cuentas.firstOrNull { it.nombre == state.cuenta },
+                opciones = state.cuentas,
+                textoOpcion = { it.display },
+                onSeleccion = { viewModel.onCuentaChange(it.nombre) },
+            )
 
             if (state.esMixto) {
                 Text("Reparto del pago mixto", style = MaterialTheme.typography.titleSmall)

@@ -1,19 +1,31 @@
 package com.tallerapp.data.repository
 
+import com.tallerapp.core.NegocioActual
 import com.tallerapp.data.local.EgresoDao
 import com.tallerapp.data.mapper.toDomain
 import com.tallerapp.data.mapper.toEntity
 import com.tallerapp.domain.model.Egreso
 import com.tallerapp.domain.repository.EgresoRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class EgresoRepositoryImpl(private val dao: EgresoDao) : EgresoRepository {
 
     override fun observarRango(inicio: Long, fin: Long): Flow<List<Egreso>> =
-        dao.observarRango(inicio, fin).map { lista -> lista.map { it.toDomain() } }
+        NegocioActual.id.flatMapLatest { ng -> dao.observarRango(ng, inicio, fin) }
+            .map { lista -> lista.map { it.toDomain() } }
 
-    override fun sumaRango(inicio: Long, fin: Long): Flow<Long> = dao.sumaRango(inicio, fin)
+    override fun sumaRango(inicio: Long, fin: Long): Flow<Long> =
+        NegocioActual.id.flatMapLatest { ng -> dao.sumaRango(ng, inicio, fin) }
+
+    override fun observarRangoTodos(inicio: Long, fin: Long): Flow<List<Egreso>> =
+        dao.observarRangoTodos(inicio, fin).map { lista -> lista.map { it.toDomain() } }
+
+    override fun totalesPorNegocio(inicio: Long, fin: Long): Flow<Map<Long, Long>> =
+        dao.totalesPorNegocio(inicio, fin).map { lista -> lista.associate { it.negocioId to it.total } }
 
     override suspend fun obtener(id: Long): Egreso? = dao.obtener(id)?.toDomain()
 

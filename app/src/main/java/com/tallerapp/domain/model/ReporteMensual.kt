@@ -2,7 +2,7 @@ package com.tallerapp.domain.model
 
 /** Total gastado en una categoría dentro de un período (para el gráfico de gastos). */
 data class GastoPorCategoria(
-    val categoria: CategoriaEgreso,
+    val categoria: String,
     val montoCentavos: Long,
 )
 

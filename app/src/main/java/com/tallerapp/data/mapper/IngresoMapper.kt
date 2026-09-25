@@ -1,5 +1,6 @@
 package com.tallerapp.data.mapper
 
+import com.tallerapp.core.NegocioActual
 import com.tallerapp.data.local.IngresoEntity
 import com.tallerapp.domain.model.Ingreso
 import com.tallerapp.domain.model.MetodoPago
@@ -13,6 +14,7 @@ fun IngresoEntity.toDomain(): Ingreso {
         montoCentavos = montoCentavos,
         concepto = concepto,
         metodo = metodoPago,
+        cuenta = cuenta,
         reparto = if (metodoPago == MetodoPago.PAGO_MIXTO) {
             RepartoPago(
                 efectivoCentavos = repEfectivo ?: 0,
@@ -33,6 +35,7 @@ fun Ingreso.toEntity(): IngresoEntity = IngresoEntity(
     montoCentavos = montoCentavos,
     concepto = concepto,
     metodo = metodo.name,
+    cuenta = cuenta,
     repEfectivo = reparto?.efectivoCentavos,
     repTransferencia = reparto?.transferenciaCentavos,
     repTarjeta = reparto?.tarjetaCentavos,
@@ -41,4 +44,5 @@ fun Ingreso.toEntity(): IngresoEntity = IngresoEntity(
     fechaRegistro = fechaRegistro,
     origen = origen.name,
     trabajoId = trabajoId,
+    negocioId = NegocioActual.value,
 )

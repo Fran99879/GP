@@ -51,6 +51,14 @@ object Fechas {
         return "$mes ${ym.year}"
     }
 
+    /** Inicio del día (00:00 local) de una fecha, en millis. */
+    fun aMillis(fecha: LocalDate): Long =
+        fecha.atStartOfDay(zona).toInstant().toEpochMilli()
+
+    /** Fecha local a partir de un millis. */
+    fun aLocalDate(epochMillis: Long): LocalDate =
+        Instant.ofEpochMilli(epochMillis).atZone(zona).toLocalDate()
+
     /** True si [epochMillis] cae en el día de hoy (para la regla V-7). */
     fun esHoy(epochMillis: Long): Boolean =
         Instant.ofEpochMilli(epochMillis).atZone(zona).toLocalDate() == LocalDate.now(zona)

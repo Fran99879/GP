@@ -3,7 +3,9 @@ package com.tallerapp.features.deudas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +34,7 @@ fun DeudaFormScreen(
     onBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val contactos by viewModel.contactos.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.guardadoOk) {
         if (state.guardadoOk) onBack()
@@ -63,6 +66,24 @@ fun DeudaFormScreen(
                 etiqueta = "¿Quién te debe? *",
                 error = state.errores.nombre,
             )
+            // Sugerencias de contactos frecuentes (tocá para completar).
+            val sugerencias = contactos
+                .filter { state.nombre.isBlank() || it.contains(state.nombre, ignoreCase = true) }
+                .filter { !it.equals(state.nombre, ignoreCase = true) }
+                .take(8)
+            if (sugerencias.isNotEmpty()) {
+                androidx.compose.foundation.layout.Row(
+                    modifier = Modifier.fillMaxWidth().horizontalScroll(androidx.compose.foundation.rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    sugerencias.forEach { c ->
+                        androidx.compose.material3.AssistChip(
+                            onClick = { viewModel.onNombreChange(c) },
+                            label = { Text(c) },
+                        )
+                    }
+                }
+            }
             CampoTexto(
                 valor = state.monto,
                 onChange = viewModel::onMontoChange,
@@ -78,6 +99,19 @@ fun DeudaFormScreen(
             )
 
             FechaPicker(fechaMillis = state.fecha, onFechaChange = viewModel::onFechaChange)
+
+            androidx.compose.foundation.layout.Row(
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            ) {
+                androidx.compose.material3.Checkbox(
+                    checked = state.fechaLimite != null,
+                    onCheckedChange = { on -> viewModel.onFechaLimiteChange(if (on) com.tallerapp.core.util.Fechas.hoyInicioMillis() else null) },
+                )
+                Text("Fecha para cobrar (te avisamos si se pasa)")
+            }
+            if (state.fechaLimite != null) {
+                FechaPicker(fechaMillis = state.fechaLimite!!, onFechaChange = { viewModel.onFechaLimiteChange(it) })
+            }
 
             PrimaryButton("Guardar", viewModel::guardar, enabled = !state.procesando)
         }

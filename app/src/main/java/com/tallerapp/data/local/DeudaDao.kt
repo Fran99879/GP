@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.Flow
 interface DeudaDao {
 
     /** Todas las deudas: primero las pendientes, luego las cobradas, más nuevas arriba. */
-    @Query("SELECT * FROM deuda ORDER BY cobrada ASC, fecha DESC, id DESC")
-    fun observarTodas(): Flow<List<DeudaEntity>>
+    @Query("SELECT * FROM deuda WHERE negocioId = :ng ORDER BY cobrada ASC, fecha DESC, id DESC")
+    fun observarTodas(ng: Long): Flow<List<DeudaEntity>>
 
     /** Suma de lo que te deben (solo pendientes). */
-    @Query("SELECT COALESCE(SUM(montoCentavos), 0) FROM deuda WHERE cobrada = 0")
-    fun sumaPendiente(): Flow<Long>
+    @Query("SELECT COALESCE(SUM(montoCentavos), 0) FROM deuda WHERE negocioId = :ng AND cobrada = 0")
+    fun sumaPendiente(ng: Long): Flow<Long>
 
     /** Cantidad de deudas pendientes. */
-    @Query("SELECT COUNT(*) FROM deuda WHERE cobrada = 0")
-    fun contarPendientes(): Flow<Int>
+    @Query("SELECT COUNT(*) FROM deuda WHERE negocioId = :ng AND cobrada = 0")
+    fun contarPendientes(ng: Long): Flow<Int>
 
     @Query("SELECT * FROM deuda WHERE id = :id")
     suspend fun obtener(id: Long): DeudaEntity?
