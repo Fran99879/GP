@@ -14,3 +14,7 @@ build/
 .externalNativeBuild
 .cxx
 keystore.properties
+
+# Notas de trabajo y material de Play (no se suben)
+README-CONTEXTO.md
+play-assets/
