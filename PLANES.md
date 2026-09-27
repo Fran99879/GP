@@ -1,187 +1,154 @@
-# Planes Gratis / Pro / Premium — esquema propuesto
+# Planes Gratis / Pro — esquema
 
 Documento de decisión para la monetización de **Mis Finanzas** en Google Play.
-Nada de esto está implementado todavía: es la propuesta para que la revises y ajustes.
-
-Contexto: la app ya está **completa a nivel funcional** (ver `UI-ESCRITORIO-ANALISIS-Y-ROADMAP-MOVIL.md`).
-El sistema de licencias Ed25519 se retiró del móvil; queda solo en escritorio.
+Todavía sin implementar: falta la integración de cobro.
 
 ---
 
-## 1. Principio: qué se cobra y qué no
+## 1. La división
 
-La regla que propongo, y que conviene no romper:
+> **Uso personal: gratis. Uso comercial: Pro.**
 
-> **Lo que ya cargaste nunca se te bloquea.** Se cobra por *capacidad* y *herramientas
-> de negocio*, no por el acceso a tus propios datos.
+Quien lleva las cuentas de su casa tiene la app completa sin pagar. Quien lleva las de un
+negocio paga, porque para eso la app le ahorra tiempo y plata.
 
-Esto importa por dos motivos:
+Es una división que el usuario entiende sola y no necesita explicación.
 
-1. **Confianza.** Es una app de finanzas personales. Si alguien carga seis meses de
-   movimientos y al vencer la suscripción no los puede ver, no vuelve nunca más — y lo
-   cuenta en las reseñas.
-2. **Política de Play.** Retener datos del usuario como rehén para forzar un pago es un
-   camino rápido a una suspensión.
+### Regla que no se rompe
 
-Traducción concreta: si alguien tiene 4 negocios en Pro y deja de pagar, **los 4 siguen
-visibles y exportables**; simplemente no puede crear un quinto ni seguir cargando en los
-que exceden el límite gratuito. Nunca se borra nada.
+**Lo que ya cargaste nunca se te bloquea.** Si alguien tiene 4 negocios en Pro y deja de
+pagar, los 4 **siguen visibles y exportables**: no puede crear más ni cargar movimientos
+nuevos en los que exceden el límite, pero no se borra ni se esconde nada.
+
+Dos motivos: es una app de finanzas y la confianza es todo; y retener datos del usuario para
+forzar un pago puede costarte una suspensión de Play.
 
 ---
 
-## 2. Los tres planes
+## 2. Gratis — finanzas personales completas
 
-### 🆓 Gratis — "que sirva de verdad"
+Tiene que servir de verdad como app de finanzas personales. Si es un demo recortado, nadie
+llega a considerar pagar.
 
-El plan gratuito tiene que ser **usable como app completa de finanzas personales**, no un
-demo recortado. Si no sirve, nadie llega a considerar pagar.
-
-| Incluye | Detalle |
+| Incluye | |
 |---|---|
-| **1 negocio** | Suficiente para uso personal, que es la mayoría de los usuarios |
-| Ingresos y gastos | Sin límite de cantidad |
+| **1 negocio** ("Personal") | Sin límite de movimientos |
+| Ingresos y gastos | Categoría, cuenta, método de pago |
 | Categorías y cuentas | Personalizables, con ícono |
-| Quién me debe | Deudas con fecha límite y recordatorio |
+| Quién me debe | Con fecha límite |
 | Metas de ahorro | Sin límite |
+| Movimientos recurrentes | Sueldo, alquiler, suscripciones |
 | Agenda | Tareas, turnos y productos |
 | Reportes del mes | Balance, dona por categoría, barras, evolución 12 meses |
 | Presupuestos | Por categoría |
-| Calculadora | — |
-| Temas y moneda | Claro/oscuro, color de acento, multi-moneda |
+| Calculadora, temas, multi-moneda | |
 
-### ⭐ Pro — "para el que tiene un negocio"
+---
 
-El salto natural: **dejás de manejar solo tu plata y empezás a manejar la de un negocio.**
+## 3. Pro — para el que tiene un negocio
 
-| Suma sobre Gratis | Por qué acá |
+### Ya construido ✅
+
+| Función | |
 |---|---|
-| **Negocios ilimitados** | Es *el* límite que empuja la conversión: separar personal de negocio, o tener dos locales |
-| **Comparativa entre negocios** | Solo tiene sentido con más de uno; ya está construida |
-| **Vista combinada** en Reportes | Ídem |
-| **Remitos PDF** | Herramienta de trabajo, no de finanzas personales |
-| **Movimientos recurrentes** | Sueldo, alquiler, suscripciones |
+| **Negocios ilimitados** | El límite que empuja la conversión |
+| **Comparativa entre negocios** | Cuál rinde más |
+| **Vista combinada** en Reportes | Todos los negocios juntos |
+| **Remitos PDF** | Herramienta de trabajo |
 | **Exportar PDF / Excel** | Para el contador |
 
-### 💎 Premium — "tranquilidad"
+### Por construir ⛔
 
-Pro resuelve *hoy*. Premium resuelve el **miedo a perder los datos**, que es la
-preocupación real de quien lleva la contabilidad de su negocio en el teléfono.
-
-| Suma sobre Pro | Estado |
+| Función | Nota |
 |---|---|
-| **Backup automático en la nube** | ⛔ No existe — hay que construirlo |
-| **Sincronizar entre dispositivos** (teléfono ↔ escritorio) | ⛔ No existe — hay que construirlo |
-| **Historial de respaldos y restauración** | ⛔ No existe |
-| Soporte prioritario | Organizativo |
+| **Control de stock** | Productos, cantidades, alertas de reposición |
+| **Clientes** | Ficha, historial de compras, cuenta corriente |
+| **Proveedores** | Ficha, historial de compras, deudas a pagar |
+| **Estadísticas avanzadas** | Rentabilidad, producto más vendido, mejor cliente |
 
-> ⚠️ **Premium todavía no se puede vender.** Su valor depende de features que no existen.
-> Lanzarlo ahora sería cobrar por una promesa. La recomendación es **salir con Gratis + Pro**
-> y agregar Premium cuando el backup en la nube esté andando.
+Estas cuatro son el argumento para que Pro **siga valiendo la suscripción mes a mes**. Sin
+ellas, Pro es "pagar por más negocios" y la gente cancela después del primer mes.
 
----
-
-## 3. Qué hay que construir
-
-| Plan | Features listas | Por construir |
-|---|---|---|
-| Gratis | **Todo** ✅ | Nada |
-| Pro | **Todo** ✅ (multi-negocio, comparativa, remitos, recurrentes, export) | Solo el *gate* de pago |
-| Premium | Nada | Backup nube, sync, historial |
-
-Dicho de otra forma: **para vender Pro solo falta la integración de cobro.** Todo lo que
-incluye ya está hecho y verificado.
+> Dato útil: **clientes y proveedores** son la base de stock y de las estadísticas. Conviene
+> hacerlos primero. Y ya existe la tabla `contacto` (hoy solo autocompleta deudas), así que
+> hay de dónde partir.
 
 ---
 
-## 4. Precio — decisión tuya
+## 4. Precio — a definir
 
-No me meto a fijar precios, pero sí las variables que importan:
+Variables que importan:
 
-- **Play se queda el 15%** del primer millón de dólares anuales (30% después). Sobre una
-  suscripción chica, ese 15% es menos de lo que parece en valores absolutos.
-- **Suscripción mensual vs pago único.** La mensual da ingreso sostenido, pero te obliga a
-  seguir entregando valor todos los meses o la gente cancela. El pago único convierte mucho
-  mejor pero no financia el mantenimiento.
-- **Sugerencia**: Pro como **suscripción mensual con opción anual** (la anual con descuento
-  mejora mucho la retención y cobra por adelantado), más **prueba gratis de 7 o 14 días**,
-  que Play soporta nativamente.
-- En Argentina conviene mirar el precio en pesos y que Play ajusta por país: definilo en
-  moneda local, no convertido del dólar.
+- **Play se queda el 15%** del primer millón de dólares anuales (30% después).
+- **Mensual vs anual**: la mensual da ingreso sostenido pero obliga a entregar valor todos
+  los meses. La anual convierte peor pero cobra por adelantado y retiene mucho más.
+- **Sugerencia**: suscripción **mensual + anual con descuento**. **Prueba gratis: 14 días**
+  (definido por el dueño; Play la soporta nativamente).
+- En Argentina, fijar el precio **en pesos**, no convertido del dólar.
+
+### Pendiente
+- [ ] Precio mensual
+- [ ] Precio anual
+- [x] Prueba gratis: **14 días** (alcanza a cruzar un cierre de mes sin que el usuario se olvide de que se suscribió)
 
 ---
 
-## 5. Implementación técnica
+## 5. Implementación
 
-### Productos a crear en Play Console
+### Productos en Play Console
 
-| ID sugerido | Tipo | Notas |
-|---|---|---|
-| `pro_mensual` | Suscripción (base plan mensual) | Con período de prueba |
-| `pro_anual` | Suscripción (base plan anual) | Mismo producto, otro base plan |
+Un producto **"Pro"** con dos *base plans*: `mensual` y `anual`. No son dos productos
+separados.
 
-Play modela esto como **un producto "Pro" con dos base plans**, no dos productos separados.
+`Monetizar con Play → Productos → Suscripciones`
 
 ### En la app
 
-1. **Dependencia**: `com.android.billingclient:billing-ktx`.
-2. **`EstadoPlan`** (objeto global, como `NegocioActual`): expone
-   `StateFlow<Plan>` con `GRATIS` / `PRO`. Las pantallas lo observan y se actualizan solas.
-3. **Gates**: envolver los puntos de venta —
+1. **Dependencia**: `com.android.billingclient:billing-ktx`
+2. **`EstadoPlan`**: objeto global con `StateFlow<Plan>` (`GRATIS` / `PRO`), mismo patrón que
+   `NegocioActual`. Las pantallas lo observan y se actualizan solas.
+3. **Gates**:
    - `CrearNegocioUseCase`: si es Gratis y ya hay 1, devolver un resultado que la UI traduzca
-     en la pantalla de upgrade (ya hay precedente: `EliminarNegocioUseCase` devuelve `Boolean`).
-   - Botón de Remito, export y comparativa: mostrar el candado en vez de ocultarlos —
-     **la gente no compra lo que no sabe que existe**.
-4. **Pantalla de planes**: comparativa de los tres, con el precio que trae Play (nunca
-   hardcodeado: Play devuelve el precio localizado del usuario).
-5. **Restaurar compras**: obligatorio. Al reinstalar o cambiar de teléfono, `queryPurchases`
-   al iniciar.
-6. **Compras pendientes**: Play exige manejarlas (pago en efectivo en Argentina puede quedar
-   pendiente días). No entregar Pro hasta `PURCHASED`.
+     en la pantalla de planes. Ya hay precedente: `EliminarNegocioUseCase` devuelve `Boolean`.
+   - Remito, export y comparativa: **mostrar con candado, no ocultar**. Nadie compra lo que no
+     sabe que existe.
+4. **Pantalla de planes**: comparativa Gratis vs Pro. El precio lo trae Play ya localizado —
+   **nunca hardcodearlo**.
+5. **Restaurar compras**: obligatorio. `queryPurchases` al iniciar, para reinstalaciones y
+   cambio de teléfono.
+6. **Compras pendientes**: Play lo exige. En Argentina el pago en efectivo puede quedar
+   pendiente días. No entregar Pro hasta `PURCHASED`.
 
-### Degradación (lo más delicado)
+### Degradación
 
-Cuando una suscripción vence, con el principio de la sección 1:
-
-- Los negocios que excedan el límite pasan a **solo lectura**: se ven, se exportan, no se
-  cargan movimientos nuevos.
-- **Nunca** se borran datos ni se ocultan.
-- Un aviso claro y no agresivo explicando qué se recuperaría al renovar.
+Al vencer: los negocios que exceden el límite pasan a **solo lectura**. Se ven, se exportan,
+no se cargan movimientos nuevos. Aviso claro y no agresivo de qué se recupera al renovar.
 
 ### Validación
 
-Para una app **100% local** como esta, lo pragmático es confiar en el estado que cachea la
-librería de Play. Un backend de validación solo se justifica si más adelante hay sync
-(Premium), porque ahí ya vas a tener servidor.
+Para una app 100% local, alcanza con el estado que cachea la librería de Play. Un backend de
+validación solo se justifica si más adelante hay sincronización.
 
 ---
 
-## 6. Lo que no se puede probar en el emulador
+## 6. No se puede probar en el emulador
 
-A diferencia de todo lo demás que verificamos, **Play Billing no se puede probar localmente**.
-Requiere:
+Play Billing requiere:
 
-1. La app **subida a Play** (alcanza con testing interno).
-2. Los productos **creados y activos** en Play Console.
-3. Una **cuenta de tester con licencia** configurada.
+1. App **subida a Play** — ✅ ya está en prueba interna
+2. Productos **creados y activos** en Play Console
+3. Cuenta de **tester con licencia**
 
-Es decir: la secuencia obligada es **cuenta de desarrollador → subir a testing interno →
-recién ahí implementar y probar el cobro**. No se puede adelantar.
+Es lo único del proyecto que no se puede verificar localmente.
 
 ---
 
-## 7. Recomendación
+## 7. Al activar Billing, actualizar en Play Console
 
-1. **Salir ya con Gratis + Pro.** Todo lo de Pro está construido; falta solo el cobro.
-2. **Premium después**, cuando exista el backup en la nube. No vender promesas.
-3. Primera subida a **testing interno**, no producción: te deja probar el cobro de verdad
-   sin exponer la app.
-4. Definir vos: **precios** y si querés prueba gratis (yo la pondría).
+Declaraciones que hoy están en "No" y pasan a "Sí":
 
-### Decisiones pendientes
+- **Datos de inicio de sesión** → Sí (hay contenido que requiere pago)
+- **Clasificación de contenido** → "¿Permite comprar contenido digital?" → Sí
+- **Seguridad de los datos** → revisar: Google procesa el pago
 
-- [ ] ¿El límite del plan Gratis es **1 negocio** o 2? (el escritorio usa 2)
-- [ ] ¿Los **recurrentes** van en Gratis o en Pro? Los puse en Pro, pero son útiles también
-      para uso personal — es discutible.
-- [ ] Precio de Pro mensual y anual.
-- [ ] ¿Prueba gratis? ¿De cuántos días?
-- [ ] ¿Lanzamos Premium más adelante o lo dejamos fuera del roadmap por ahora?
+Declarar mal es causa de suspensión.

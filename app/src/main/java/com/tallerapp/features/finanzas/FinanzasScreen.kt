@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.billing.EstadoPlan
 import com.tallerapp.core.ui.components.BloqueResumen3
 import com.tallerapp.core.ui.components.BotonGhost
 import com.tallerapp.core.ui.components.CampoTexto
@@ -64,6 +65,7 @@ fun FinanzasScreen(
     onVerRecurrentes: () -> Unit = {},
     onVerMetas: () -> Unit = {},
     onVerRemito: () -> Unit = {},
+    onVerPlanes: () -> Unit = {},
 ) {
     val ingresos by viewModel.ingresos.collectAsStateWithLifecycle()
     val egresos by viewModel.egresos.collectAsStateWithLifecycle()
@@ -72,6 +74,8 @@ fun FinanzasScreen(
     val sumIng = ingresos.sumOf { it.montoCentavos }
     val sumGas = egresos.sumOf { it.montoCentavos }
     var pendiente by remember { mutableStateOf<PendienteEliminar?>(null) }
+    val plan by EstadoPlan.plan.collectAsStateWithLifecycle()
+    val esPro = plan.esPro
 
     Scaffold(
         topBar = {
@@ -136,7 +140,8 @@ fun FinanzasScreen(
                 BotonGhost("🏷️ Categorías", onVerCategorias)
                 BotonGhost("🔁 Recurrentes", onVerRecurrentes)
                 BotonGhost("🎯 Metas", onVerMetas)
-                BotonGhost("🧾 Remito", onVerRemito)
+                // Con candado en vez de oculto: el usuario tiene que saber que existe.
+                BotonGhost(if (esPro) "🧾 Remito" else "🔒 Remito", if (esPro) onVerRemito else onVerPlanes)
             }
 
             TituloSeccion("Ingresos")

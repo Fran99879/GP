@@ -1,5 +1,7 @@
 package com.tallerapp.domain.usecase
 
+import com.tallerapp.core.billing.EstadoPlan
+import com.tallerapp.core.billing.LimitesPlan
 import com.tallerapp.domain.model.Negocio
 import com.tallerapp.domain.repository.NegocioRepository
 import kotlinx.coroutines.flow.Flow
@@ -9,8 +11,29 @@ class ObservarNegociosUseCase(private val repository: NegocioRepository) {
     operator fun invoke(): Flow<List<Negocio>> = repository.observar()
 }
 
-class CrearNegocioUseCase(private val repository: NegocioRepository) {
-    suspend operator fun invoke(nombre: String): Long = repository.crear(nombre.trim())
+/** Resultado de intentar crear un negocio. */
+sealed interface ResultadoCrearNegocio {
+    data class Creado(val id: Long) : ResultadoCrearNegocio
+
+    /** El plan Gratis ya llegó a su límite de negocios. */
+    data object RequierePro : ResultadoCrearNegocio
+}
+
+/**
+ * Crea un negocio. El plan Gratis admite [LimitesPlan.NEGOCIOS_GRATIS]; a partir de ahí
+ * hace falta Pro (ver `PLANES.md`: uso personal gratis, uso comercial pago).
+ */
+class CrearNegocioUseCase(
+    private val repository: NegocioRepository,
+    private val observarNegocios: ObservarNegociosUseCase,
+) {
+    suspend operator fun invoke(nombre: String): ResultadoCrearNegocio {
+        val cuantos = observarNegocios().first().size
+        if (!EstadoPlan.esPro && cuantos >= LimitesPlan.NEGOCIOS_GRATIS) {
+            return ResultadoCrearNegocio.RequierePro
+        }
+        return ResultadoCrearNegocio.Creado(repository.crear(nombre.trim()))
+    }
 }
 
 class RenombrarNegocioUseCase(private val repository: NegocioRepository) {

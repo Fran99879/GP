@@ -30,6 +30,7 @@ object Destination {
     const val CALCULADORA = "calculadora"
     const val REMITO = "remito"
     const val AGENDA = "agenda"
+    const val PLANES = "planes"
     const val PERFIL = "perfil"
 
     fun ingresoEditar(id: Long): String = "finanzas/ingreso/editar/$id"

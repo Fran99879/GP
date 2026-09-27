@@ -19,6 +19,8 @@ class TallerApplication : Application() {
         NegocioActual.cargar(this)
         container = AppContainer(this)
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            // Sincroniza el plan con Google Play (también restaura Pro tras reinstalar).
+            runCatching { container.facturacion.conectar() }
             // Asegura el negocio inicial ("Personal") en instalaciones nuevas.
             runCatching { container.asegurarNegocioInicial() }
             // Genera los movimientos recurrentes que correspondan a este mes.

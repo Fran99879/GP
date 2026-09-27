@@ -76,6 +76,9 @@ class AppContainer(context: Context) {
 
     private val database = TallerDatabase.obtener(context)
 
+    /** Cobro de la suscripción Pro. Se conecta desde TallerApplication. */
+    val facturacion = com.tallerapp.core.billing.FacturacionPlay(context.applicationContext)
+
     private val ingresoRepository: IngresoRepository =
         IngresoRepositoryImpl(database.ingresoDao())
     private val egresoRepository: EgresoRepository =
@@ -164,7 +167,7 @@ class AppContainer(context: Context) {
 
     // Negocios (multi-negocio).
     val observarNegocios = ObservarNegociosUseCase(negocioRepository)
-    val crearNegocio = CrearNegocioUseCase(negocioRepository)
+    val crearNegocio = CrearNegocioUseCase(negocioRepository, observarNegocios)
     val renombrarNegocio = RenombrarNegocioUseCase(negocioRepository)
     val eliminarNegocio = com.tallerapp.domain.usecase.EliminarNegocioUseCase(negocioRepository, observarNegocios)
     val asegurarNegocioInicial = AsegurarNegocioInicialUseCase(negocioRepository)

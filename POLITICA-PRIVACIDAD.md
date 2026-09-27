@@ -86,4 +86,4 @@ aplicación.
 
 Por consultas sobre esta política o sobre el tratamiento de tus datos:
 
-**fran99879@gmail.com**
+**misfinanzass.app@gmail.com**

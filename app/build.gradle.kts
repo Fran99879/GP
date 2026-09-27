@@ -82,6 +82,9 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    // Cobro de suscripciones (plan Pro) vía Google Play.
+    implementation("com.android.billingclient:billing-ktx:7.1.1")
+
     // SDK de licencias (módulo referenciado en settings.gradle.kts).
 
     // Persistencia local (Frozen Spec 6 / Arquitectura AD-4)

@@ -9,8 +9,11 @@ import com.tallerapp.domain.usecase.CrearNegocioUseCase
 import com.tallerapp.domain.usecase.EliminarNegocioUseCase
 import com.tallerapp.domain.usecase.ObservarNegociosUseCase
 import com.tallerapp.domain.usecase.RenombrarNegocioUseCase
+import com.tallerapp.domain.usecase.ResultadoCrearNegocio
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -27,7 +30,20 @@ class NegociosViewModel(
     /** Id del negocio actualmente seleccionado (compartido por toda la app). */
     val actual: StateFlow<Long> = NegocioActual.id
 
-    fun crear(nombre: String) = viewModelScope.launch { crearNegocio(nombre) }
+    fun crear(nombre: String) = viewModelScope.launch {
+        if (crearNegocio(nombre) is ResultadoCrearNegocio.RequierePro) {
+            _requierePro.value = true
+        }
+    }
+
+    /** True cuando el usuario quiso crear un negocio y el plan Gratis no se lo permite. */
+    private val _requierePro = MutableStateFlow(false)
+    val requierePro: StateFlow<Boolean> = _requierePro.asStateFlow()
+
+    fun descartarAvisoPro() {
+        _requierePro.value = false
+    }
+
     fun renombrar(id: Long, nombre: String) = viewModelScope.launch { renombrarNegocio(id, nombre) }
 
     /**

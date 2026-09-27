@@ -42,6 +42,7 @@ import com.tallerapp.core.export.ReporteContenido
 import com.tallerapp.core.ui.components.BarrasIngresoGasto
 import com.tallerapp.core.ui.components.GraficoDona
 import com.tallerapp.core.ui.components.Porcion
+import com.tallerapp.core.ui.components.BotonGhost
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloSeccion
@@ -59,6 +60,7 @@ fun ReportesScreen(
     onOpenMenu: () -> Unit = {},
     viewModel: ReportesViewModel,
     onBack: () -> Unit,
+    onVerPlanes: () -> Unit = {},
 ) {
     val mensual by viewModel.mensual.collectAsStateWithLifecycle()
     val mes by viewModel.mes.collectAsStateWithLifecycle()
@@ -66,6 +68,8 @@ fun ReportesScreen(
     val evolucion by viewModel.evolucion.collectAsStateWithLifecycle()
     val comparativa by viewModel.comparativa.collectAsStateWithLifecycle()
     val todos by viewModel.todosLosNegocios.collectAsStateWithLifecycle()
+    val plan by com.tallerapp.core.billing.EstadoPlan.plan.collectAsStateWithLifecycle()
+    val esPro = plan.esPro
     val context = LocalContext.current
     val etiquetaMes = Fechas.etiquetaMes(mes)
     val esMesActual = mes == Fechas.mesActual()
@@ -186,7 +190,7 @@ fun ReportesScreen(
             }
 
             // Comparativa entre negocios (solo si hay más de uno, como en el escritorio).
-            if (comparativa.size > 1) {
+            if (comparativa.size > 1 && esPro) {
                 TituloSeccion("Comparativa entre negocios")
                 TarjetaApp(modifier = Modifier.fillMaxWidth()) {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -230,26 +234,30 @@ fun ReportesScreen(
                     }
                 }
             }
-
-            // Exportar.
-            TituloSeccion("Exportar $etiquetaMes")
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                FilledTonalButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        val reporte = ReporteContenido.construir(mensual, etiquetaMes)
-                        val uri = PdfExporter.generar(context, reporte)
-                        Compartir.archivo(context, uri, "application/pdf")
-                    },
-                ) { Text("PDF") }
-                OutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        val reporte = ReporteContenido.construir(mensual, etiquetaMes)
-                        val uri = CsvExporter.generar(context, reporte)
-                        Compartir.archivo(context, uri, "text/csv")
-                    },
-                ) { Text("Excel") }
+            // Exportar. Función Pro: se muestra siempre, con candado si no la tiene.
+            TituloSeccion(if (esPro) "Exportar $etiquetaMes" else "🔒 Exportar $etiquetaMes")
+            if (!esPro) {
+                TextoMuted("Exportar a PDF y Excel es parte de Pro.")
+                BotonGhost("Ver Pro", onVerPlanes, modifier = Modifier.padding(top = 8.dp))
+            } else {
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    FilledTonalButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            val reporte = ReporteContenido.construir(mensual, etiquetaMes)
+                            val uri = PdfExporter.generar(context, reporte)
+                            Compartir.archivo(context, uri, "application/pdf")
+                        },
+                    ) { Text("PDF") }
+                    OutlinedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            val reporte = ReporteContenido.construir(mensual, etiquetaMes)
+                            val uri = CsvExporter.generar(context, reporte)
+                            Compartir.archivo(context, uri, "text/csv")
+                        },
+                    ) { Text("Excel") }
+                }
             }
         }
     }

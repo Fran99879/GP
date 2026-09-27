@@ -35,6 +35,7 @@ import com.tallerapp.features.negocios.NegociosViewModel
 import com.tallerapp.features.negocios.recordarNombreNegocioActual
 import com.tallerapp.features.remito.RemitoScreen
 import com.tallerapp.features.perfil.PerfilScreen
+import com.tallerapp.features.planes.PlanesScreen
 import com.tallerapp.features.recurrentes.RecurrentesScreen
 import com.tallerapp.features.recurrentes.RecurrentesViewModel
 import com.tallerapp.features.dashboard.DashboardScreen
@@ -139,6 +140,14 @@ fun TallerApp() {
             )
         }
 
+        composable(Destination.PLANES) {
+            val container = rememberAppContainer()
+            PlanesScreen(
+                facturacion = container.facturacion,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
         composable(Destination.REMITO) {
             RemitoScreen(
                 negocioNombre = recordarNombreNegocioActual(),
@@ -176,7 +185,11 @@ fun TallerApp() {
                     }
                 },
             )
-            NegociosScreen(viewModel = vm, onBack = { navController.popBackStack() })
+            NegociosScreen(
+                viewModel = vm,
+                onBack = { navController.popBackStack() },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
+            )
         }
 
         composable(Destination.METAS) {
@@ -269,6 +282,7 @@ fun TallerApp() {
                 onVerRecurrentes = { navController.navigate(Destination.RECURRENTES) },
                 onVerMetas = { navController.navigate(Destination.METAS) },
                 onVerRemito = { navController.navigate(Destination.REMITO) },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
             )
         }
 

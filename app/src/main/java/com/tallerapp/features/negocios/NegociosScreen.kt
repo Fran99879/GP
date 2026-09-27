@@ -37,9 +37,14 @@ import com.tallerapp.domain.model.Negocio
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NegociosScreen(viewModel: NegociosViewModel, onBack: () -> Unit) {
+fun NegociosScreen(
+    viewModel: NegociosViewModel,
+    onBack: () -> Unit,
+    onVerPlanes: () -> Unit = {},
+) {
     val negocios by viewModel.negocios.collectAsStateWithLifecycle()
     val actual by viewModel.actual.collectAsStateWithLifecycle()
+    val mostrarAvisoPro by viewModel.requierePro.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var editando by remember { mutableStateOf<Negocio?>(null) }
     var creando by remember { mutableStateOf(false) }
@@ -147,6 +152,31 @@ fun NegociosScreen(viewModel: NegociosViewModel, onBack: () -> Unit) {
                 }
             },
             dismissButton = { TextButton(onClick = { borrando = null }) { Text("Cancelar") } },
+        )
+    }
+
+    // El plan Gratis admite un solo negocio. Se avisa en vez de esconder el botón:
+    // nadie compra lo que no sabe que existe.
+    if (mostrarAvisoPro) {
+        AlertDialog(
+            onDismissRequest = viewModel::descartarAvisoPro,
+            title = { Text("Varios negocios es una función Pro") },
+            text = {
+                Text(
+                    "El plan gratuito incluye un negocio, con todas las funciones de " +
+                        "finanzas personales.\n\n" +
+                        "Con Pro podés tener los negocios que quieras, compararlos entre sí, " +
+                        "generar remitos y exportar a PDF o Excel.",
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { viewModel.descartarAvisoPro(); onVerPlanes() }) {
+                    Text("Ver Pro")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = viewModel::descartarAvisoPro) { Text("Ahora no") }
+            },
         )
     }
 }

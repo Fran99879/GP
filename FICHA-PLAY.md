@@ -102,7 +102,7 @@ subirlos: viven en tu teléfono y nada más.
 Funciona completa sin conexión.
 
 
-Consultas y sugerencias: fran99879@gmail.com
+Consultas y sugerencias: misfinanzass.app@gmail.com
 ```
 
 ---
@@ -116,7 +116,7 @@ Consultas y sugerencias: fran99879@gmail.com
 
 ## Datos de contacto
 
-- **Correo electrónico**: `fran99879@gmail.com`
+- **Correo electrónico**: `misfinanzass.app@gmail.com`
   > Se muestra **público** en la ficha. Conviene usar uno dedicado (ej. `misfinanzas.app@gmail.com`)
   > para no exponer tu correo personal ni mezclarlo con el resto.
 - **Sitio web**: opcional
