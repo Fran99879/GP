@@ -171,6 +171,7 @@ fun TallerApp() {
                             container.observarNegocios,
                             container.crearNegocio,
                             container.renombrarNegocio,
+                            container.eliminarNegocio,
                         )
                     }
                 },

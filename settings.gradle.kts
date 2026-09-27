@@ -20,7 +20,3 @@ dependencyResolutionManagement {
 rootProject.name = "TallerApp"
 include(":app")
 
-// SDK de licencias: se referencia desde su proyecto original (no se copia ni se sube a este repo).
-include(":licensesdk")
-project(":licensesdk").projectDir =
-    file("../ProyectoDeLicenciasParaApk/android-license-sdk/licensesdk")

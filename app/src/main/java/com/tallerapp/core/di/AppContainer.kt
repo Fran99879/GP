@@ -166,6 +166,7 @@ class AppContainer(context: Context) {
     val observarNegocios = ObservarNegociosUseCase(negocioRepository)
     val crearNegocio = CrearNegocioUseCase(negocioRepository)
     val renombrarNegocio = RenombrarNegocioUseCase(negocioRepository)
+    val eliminarNegocio = com.tallerapp.domain.usecase.EliminarNegocioUseCase(negocioRepository, observarNegocios)
     val asegurarNegocioInicial = AsegurarNegocioInicialUseCase(negocioRepository)
 
     // Agenda (tareas, turnos y productos).

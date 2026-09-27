@@ -203,7 +203,7 @@ Material fuerte). Para que Compose se vea igual conviene bajar la elevación de 
   destinos compartidos en `DestinosNav.kt`; el drawer ahora usa los mismos íconos vectoriales
   y separa raíz/secundarios.
 - [x] Cards flat (elevación 0 + borde `outline`) vía `TarjetaApp`.
-- [ ] Pendiente: `FilaMovimiento` y `BarraFiltros` reutilizables (se hacen en Tanda B).
+- [x] `FilaMovimiento` y `BarraFiltros`: resueltos dentro de Movimientos en la Tanda B.
 
 ### 🏠 Tanda B — Dashboard y Movimientos a paridad
 - [x] Dashboard: 4 tarjetas de resumen (Ingresos/Gastos/**Balance navy**/Me deben en 2×2),
@@ -327,3 +327,44 @@ Verificado en emulador: Room 2.7.2 abre sin problema la base **v12 creada por Ro
   el tema es oscuro, detectado por luminancia del `background`.
 - Los **emojis** en accesos rápidos y toolbar **no son una inconsistencia**: el escritorio hace
   exactamente lo mismo (vectores Tabler solo en la barra lateral). No se tocaron.
+
+## 10. Verificación funcional de multi-negocio (2026-09-24)
+
+Probado end-to-end en emulador con datos reales:
+
+| Caso | Resultado |
+|---|---|
+| Seed del negocio "Personal" en instalación nueva | ✅ |
+| Crear segundo negocio ("Kiosco") | ✅ |
+| Selector de negocio aparece al haber 2 (oculto con 1) | ✅ |
+| Cargar $1.000 en Personal | ✅ |
+| Cambiar a Kiosco → muestra $0 (aislamiento) | ✅ sin reiniciar la app |
+| Cargar $5.000 en Kiosco | ✅ |
+| Volver a Personal → sigue en $1.000 (no suma) | ✅ |
+| Movimientos lista solo los del negocio activo | ✅ |
+| Reportes: toggle "todos los negocios" → $6.000 | ✅ |
+| Reportes: comparativa Personal $1.000 / Kiosco $5.000 con barras proporcionales | ✅ |
+
+### Gaps detectados (no bloqueantes)
+- **No se puede eliminar un negocio** desde móvil (solo crear y renombrar). El escritorio sí
+  lo permite (borra el negocio y todos sus datos). Falta paridad.
+- El **selector de negocio solo está en el Inicio**; en el escritorio está en la barra
+  superior global. Conviene sumarlo al menos a Movimientos y Reportes.
+- Cosmético: en la fila de un ingreso el subtítulo puede repetir el valor
+  ("Efectivo · Efectivo") cuando la cuenta y el método coinciden.
+
+### Gaps corregidos (2026-09-25)
+
+1. **Eliminar negocio** (paridad con el escritorio). `NegocioDao.eliminarConDatos` borra en una
+   sola **`@Transaction`** el negocio y sus ingresos, egresos, deudas, recurrentes y agenda —
+   si algo falla no quedan datos huérfanos. Salvaguardas:
+   - `EliminarNegocioUseCase` **nunca borra el último** negocio (la app siempre necesita uno).
+   - Si se borra el negocio **activo**, el ViewModel cambia al primero que queda, para que
+     `NegocioActual` no apunte a un id inexistente.
+   - Confirmación aparte que avisa explícitamente que se borran todos los datos.
+   - Verificado: se borró "Kiosco" (que era el activo, con datos) → pasó a "Personal",
+     sin rastro de sus datos en la base y sin crashes.
+2. **Selector de negocio** agregado a las barras de **Movimientos** y **Reportes** (antes solo
+   estaba en Inicio). Sigue oculto cuando hay un solo negocio.
+3. Cosmético: el subtítulo de un ingreso ya no repite el valor cuando la cuenta y el método
+   coinciden (antes "Efectivo · Efectivo").

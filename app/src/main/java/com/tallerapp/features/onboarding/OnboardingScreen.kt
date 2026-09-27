@@ -3,6 +3,7 @@ package com.tallerapp.features.onboarding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -66,6 +67,9 @@ fun OnboardingScreen(onEmpezar: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                // Sin Scaffold hay que aplicar los insets a mano: con edge-to-edge el
+                // contenido quedaba debajo de la barra de estado.
+                .safeDrawingPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),

@@ -49,6 +49,7 @@ import com.tallerapp.core.ui.theme.CategoriaColores
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
 import com.tallerapp.core.util.Dinero
+import com.tallerapp.features.negocios.SelectorNegocioTopBar
 import com.tallerapp.core.util.Fechas
 
 /** Reporte mensual navegable con gráficos y exportación a PDF/Excel. */
@@ -74,6 +75,7 @@ fun ReportesScreen(
             TopAppBar(
                 title = { Text("Reportes") },
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
+                actions = { SelectorNegocioTopBar() },
             )
         },
     ) { padding ->

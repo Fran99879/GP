@@ -8,6 +8,9 @@ interface NegocioRepository {
     suspend fun crear(nombre: String): Long
     suspend fun renombrar(id: Long, nombre: String)
 
+    /** Elimina el negocio y todos sus datos. */
+    suspend fun eliminar(id: Long)
+
     /** Crea el negocio por defecto ("Personal") si la tabla está vacía (instalación nueva). */
     suspend fun asegurarInicial()
 }

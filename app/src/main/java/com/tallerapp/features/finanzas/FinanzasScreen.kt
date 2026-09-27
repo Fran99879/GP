@@ -39,6 +39,7 @@ import com.tallerapp.core.ui.theme.Ingreso
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
 import com.tallerapp.features.finanzas.components.MovimientoRow
+import com.tallerapp.features.negocios.SelectorNegocioTopBar
 
 private enum class TipoMov { INGRESO, EGRESO }
 
@@ -77,6 +78,7 @@ fun FinanzasScreen(
             TopAppBar(
                 title = { Text("Movimientos") },
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
+                actions = { SelectorNegocioTopBar() },
             )
         },
     ) { padding ->
@@ -145,7 +147,9 @@ fun FinanzasScreen(
                     val esHoy = Fechas.esHoy(ingreso.fechaRegistro)
                     MovimientoRow(
                         titulo = ingreso.concepto,
-                        subtitulo = "${ingreso.cuenta} · ${ingreso.metodo.etiqueta} · ${Fechas.formatear(ingreso.fecha)}",
+                        // Evita repetir el dato cuando la cuenta y el método coinciden ("Efectivo · Efectivo").
+                        subtitulo = listOf(ingreso.cuenta, ingreso.metodo.etiqueta).distinct()
+                            .plus(Fechas.formatear(ingreso.fecha)).joinToString(" · "),
                         monto = Dinero.formatear(ingreso.montoCentavos),
                         montoColor = Ingreso,
                         permiteEditar = esHoy,

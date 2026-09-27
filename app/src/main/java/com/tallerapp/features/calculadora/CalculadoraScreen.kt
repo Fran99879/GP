@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -103,7 +105,7 @@ fun CalculadoraScreen(onBack: () -> Unit) {
                         TeclaCalc(
                             etiqueta = etiqueta,
                             tipo = tipo,
-                            modifier = Modifier.weight(1f).fillMaxSize(),
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
                             onClick = { tocar { estado.pulsar(etiqueta) } },
                         )
                     }
@@ -135,13 +137,15 @@ private fun TeclaCalc(etiqueta: String, tipo: Tipo, modifier: Modifier, onClick:
             contentColor = MaterialTheme.colorScheme.onSurface,
         )
     }
-    Box(modifier = modifier) {
-        Button(
-            onClick = onClick,
-            colors = colores,
-            modifier = Modifier.fillMaxSize().aspectRatio(1f, matchHeightConstraintsFirst = true),
-        ) {
-            Text(etiqueta, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
-        }
+    // Sin aspectRatio: forzaba teclas cuadradas del alto de la fila, que se desbordaban
+    // a lo ancho y se superponían. Cada tecla ocupa su celda de la grilla.
+    Button(
+        onClick = onClick,
+        colors = colores,
+        shape = RoundedCornerShape(14.dp),
+        contentPadding = PaddingValues(0.dp),
+        modifier = modifier,
+    ) {
+        Text(etiqueta, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
     }
 }

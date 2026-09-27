@@ -22,6 +22,8 @@ class NegocioRepositoryImpl(private val dao: NegocioDao) : NegocioRepository {
 
     override suspend fun renombrar(id: Long, nombre: String) = dao.renombrar(id, nombre)
 
+    override suspend fun eliminar(id: Long) = dao.eliminarConDatos(id)
+
     override suspend fun asegurarInicial() {
         if (dao.count() == 0) {
             dao.insertar(

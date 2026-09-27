@@ -43,6 +43,7 @@ fun NegociosScreen(viewModel: NegociosViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
     var editando by remember { mutableStateOf<Negocio?>(null) }
     var creando by remember { mutableStateOf(false) }
+    var borrando by remember { mutableStateOf<Negocio?>(null) }
 
     Scaffold(
         topBar = {
@@ -122,6 +123,30 @@ fun NegociosScreen(viewModel: NegociosViewModel, onBack: () -> Unit) {
             inicial = n.nombre,
             onCerrar = { editando = null },
             onGuardar = { viewModel.renombrar(n.id, it); editando = null },
+            // No se ofrece borrar el último negocio: la app necesita al menos uno.
+            onEliminar = if (negocios.size > 1) {
+                { editando = null; borrando = n }
+            } else null,
+        )
+    }
+
+    // Confirmación aparte: eliminar un negocio se lleva TODOS sus datos.
+    borrando?.let { n ->
+        AlertDialog(
+            onDismissRequest = { borrando = null },
+            title = { Text("Eliminar «${n.nombre}»") },
+            text = {
+                Text(
+                    "Se van a borrar también todos sus movimientos, deudas, recurrentes y " +
+                        "entradas de agenda. Esta acción no se puede deshacer.",
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { viewModel.eliminar(context, n.id); borrando = null }) {
+                    Text("Eliminar", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = { TextButton(onClick = { borrando = null }) { Text("Cancelar") } },
         )
     }
 }
@@ -132,6 +157,7 @@ private fun NegocioDialog(
     inicial: String,
     onCerrar: () -> Unit,
     onGuardar: (String) -> Unit,
+    onEliminar: (() -> Unit)? = null,
 ) {
     var nombre by remember { mutableStateOf(inicial) }
     AlertDialog(
@@ -148,6 +174,15 @@ private fun NegocioDialog(
         confirmButton = {
             TextButton(enabled = nombre.isNotBlank(), onClick = { onGuardar(nombre.trim()) }) { Text("Guardar") }
         },
-        dismissButton = { TextButton(onClick = onCerrar) { Text("Cancelar") } },
+        dismissButton = {
+            Row {
+                if (onEliminar != null) {
+                    TextButton(onClick = onEliminar) {
+                        Text("Eliminar", color = MaterialTheme.colorScheme.error)
+                    }
+                }
+                TextButton(onClick = onCerrar) { Text("Cancelar") }
+            }
+        },
     )
 }

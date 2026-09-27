@@ -127,13 +127,14 @@ El sistema de **licencias Ed25519** que usás anda perfecto para **distribución
 - [x] **Pantalla de Perfil** propia (nombre, editable, persistido) — el 👤 del Inicio la abre. (Foto: futuro.)
 - [x] **Onboarding** la primera vez (guía de bienvenida; se marca vista y no vuelve a salir).
 - [x] **Clientes/proveedores frecuentes** — se guardan al cargar deudas y aparecen como chips para autocompletar.
-- [ ] **Íconos** vectoriales consistentes (reemplazar emojis) — opcional, para look más pro.
+- [x] **Íconos** vectoriales en la navegación (Tabler, iguales al escritorio). Los emojis de accesos rápidos y toolbar se mantienen: el escritorio hace lo mismo.
 
 ### ⏳ Tanda 5 — Negocio / monetización
 - [x] **Multi-negocio** en móvil (tabla `negocio` + selector en Ajustes → Negocios). Cada negocio guarda sus propios ingresos, egresos, deudas y recurrentes; el negocio activo se persiste y todas las consultas se filtran de forma reactiva. Migración v10→v11 (pendiente de probar en emulador).
-- [ ] **Comparativa entre negocios** y **Remitos PDF** (dependen de multi-negocio).
+- [x] **Comparativa entre negocios** (Tanda C) y **Remitos PDF** (Tanda D) — hechos y verificados.
 - [ ] **Monetización**: integrar **Google Play Billing** (freemium + suscripción) — ver sección 4.
-- [ ] Decidir distribución: **Play Store** (recomendado) vs APK directo con licencias.
+- [x] **Distribución decidida: Play Store** (2026-09-24). Implica usar Play Billing en móvil y
+  dejar las licencias Ed25519 solo para el escritorio.
 
 ### 🔒 Fuera de alcance móvil por ahora
 - Auto-updater propio (si vas por Play, lo maneja Google).
