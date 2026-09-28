@@ -12,6 +12,9 @@ data class SumaPorCuenta(val cuenta: String, val total: Long)
 @Dao
 interface CuentaDao {
 
+    @Query("SELECT COUNT(*) FROM cuenta")
+    suspend fun count(): Int
+
     @Query("SELECT * FROM cuenta WHERE activo = 1 ORDER BY orden, nombre")
     fun observar(): Flow<List<CuentaEntity>>
 

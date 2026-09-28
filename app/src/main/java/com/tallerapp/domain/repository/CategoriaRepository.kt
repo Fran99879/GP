@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 /** Contrato de persistencia de categorías personalizables. */
 interface CategoriaRepository {
+    /** Siembra las categorías por defecto si la tabla está vacía (instalación nueva). */
+    suspend fun asegurarIniciales()
     fun observar(tipo: String): Flow<List<Categoria>>
     suspend fun listar(tipo: String): List<Categoria>
     suspend fun crear(categoria: Categoria): Long

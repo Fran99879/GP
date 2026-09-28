@@ -140,6 +140,10 @@ class AppContainer(context: Context) {
         com.tallerapp.domain.usecase.ObservarEvolucionUseCase(ingresoRepository, egresoRepository)
 
     // Categorías personalizables.
+    val asegurarCategoriasIniciales =
+        com.tallerapp.domain.usecase.AsegurarCategoriasInicialesUseCase(categoriaRepository)
+    val asegurarCuentasIniciales =
+        com.tallerapp.domain.usecase.AsegurarCuentasInicialesUseCase(cuentaRepository)
     val observarCategorias = ObservarCategoriasUseCase(categoriaRepository)
     val guardarCategoria = GuardarCategoriaUseCase(categoriaRepository)
     val eliminarCategoria = EliminarCategoriaUseCase(categoriaRepository)

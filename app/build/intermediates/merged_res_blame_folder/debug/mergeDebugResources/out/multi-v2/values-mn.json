@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\acf435ed4e109ab17e93bde9c98cd3a3\\transformed\\core-1.13.1\\res\\values-mn\\values-mn.xml",
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\ac5c3cc48102ceed4cc09c444c8987aa\\transformed\\core-1.15.0\\res\\values-mn\\values-mn.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -55,13 +55,13 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\81ad88c680b808a15bc79a9d88bc4d84\\transformed\\play-services-basement-18.4.0\\res\\values-mn\\values.xml",
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\47b7b886449fa316d69002911858668e\\transformed\\play-services-basement-18.9.0\\res\\values-mn\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
-                        "startOffsets": "195",
+                        "startOffsets": "218",
                         "endColumns": "145",
-                        "endOffsets": "340"
+                        "endOffsets": "363"
                     },
                     "to": {
                         "startLines": "20",

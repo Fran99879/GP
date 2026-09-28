@@ -4,6 +4,11 @@ import com.tallerapp.domain.model.Cuenta
 import com.tallerapp.domain.repository.CuentaRepository
 import kotlinx.coroutines.flow.Flow
 
+/** Siembra las cuentas por defecto en una instalación nueva. */
+class AsegurarCuentasInicialesUseCase(private val repository: CuentaRepository) {
+    suspend operator fun invoke() = repository.asegurarIniciales()
+}
+
 /** Observa las cuentas activas (para los selectores). */
 class ObservarCuentasUseCase(private val repository: CuentaRepository) {
     operator fun invoke(): Flow<List<Cuenta>> = repository.observar()

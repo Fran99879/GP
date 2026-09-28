@@ -1,6 +1,7 @@
 package com.tallerapp.data.repository
 
 import com.tallerapp.data.local.CategoriaDao
+import com.tallerapp.data.local.DatosIniciales
 import com.tallerapp.data.mapper.toDomain
 import com.tallerapp.data.mapper.toEntity
 import com.tallerapp.domain.model.Categoria
@@ -9,6 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class CategoriaRepositoryImpl(private val dao: CategoriaDao) : CategoriaRepository {
+
+    override suspend fun asegurarIniciales() {
+        if (dao.count() == 0) DatosIniciales.CATEGORIAS.forEach { dao.insertar(it) }
+    }
 
     override fun observar(tipo: String): Flow<List<Categoria>> =
         dao.observar(tipo).map { list -> list.map { it.toDomain() } }

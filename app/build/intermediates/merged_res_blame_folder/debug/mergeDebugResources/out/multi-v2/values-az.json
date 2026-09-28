@@ -21,13 +21,13 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\81ad88c680b808a15bc79a9d88bc4d84\\transformed\\play-services-basement-18.4.0\\res\\values-az\\values.xml",
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\47b7b886449fa316d69002911858668e\\transformed\\play-services-basement-18.9.0\\res\\values-az\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
-                        "startOffsets": "195",
+                        "startOffsets": "218",
                         "endColumns": "157",
-                        "endOffsets": "352"
+                        "endOffsets": "375"
                     },
                     "to": {
                         "startLines": "20",
@@ -52,23 +52,6 @@
                         "startOffsets": "105,11250,11339",
                         "endColumns": "79,88,93",
                         "endOffsets": "180,11334,11428"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\acf435ed4e109ab17e93bde9c98cd3a3\\transformed\\core-1.13.1\\res\\values-az\\values-az.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,156,258,361,465,566,671,782",
-                        "endColumns": "100,101,102,103,100,104,110,100",
-                        "endOffsets": "151,253,356,460,561,666,777,878"
-                    },
-                    "to": {
-                        "startLines": "3,4,5,6,7,8,9,102",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "185,286,388,491,595,696,801,10885",
-                        "endColumns": "100,101,102,103,100,104,110,100",
-                        "endOffsets": "281,383,486,590,691,796,907,10981"
                     }
                 },
                 {
@@ -103,6 +86,23 @@
                         "startOffsets": "912,1012,3346,3443,3544,3635,3716,10156,10248,10330,10411,10500,10572,10662,10736,10812,10986,11067,11133",
                         "endColumns": "99,87,96,100,90,80,87,91,81,80,88,71,89,73,75,72,80,65,116",
                         "endOffsets": "1007,1095,3438,3539,3630,3711,3799,10243,10325,10406,10495,10567,10657,10731,10807,10880,11062,11128,11245"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\ac5c3cc48102ceed4cc09c444c8987aa\\transformed\\core-1.15.0\\res\\values-az\\values-az.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,156,258,361,465,566,671,782",
+                        "endColumns": "100,101,102,103,100,104,110,100",
+                        "endOffsets": "151,253,356,460,561,666,777,878"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,102",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "185,286,388,491,595,696,801,10885",
+                        "endColumns": "100,101,102,103,100,104,110,100",
+                        "endOffsets": "281,383,486,590,691,796,907,10981"
                     }
                 },
                 {

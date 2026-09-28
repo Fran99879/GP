@@ -1,6 +1,7 @@
 package com.tallerapp.data.repository
 
 import com.tallerapp.data.local.CuentaDao
+import com.tallerapp.data.local.DatosIniciales
 import com.tallerapp.data.mapper.toDomain
 import com.tallerapp.data.mapper.toEntity
 import com.tallerapp.domain.model.Cuenta
@@ -9,6 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class CuentaRepositoryImpl(private val dao: CuentaDao) : CuentaRepository {
+
+    override suspend fun asegurarIniciales() {
+        if (dao.count() == 0) DatosIniciales.CUENTAS.forEach { dao.insertar(it) }
+    }
 
     override fun observar(): Flow<List<Cuenta>> =
         dao.observar().map { list -> list.map { it.toDomain() } }

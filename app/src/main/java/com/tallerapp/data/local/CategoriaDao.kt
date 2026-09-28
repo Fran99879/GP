@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CategoriaDao {
 
+    @Query("SELECT COUNT(*) FROM categoria")
+    suspend fun count(): Int
+
     @Query("SELECT * FROM categoria WHERE tipo = :tipo AND activo = 1 ORDER BY orden, nombre")
     fun observar(tipo: String): Flow<List<CategoriaEntity>>
 

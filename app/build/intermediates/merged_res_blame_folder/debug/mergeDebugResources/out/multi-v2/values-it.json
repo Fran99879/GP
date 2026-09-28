@@ -38,23 +38,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\81ad88c680b808a15bc79a9d88bc4d84\\transformed\\play-services-basement-18.4.0\\res\\values-it\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "131",
-                        "endOffsets": "326"
-                    },
-                    "to": {
-                        "startLines": "20",
-                        "startColumns": "4",
-                        "startOffsets": "2128",
-                        "endColumns": "135",
-                        "endOffsets": "2259"
-                    }
-                },
-                {
                     "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\4f0fc53e7b4a0bd85bab52f303155742\\transformed\\foundation-release\\res\\values-it\\values-it.xml",
                     "from": {
                         "startLines": "2,3,4",
@@ -72,7 +55,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\acf435ed4e109ab17e93bde9c98cd3a3\\transformed\\core-1.13.1\\res\\values-it\\values-it.xml",
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\47b7b886449fa316d69002911858668e\\transformed\\play-services-basement-18.9.0\\res\\values-it\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "218",
+                        "endColumns": "131",
+                        "endOffsets": "349"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "2128",
+                        "endColumns": "135",
+                        "endOffsets": "2259"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\ac5c3cc48102ceed4cc09c444c8987aa\\transformed\\core-1.15.0\\res\\values-it\\values-it.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

@@ -23,6 +23,10 @@ class TallerApplication : Application() {
             runCatching { container.facturacion.conectar() }
             // Asegura el negocio inicial ("Personal") en instalaciones nuevas.
             runCatching { container.asegurarNegocioInicial() }
+            // Categorías y cuentas por defecto: las migraciones que las siembran no corren
+            // en una instalación nueva, solo al actualizar.
+            runCatching { container.asegurarCategoriasIniciales() }
+            runCatching { container.asegurarCuentasIniciales() }
             // Genera los movimientos recurrentes que correspondan a este mes.
             runCatching { container.generarRecurrentes() }
         }

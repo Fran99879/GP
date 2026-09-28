@@ -21,23 +21,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\acf435ed4e109ab17e93bde9c98cd3a3\\transformed\\core-1.13.1\\res\\values-sw\\values-sw.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,149,251,348,449,556,663,778",
-                        "endColumns": "93,101,96,100,106,106,114,100",
-                        "endOffsets": "144,246,343,444,551,658,773,874"
-                    },
-                    "to": {
-                        "startLines": "3,4,5,6,7,8,9,102",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "188,282,384,481,582,689,796,10897",
-                        "endColumns": "93,101,96,100,106,106,114,100",
-                        "endOffsets": "277,379,476,577,684,791,906,10993"
-                    }
-                },
-                {
                     "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\bd2b191f2e678bdff4ef6327e8385d4b\\transformed\\material-release\\res\\values-sw\\values-sw.xml",
                     "from": {
                         "startLines": "2",
@@ -69,6 +52,23 @@
                         "startOffsets": "3817,3933,4048,4164,4278,4378,4477,4593,4734,4850,5001,5087,5187,5280,5382,5500,5627,5732,5862,5991,6127,6292,6421,6545,6674,6783,6877,6973,7096,7224,7321,7433,7543,7675,7816,7928,8028,8107,8203,8300,8415,8502,8587,8701,8781,8864,8963,9063,9158,9257,9345,9450,9550,9653,9769,9849,9967",
                         "endColumns": "115,114,115,113,99,98,115,140,115,150,85,99,92,101,117,126,104,129,128,135,164,128,123,128,108,93,95,122,127,96,111,109,131,140,111,99,78,95,96,114,86,84,113,79,82,98,99,94,98,87,104,99,102,115,79,117,109",
                         "endOffsets": "3928,4043,4159,4273,4373,4472,4588,4729,4845,4996,5082,5182,5275,5377,5495,5622,5727,5857,5986,6122,6287,6416,6540,6669,6778,6872,6968,7091,7219,7316,7428,7538,7670,7811,7923,8023,8102,8198,8295,8410,8497,8582,8696,8776,8859,8958,9058,9153,9252,9340,9445,9545,9648,9764,9844,9962,10072"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\ac5c3cc48102ceed4cc09c444c8987aa\\transformed\\core-1.15.0\\res\\values-sw\\values-sw.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,149,251,348,449,556,663,778",
+                        "endColumns": "93,101,96,100,106,106,114,100",
+                        "endOffsets": "144,246,343,444,551,658,773,874"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,102",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "188,282,384,481,582,689,796,10897",
+                        "endColumns": "93,101,96,100,106,106,114,100",
+                        "endOffsets": "277,379,476,577,684,791,906,10993"
                     }
                 },
                 {
@@ -106,13 +106,13 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\81ad88c680b808a15bc79a9d88bc4d84\\transformed\\play-services-basement-18.4.0\\res\\values-sw\\values.xml",
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\47b7b886449fa316d69002911858668e\\transformed\\play-services-basement-18.9.0\\res\\values-sw\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
-                        "startOffsets": "195",
+                        "startOffsets": "218",
                         "endColumns": "141",
-                        "endOffsets": "336"
+                        "endOffsets": "359"
                     },
                     "to": {
                         "startLines": "20",

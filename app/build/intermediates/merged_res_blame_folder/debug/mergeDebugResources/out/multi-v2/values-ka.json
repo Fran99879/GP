@@ -21,6 +21,23 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\47b7b886449fa316d69002911858668e\\transformed\\play-services-basement-18.9.0\\res\\values-ka\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "218",
+                        "endColumns": "138",
+                        "endOffsets": "356"
+                    },
+                    "to": {
+                        "startLines": "20",
+                        "startColumns": "4",
+                        "startOffsets": "2106",
+                        "endColumns": "142",
+                        "endOffsets": "2244"
+                    }
+                },
+                {
                     "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\63544469ff072aba1936382512688f7a\\transformed\\play-services-base-18.5.0\\res\\values-ka\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
@@ -55,40 +72,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\acf435ed4e109ab17e93bde9c98cd3a3\\transformed\\core-1.13.1\\res\\values-ka\\values-ka.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,151,253,352,451,557,661,779",
-                        "endColumns": "95,101,98,98,105,103,117,100",
-                        "endOffsets": "146,248,347,446,552,656,774,875"
-                    },
-                    "to": {
-                        "startLines": "3,4,5,6,7,8,9,102",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "190,286,388,487,586,692,796,10892",
-                        "endColumns": "95,101,98,98,105,103,117,100",
-                        "endOffsets": "281,383,482,581,687,791,909,10988"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\81ad88c680b808a15bc79a9d88bc4d84\\transformed\\play-services-basement-18.4.0\\res\\values-ka\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "138",
-                        "endOffsets": "333"
-                    },
-                    "to": {
-                        "startLines": "20",
-                        "startColumns": "4",
-                        "startOffsets": "2106",
-                        "endColumns": "142",
-                        "endOffsets": "2244"
-                    }
-                },
-                {
                     "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\bd2b191f2e678bdff4ef6327e8385d4b\\transformed\\material-release\\res\\values-ka\\values-ka.xml",
                     "from": {
                         "startLines": "2",
@@ -120,6 +103,23 @@
                         "startOffsets": "3784,3902,4019,4140,4254,4354,4453,4569,4705,4823,4971,5057,5159,5253,5351,5473,5593,5700,5835,5972,6107,6279,6408,6525,6643,6764,6859,6956,7074,7213,7316,7418,7529,7667,7807,7918,8021,8098,8193,8291,8401,8487,8574,8687,8767,8852,8953,9056,9150,9252,9338,9444,9540,9648,9765,9845,9951",
                         "endColumns": "117,116,120,113,99,98,115,135,117,147,85,101,93,97,121,119,106,134,136,134,171,128,116,117,120,94,96,117,138,102,101,110,137,139,110,102,76,94,97,109,85,86,112,79,84,100,102,93,101,85,105,95,107,116,79,105,96",
                         "endOffsets": "3897,4014,4135,4249,4349,4448,4564,4700,4818,4966,5052,5154,5248,5346,5468,5588,5695,5830,5967,6102,6274,6403,6520,6638,6759,6854,6951,7069,7208,7311,7413,7524,7662,7802,7913,8016,8093,8188,8286,8396,8482,8569,8682,8762,8847,8948,9051,9145,9247,9333,9439,9535,9643,9760,9840,9946,10043"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Fran9\\.gradle\\caches\\9.5.0\\transforms\\ac5c3cc48102ceed4cc09c444c8987aa\\transformed\\core-1.15.0\\res\\values-ka\\values-ka.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,151,253,352,451,557,661,779",
+                        "endColumns": "95,101,98,98,105,103,117,100",
+                        "endOffsets": "146,248,347,446,552,656,774,875"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6,7,8,9,102",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "190,286,388,487,586,692,796,10892",
+                        "endColumns": "95,101,98,98,105,103,117,100",
+                        "endOffsets": "281,383,482,581,687,791,909,10988"
                     }
                 }
             ]

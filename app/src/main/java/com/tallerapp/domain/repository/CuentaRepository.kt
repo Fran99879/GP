@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 /** Contrato de persistencia de cuentas / medios de pago. */
 interface CuentaRepository {
+    /** Siembra las cuentas por defecto si la tabla está vacía (instalación nueva). */
+    suspend fun asegurarIniciales()
     fun observar(): Flow<List<Cuenta>>
     suspend fun listar(): List<Cuenta>
     /** Cuentas con el saldo calculado (inicial + ingresos − gastos). */

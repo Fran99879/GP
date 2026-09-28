@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.tallerapp"
-4    android:versionCode="1"
-5    android:versionName="1.0" >
+4    android:versionCode="5"
+5    android:versionName="1.1" >
 6
 7    <uses-sdk
 7-->INJECTED
@@ -12,35 +12,35 @@
 9-->INJECTED
 10
 11    <uses-permission android:name="com.android.vending.BILLING" />
-11-->[com.android.billingclient:billing-ktx:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\9d33967c4149fd74207057a96ec88810\transformed\billing-ktx-7.1.1\AndroidManifest.xml:9:5-67
-11-->[com.android.billingclient:billing-ktx:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\9d33967c4149fd74207057a96ec88810\transformed\billing-ktx-7.1.1\AndroidManifest.xml:9:22-64
+11-->[com.android.billingclient:billing-ktx:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\9095515ca35cb7f53e93dbdad089c119\transformed\billing-ktx-9.1.0\AndroidManifest.xml:9:5-67
+11-->[com.android.billingclient:billing-ktx:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\9095515ca35cb7f53e93dbdad089c119\transformed\billing-ktx-9.1.0\AndroidManifest.xml:9:22-64
 12
 13    <queries>
-13-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:12:5-19:15
+13-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:12:5-19:15
 14        <intent>
-14-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:13:9-15:18
+14-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:13:9-15:18
 15            <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
-15-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:14:13-91
-15-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:14:21-88
+15-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:14:13-91
+15-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:14:21-88
 16        </intent>
 17        <intent>
-17-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:16:9-18:18
+17-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:16:9-18:18
 18            <action android:name="com.google.android.apps.play.billingtestcompanion.BillingOverrideService.BIND" />
-18-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:17:13-116
-18-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:17:21-113
+18-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:17:13-116
+18-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:17:21-113
 19        </intent>
 20    </queries>
 21
 22    <permission
-22-->[androidx.core:core:1.13.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\acf435ed4e109ab17e93bde9c98cd3a3\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+22-->[androidx.core:core:1.15.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\ac5c3cc48102ceed4cc09c444c8987aa\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
 23        android:name="com.tallerapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-23-->[androidx.core:core:1.13.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\acf435ed4e109ab17e93bde9c98cd3a3\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+23-->[androidx.core:core:1.15.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\ac5c3cc48102ceed4cc09c444c8987aa\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
 24        android:protectionLevel="signature" />
-24-->[androidx.core:core:1.13.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\acf435ed4e109ab17e93bde9c98cd3a3\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+24-->[androidx.core:core:1.15.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\ac5c3cc48102ceed4cc09c444c8987aa\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
 25
 26    <uses-permission android:name="com.tallerapp.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
-26-->[androidx.core:core:1.13.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\acf435ed4e109ab17e93bde9c98cd3a3\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
-26-->[androidx.core:core:1.13.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\acf435ed4e109ab17e93bde9c98cd3a3\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+26-->[androidx.core:core:1.15.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\ac5c3cc48102ceed4cc09c444c8987aa\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
+26-->[androidx.core:core:1.15.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\ac5c3cc48102ceed4cc09c444c8987aa\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
 27    <!-- <uses-sdk android:minSdkVersion="14"/> -->
 28    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 28-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\4203d1aaf3c46761b31653ba075c39fc\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:24:5-79
@@ -56,7 +56,7 @@
 33        android:allowBackup="false"
 33-->C:\Proyectos\GP\app\src\main\AndroidManifest.xml:6:9-36
 34        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-34-->[androidx.core:core:1.13.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\acf435ed4e109ab17e93bde9c98cd3a3\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+34-->[androidx.core:core:1.15.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\ac5c3cc48102ceed4cc09c444c8987aa\transformed\core-1.15.0\AndroidManifest.xml:28:18-86
 35        android:debuggable="true"
 36        android:extractNativeLibs="false"
 36-->INJECTED
@@ -106,32 +106,32 @@
 60        </provider>
 61
 62        <meta-data
-62-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:22:9-24:37
+62-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:22:9-24:37
 63            android:name="com.google.android.play.billingclient.version"
-63-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:23:13-73
-64            android:value="7.1.1" />
-64-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:24:13-34
+63-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:23:13-73
+64            android:value="9.1.0" />
+64-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:24:13-34
 65
 66        <activity
-66-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:26:9-30:75
+66-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:26:9-30:75
 67            android:name="com.android.billingclient.api.ProxyBillingActivity"
-67-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:27:13-78
+67-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:27:13-78
 68            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-68-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:28:13-96
+68-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:28:13-96
 69            android:exported="false"
-69-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:29:13-37
+69-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:29:13-37
 70            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-70-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:30:13-72
+70-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:30:13-72
 71        <activity
-71-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:31:9-35:75
+71-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:31:9-35:75
 72            android:name="com.android.billingclient.api.ProxyBillingActivityV2"
-72-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:32:13-80
+72-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:32:13-80
 73            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-73-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:33:13-96
+73-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:33:13-96
 74            android:exported="false"
-74-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:34:13-37
+74-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:34:13-37
 75            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-75-->[com.android.billingclient:billing:7.1.1] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\74b5eb18f65b2ed8357683518cb5613f\transformed\billing-7.1.1\AndroidManifest.xml:35:13-72
+75-->[com.android.billingclient:billing:9.1.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\82c7cd5fb026aa5f3bafccd54e075bcd\transformed\billing-9.1.0\AndroidManifest.xml:35:13-72
 76        <activity
 76-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\63544469ff072aba1936382512688f7a\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:9-173
 77            android:name="com.google.android.gms.common.api.GoogleApiActivity"
@@ -142,11 +142,11 @@
 79-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\63544469ff072aba1936382512688f7a\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:86-145
 80
 81        <meta-data
-81-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\81ad88c680b808a15bc79a9d88bc4d84\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+81-->[com.google.android.gms:play-services-basement:18.9.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\47b7b886449fa316d69002911858668e\transformed\play-services-basement-18.9.0\AndroidManifest.xml:21:9-23:69
 82            android:name="com.google.android.gms.version"
-82-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\81ad88c680b808a15bc79a9d88bc4d84\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+82-->[com.google.android.gms:play-services-basement:18.9.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\47b7b886449fa316d69002911858668e\transformed\play-services-basement-18.9.0\AndroidManifest.xml:22:13-58
 83            android:value="@integer/google_play_services_version" />
-83-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\81ad88c680b808a15bc79a9d88bc4d84\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+83-->[com.google.android.gms:play-services-basement:18.9.0] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\47b7b886449fa316d69002911858668e\transformed\play-services-basement-18.9.0\AndroidManifest.xml:23:13-66
 84
 85        <activity
 85-->[androidx.compose.ui:ui-tooling-android:1.8.3] C:\Users\Fran9\.gradle\caches\9.5.0\transforms\bc86c50adf0c77fb030465ae0590a493\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39

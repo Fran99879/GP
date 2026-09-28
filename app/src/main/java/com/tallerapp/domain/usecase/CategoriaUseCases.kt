@@ -5,6 +5,11 @@ import com.tallerapp.domain.repository.CategoriaRepository
 import kotlinx.coroutines.flow.Flow
 
 /** Observa las categorías activas de un tipo ("ingreso" | "egreso"). */
+/** Siembra las categorías por defecto en una instalación nueva. */
+class AsegurarCategoriasInicialesUseCase(private val repository: CategoriaRepository) {
+    suspend operator fun invoke() = repository.asegurarIniciales()
+}
+
 class ObservarCategoriasUseCase(private val repository: CategoriaRepository) {
     operator fun invoke(tipo: String): Flow<List<Categoria>> = repository.observar(tipo)
 }
