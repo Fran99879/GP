@@ -15,8 +15,8 @@ android {
         applicationId = "com.tallerapp"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.1"
 
     }
 
@@ -83,7 +83,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
     // Cobro de suscripciones (plan Pro) vía Google Play.
-    implementation("com.android.billingclient:billing-ktx:7.1.1")
+    implementation("com.android.billingclient:billing-ktx:9.1.0")
 
     // SDK de licencias (módulo referenciado en settings.gradle.kts).
 
