@@ -154,19 +154,34 @@ class FacturacionPlay(context: Context) {
 
         val resultado = cliente.queryProductDetails(params)
         val producto = resultado.productDetailsList?.firstOrNull() ?: return
-        _ofertas.value = producto.subscriptionOfferDetails.orEmpty().mapNotNull { oferta ->
-            val fase = oferta.pricingPhases.pricingPhaseList.lastOrNull() ?: return@mapNotNull null
-            val prueba = oferta.pricingPhases.pricingPhaseList
-                .firstOrNull { it.priceAmountMicros == 0L }
-            OfertaPro(
-                idPlanBase = oferta.basePlanId,
-                etiqueta = if (oferta.basePlanId == PLAN_ANUAL) "Anual" else "Mensual",
-                precio = fase.formattedPrice,
-                periodo = if (oferta.basePlanId == PLAN_ANUAL) "por año" else "por mes",
-                diasPrueba = prueba?.billingPeriod?.let(::diasDe) ?: 0,
-                offerToken = oferta.offerToken,
-            )
-        }.also { if (it.isEmpty()) Log.w(TAG, "Producto $PRODUCTO_PRO sin ofertas") }
+        // Play devuelve una entrada por cada oferta del plan base y otra por el plan base
+        // pelado, así que un plan con prueba gratuita llega dos veces. Se agrupa y se elige
+        // la de prueba: mostrar las dos daba un botón que compraba sin los días gratis.
+        _ofertas.value = producto.subscriptionOfferDetails.orEmpty()
+            .groupBy { it.basePlanId }
+            .mapNotNull { (idPlanBase, delPlan) ->
+                val oferta = delPlan.firstOrNull { o ->
+                    o.pricingPhases.pricingPhaseList.any { it.priceAmountMicros == 0L }
+                } ?: delPlan.firstOrNull() ?: return@mapNotNull null
+
+                val fase = oferta.pricingPhases.pricingPhaseList
+                    .lastOrNull() ?: return@mapNotNull null
+                val prueba = oferta.pricingPhases.pricingPhaseList
+                    .firstOrNull { it.priceAmountMicros == 0L }
+                val anual = idPlanBase == PLAN_ANUAL
+
+                OfertaPro(
+                    idPlanBase = idPlanBase,
+                    etiqueta = if (anual) "Anual" else "Mensual",
+                    precio = fase.formattedPrice,
+                    periodo = if (anual) "por año" else "por mes",
+                    diasPrueba = prueba?.billingPeriod?.let(::diasDe) ?: 0,
+                    offerToken = oferta.offerToken,
+                )
+            }
+            // El orden en que Play devuelve los planes no está garantizado.
+            .sortedBy { if (it.idPlanBase == PLAN_ANUAL) 0 else 1 }
+            .also { if (it.isEmpty()) Log.w(TAG, "Producto $PRODUCTO_PRO sin ofertas") }
     }
 
     /** Abre la pantalla de pago de Google. */

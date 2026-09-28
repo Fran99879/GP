@@ -1,6 +1,8 @@
 package com.tallerapp.features.planes
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -117,7 +119,26 @@ fun PlanesScreen(facturacion: FacturacionPlay, onBack: () -> Unit) {
                 TextoMuted("Para tu negocio")
                 PRO.forEach { Linea(it) }
 
-                if (!plan.esPro) {
+                if (plan.esPro) {
+                    Text(
+                        "Tenés Pro activo",
+                        modifier = Modifier.padding(top = 12.dp),
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    TextButton(
+                        onClick = {
+                            val uri = Uri.parse(
+                                "https://play.google.com/store/account/subscriptions" +
+                                    "?sku=${FacturacionPlay.PRODUCTO_PRO}" +
+                                    "&package=${context.packageName}",
+                            )
+                            context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                        },
+                        modifier = Modifier.padding(top = 4.dp),
+                    ) {
+                        Text("Gestionar suscripción en Google Play")
+                    }
+                } else {
                     if (ofertas.isEmpty()) {
                         TextoMuted(
                             "No se pudieron cargar los precios. Revisá tu conexión e " +
