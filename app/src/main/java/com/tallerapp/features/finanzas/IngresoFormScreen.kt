@@ -23,7 +23,6 @@ import com.tallerapp.core.ui.components.CampoTexto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.ui.components.SelectorOpciones
-import com.tallerapp.domain.model.MetodoPago
 import com.tallerapp.features.finanzas.ingreso.IngresoFormViewModel
 
 /** Formulario de alta/edición de ingreso (Frozen Spec 9.5, validaciones V-2/V-6). */
@@ -75,31 +74,12 @@ fun IngresoFormScreen(
                 habilitado = state.editable,
             )
             SelectorOpciones(
-                etiqueta = "Método de pago *",
-                seleccionado = state.metodo,
-                opciones = MetodoPago.entries,
-                textoOpcion = { it.etiqueta },
-                onSeleccion = viewModel::onMetodoChange,
-                error = state.errores.metodo,
-            )
-            SelectorOpciones(
                 etiqueta = "Cuenta",
                 seleccionado = state.cuentas.firstOrNull { it.nombre == state.cuenta },
                 opciones = state.cuentas,
                 textoOpcion = { it.display },
                 onSeleccion = { viewModel.onCuentaChange(it.nombre) },
             )
-
-            if (state.esMixto) {
-                Text("Reparto del pago mixto", style = MaterialTheme.typography.titleSmall)
-                state.errores.reparto?.let {
-                    Text(it, color = MaterialTheme.colorScheme.error)
-                }
-                CampoTexto(state.efectivo, viewModel::onEfectivoChange, "Efectivo", tipoTeclado = KeyboardType.Decimal, habilitado = state.editable)
-                CampoTexto(state.transferencia, viewModel::onTransferenciaChange, "Transferencia", tipoTeclado = KeyboardType.Decimal, habilitado = state.editable)
-                CampoTexto(state.tarjeta, viewModel::onTarjetaChange, "Tarjeta", tipoTeclado = KeyboardType.Decimal, habilitado = state.editable)
-                CampoTexto(state.mercadoPago, viewModel::onMercadoPagoChange, "Mercado Pago", tipoTeclado = KeyboardType.Decimal, habilitado = state.editable)
-            }
 
             FechaPicker(fechaMillis = state.fecha, onFechaChange = viewModel::onFechaChange)
 

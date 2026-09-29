@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
 import com.tallerapp.domain.model.Cuenta
-import com.tallerapp.domain.model.MetodoPago
-import com.tallerapp.domain.model.RepartoPago
 import com.tallerapp.domain.usecase.EditarIngresoUseCase
 import com.tallerapp.domain.usecase.IngresoResultado
 import com.tallerapp.domain.usecase.ObservarCuentasUseCase
@@ -22,22 +20,15 @@ import kotlinx.coroutines.launch
 data class IngresoFormState(
     val monto: String = "",
     val concepto: String = "",
-    val metodo: MetodoPago? = null,
     val cuenta: String? = null,
     val cuentas: List<Cuenta> = emptyList(),
-    val efectivo: String = "",
-    val transferencia: String = "",
-    val tarjeta: String = "",
-    val mercadoPago: String = "",
     val fecha: Long = Fechas.hoyInicioMillis(),
     val editable: Boolean = true,
     val errores: IngresoErrores = IngresoErrores(),
     val titulo: String = "Nuevo Ingreso",
     val procesando: Boolean = false,
     val guardadoOk: Boolean = false,
-) {
-    val esMixto: Boolean get() = metodo == MetodoPago.PAGO_MIXTO
-}
+)
 
 class IngresoFormViewModel(
     private val registrarIngreso: RegistrarIngresoUseCase,
@@ -68,12 +59,7 @@ class IngresoFormViewModel(
                 it.copy(
                     monto = Dinero.centavosAEntrada(i.montoCentavos),
                     concepto = i.concepto,
-                    metodo = i.metodo,
                     cuenta = i.cuenta,
-                    efectivo = i.reparto?.efectivoCentavos?.let(Dinero::centavosAEntrada).orEmpty(),
-                    transferencia = i.reparto?.transferenciaCentavos?.let(Dinero::centavosAEntrada).orEmpty(),
-                    tarjeta = i.reparto?.tarjetaCentavos?.let(Dinero::centavosAEntrada).orEmpty(),
-                    mercadoPago = i.reparto?.mercadoPagoCentavos?.let(Dinero::centavosAEntrada).orEmpty(),
                     fecha = i.fecha,
                     editable = Fechas.esHoy(i.fechaRegistro),
                     titulo = "Editar Ingreso",
@@ -84,34 +70,21 @@ class IngresoFormViewModel(
 
     fun onMontoChange(v: String) = _state.update { it.copy(monto = v) }
     fun onConceptoChange(v: String) = _state.update { it.copy(concepto = v) }
-    fun onMetodoChange(v: MetodoPago) = _state.update { it.copy(metodo = v) }
     fun onCuentaChange(v: String) = _state.update { it.copy(cuenta = v) }
-    fun onEfectivoChange(v: String) = _state.update { it.copy(efectivo = v) }
-    fun onTransferenciaChange(v: String) = _state.update { it.copy(transferencia = v) }
-    fun onTarjetaChange(v: String) = _state.update { it.copy(tarjeta = v) }
-    fun onMercadoPagoChange(v: String) = _state.update { it.copy(mercadoPago = v) }
     fun onFechaChange(v: Long) = _state.update { it.copy(fecha = v) }
 
     fun guardar() {
         if (_state.value.procesando) return
         val s = _state.value
         val montoCentavos = Dinero.parsearACentavos(s.monto)
-        val reparto = if (s.esMixto) {
-            RepartoPago(
-                efectivoCentavos = aCentavos(s.efectivo),
-                transferenciaCentavos = aCentavos(s.transferencia),
-                tarjetaCentavos = aCentavos(s.tarjeta),
-                mercadoPagoCentavos = aCentavos(s.mercadoPago),
-            )
-        } else null
 
         _state.update { it.copy(procesando = true) }
         viewModelScope.launch {
             val cuenta = s.cuenta ?: "Efectivo"
             val resultado = if (esEdicion) {
-                editarIngreso(ingresoId!!, montoCentavos, s.concepto, s.metodo, cuenta, reparto, s.fecha)
+                editarIngreso(ingresoId!!, montoCentavos, s.concepto, cuenta, s.fecha)
             } else {
-                registrarIngreso(montoCentavos, s.concepto, s.metodo, cuenta, reparto, s.fecha)
+                registrarIngreso(montoCentavos, s.concepto, cuenta, s.fecha)
             }
             when (resultado) {
                 is IngresoResultado.Exito -> _state.update { it.copy(guardadoOk = true) }
@@ -120,8 +93,4 @@ class IngresoFormViewModel(
             }
         }
     }
-
-    /** Texto vacío cuenta como 0; texto inválido también, la validación atrapa el total. */
-    private fun aCentavos(texto: String): Long =
-        if (texto.isBlank()) 0L else Dinero.parsearACentavos(texto) ?: 0L
 }

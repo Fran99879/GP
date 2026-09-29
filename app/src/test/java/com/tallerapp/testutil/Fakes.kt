@@ -19,6 +19,10 @@ class FakeIngresoRepository : IngresoRepository {
         flowOf(items.values.filter { it.fecha in inicio until fin })
     override fun sumaRango(inicio: Long, fin: Long): Flow<Long> =
         flowOf(items.values.filter { it.fecha in inicio until fin }.sumOf { it.montoCentavos })
+    // Los fakes no simulan multi-negocio: todo vive en un solo negocio.
+    override fun sumaRangoTodos(inicio: Long, fin: Long): Flow<Long> = sumaRango(inicio, fin)
+    override fun totalesPorNegocio(inicio: Long, fin: Long): Flow<Map<Long, Long>> =
+        flowOf(mapOf(1L to items.values.filter { it.fecha in inicio until fin }.sumOf { it.montoCentavos }))
     override suspend fun obtener(id: Long): Ingreso? = items[id]
     override suspend fun crear(ingreso: Ingreso): Long {
         val id = nextId++
@@ -37,6 +41,11 @@ class FakeEgresoRepository : EgresoRepository {
         flowOf(items.values.filter { it.fecha in inicio until fin })
     override fun sumaRango(inicio: Long, fin: Long): Flow<Long> =
         flowOf(items.values.filter { it.fecha in inicio until fin }.sumOf { it.montoCentavos })
+    // Los fakes no simulan multi-negocio: todo vive en un solo negocio.
+    override fun observarRangoTodos(inicio: Long, fin: Long): Flow<List<Egreso>> =
+        observarRango(inicio, fin)
+    override fun totalesPorNegocio(inicio: Long, fin: Long): Flow<Map<Long, Long>> =
+        flowOf(mapOf(1L to items.values.filter { it.fecha in inicio until fin }.sumOf { it.montoCentavos }))
     override suspend fun obtener(id: Long): Egreso? = items[id]
     override suspend fun crear(egreso: Egreso): Long {
         val id = nextId++

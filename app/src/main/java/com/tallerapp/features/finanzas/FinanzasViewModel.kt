@@ -49,8 +49,7 @@ class FinanzasViewModel(
             observarIngresosRango(f.desde, finExclusivo(f.hasta)).map { lista ->
                 if (f.texto.isBlank()) lista
                 else lista.filter {
-                    it.concepto.contains(f.texto, true) || it.cuenta.contains(f.texto, true) ||
-                        it.metodo.etiqueta.contains(f.texto, true)
+                    it.concepto.contains(f.texto, true) || it.cuenta.contains(f.texto, true)
                 }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())

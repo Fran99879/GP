@@ -1,8 +1,6 @@
 package com.tallerapp.domain.usecase
 
 import com.tallerapp.core.util.Fechas
-import com.tallerapp.domain.model.MetodoPago
-import com.tallerapp.domain.model.RepartoPago
 import com.tallerapp.domain.repository.IngresoRepository
 import com.tallerapp.domain.validation.IngresoErrores
 import com.tallerapp.domain.validation.IngresoValidator
@@ -17,9 +15,7 @@ class EditarIngresoUseCase(private val repository: IngresoRepository) {
         id: Long,
         montoCentavos: Long?,
         concepto: String,
-        metodo: MetodoPago?,
         cuenta: String,
-        reparto: RepartoPago?,
         fecha: Long,
     ): IngresoResultado {
         val existente = repository.obtener(id)
@@ -31,15 +27,13 @@ class EditarIngresoUseCase(private val repository: IngresoRepository) {
             )
         }
 
-        val errores = IngresoValidator.validar(montoCentavos, concepto, metodo, reparto)
+        val errores = IngresoValidator.validar(montoCentavos, concepto)
         if (!errores.esValido) return IngresoResultado.Invalido(errores)
 
         val actualizado = existente.copy(
             montoCentavos = montoCentavos!!,
             concepto = concepto.trim(),
-            metodo = metodo!!,
             cuenta = cuenta,
-            reparto = if (metodo == MetodoPago.PAGO_MIXTO) reparto else null,
             fecha = fecha,
         )
         repository.actualizar(actualizado)

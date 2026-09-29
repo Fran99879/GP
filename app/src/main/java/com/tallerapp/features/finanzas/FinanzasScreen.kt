@@ -152,8 +152,7 @@ fun FinanzasScreen(
                     val esHoy = Fechas.esHoy(ingreso.fechaRegistro)
                     MovimientoRow(
                         titulo = ingreso.concepto,
-                        // Evita repetir el dato cuando la cuenta y el método coinciden ("Efectivo · Efectivo").
-                        subtitulo = listOf(ingreso.cuenta, ingreso.metodo.etiqueta).distinct()
+                        subtitulo = listOf(ingreso.cuenta)
                             .plus(Fechas.formatear(ingreso.fecha)).joinToString(" · "),
                         monto = Dinero.formatear(ingreso.montoCentavos),
                         montoColor = Ingreso,

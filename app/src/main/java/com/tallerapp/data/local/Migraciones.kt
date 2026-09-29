@@ -288,3 +288,47 @@ val MIGRATION_11_12 = object : Migration(11, 12) {
         db.execSQL("CREATE INDEX IF NOT EXISTS `ix_agenda_fecha` ON `agenda` (`fecha`)")
     }
 }
+
+/**
+ * v12 → v13: retira `metodo` y el reparto del pago mixto de `ingreso`.
+ *
+ * `cuenta` (v6) ya respondía lo mismo que el enum `MetodoPago`, así que el formulario
+ * preguntaba dos veces — y el egreso, que solo tiene `cuenta`, preguntaba distinto.
+ *
+ * Los ingresos se conservan enteros: se copian con su monto, concepto, cuenta, fecha y
+ * negocio. Lo único que se pierde es el **detalle** del reparto de un pago mixto (cuánto
+ * fue por cada medio); el monto total queda intacto y la cuenta que tenía el ingreso pasa
+ * tal cual. SQLite anterior a 3.35 no soporta DROP COLUMN y minSdk es 26, así que se
+ * recrea la tabla.
+ */
+val MIGRATION_12_13 = object : Migration(12, 13) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `ingreso_nuevo` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `montoCentavos` INTEGER NOT NULL,
+                `concepto` TEXT NOT NULL,
+                `cuenta` TEXT NOT NULL DEFAULT 'Efectivo',
+                `negocioId` INTEGER NOT NULL DEFAULT 1,
+                `fecha` INTEGER NOT NULL,
+                `fechaRegistro` INTEGER NOT NULL,
+                `origen` TEXT NOT NULL,
+                `trabajoId` INTEGER
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            INSERT INTO `ingreso_nuevo`
+                (`id`,`montoCentavos`,`concepto`,`cuenta`,`negocioId`,`fecha`,`fechaRegistro`,`origen`,`trabajoId`)
+            SELECT `id`,`montoCentavos`,`concepto`,`cuenta`,`negocioId`,`fecha`,`fechaRegistro`,`origen`,`trabajoId`
+            FROM `ingreso`
+            """.trimIndent(),
+        )
+        db.execSQL("DROP TABLE `ingreso`")
+        db.execSQL("ALTER TABLE `ingreso_nuevo` RENAME TO `ingreso`")
+        // Room valida los índices al abrir: el nombre debe coincidir con el de la entidad.
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_ingreso_fecha` ON `ingreso` (`fecha`)")
+    }
+}

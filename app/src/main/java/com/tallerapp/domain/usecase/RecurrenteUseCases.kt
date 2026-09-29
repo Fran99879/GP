@@ -2,7 +2,6 @@ package com.tallerapp.domain.usecase
 
 import com.tallerapp.domain.model.Egreso
 import com.tallerapp.domain.model.Ingreso
-import com.tallerapp.domain.model.MetodoPago
 import com.tallerapp.domain.model.OrigenIngreso
 import com.tallerapp.domain.model.Recurrente
 import com.tallerapp.domain.repository.EgresoRepository
@@ -51,7 +50,7 @@ class GenerarRecurrentesUseCase(
                 ingresoRepository.crear(
                     Ingreso(
                         montoCentavos = rec.montoCentavos, concepto = rec.concepto,
-                        metodo = MetodoPago.EFECTIVO, cuenta = rec.cuenta, reparto = null,
+                        cuenta = rec.cuenta,
                         fecha = fecha, fechaRegistro = ahora, origen = OrigenIngreso.MANUAL, trabajoId = null,
                     ),
                 )
