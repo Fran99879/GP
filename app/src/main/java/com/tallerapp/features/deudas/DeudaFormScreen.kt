@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.CampoTexto
+import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.features.deudas.form.DeudaFormViewModel
@@ -84,11 +85,10 @@ fun DeudaFormScreen(
                     }
                 }
             }
-            CampoTexto(
+            CampoMonto(
                 valor = state.monto,
                 onChange = viewModel::onMontoChange,
                 etiqueta = "Monto *",
-                tipoTeclado = KeyboardType.Decimal,
                 error = state.errores.monto,
             )
             CampoTexto(

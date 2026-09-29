@@ -18,6 +18,8 @@ val DESTINOS_RAIZ = listOf(
 val DESTINOS_SECUNDARIOS = listOf(
     DestinoNav("Agenda", Destination.AGENDA, IconosApp.Agenda),
     DestinoNav("Negocios", Destination.NEGOCIOS, IconosApp.Negocios),
+    DestinoNav("Productos", Destination.PRODUCTOS, IconosApp.Negocios),
+    DestinoNav("Facturas", Destination.FACTURAS, IconosApp.Movimientos),
     DestinoNav("Calculadora", Destination.CALCULADORA, IconosApp.Calculadora),
     DestinoNav("Planes", Destination.PLANES, IconosApp.Movimientos),
     DestinoNav("Configuración", Destination.AJUSTES, IconosApp.Configuracion),

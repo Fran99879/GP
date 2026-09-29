@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.SelectorOpciones
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
+import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Recurrente
 
@@ -122,7 +123,7 @@ private fun RecurrenteDialog(
                     etiqueta = "Tipo", seleccionado = tipo, opciones = listOf("egreso", "ingreso"),
                     textoOpcion = { if (it == "ingreso") "Ingreso" else "Gasto" }, onSeleccion = { tipo = it },
                 )
-                OutlinedTextField(value = monto, onValueChange = { monto = it }, label = { Text("Monto") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                CampoMonto(valor = monto, onChange = { monto = it }, etiqueta = "Monto")
                 OutlinedTextField(value = concepto, onValueChange = { concepto = it }, label = { Text("Concepto") })
                 if (tipo == "egreso" && categorias.isNotEmpty()) {
                     SelectorOpciones(etiqueta = "Categoría", seleccionado = categoria, opciones = categorias, textoOpcion = { it }, onSeleccion = { categoria = it })

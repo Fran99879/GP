@@ -11,6 +11,8 @@ import com.tallerapp.data.repository.MetaRepositoryImpl
 import com.tallerapp.data.repository.NegocioRepositoryImpl
 import com.tallerapp.data.repository.RecurrenteRepositoryImpl
 import com.tallerapp.data.repository.EgresoRepositoryImpl
+import com.tallerapp.data.repository.FacturaRepositoryImpl
+import com.tallerapp.data.repository.ProductoRepositoryImpl
 import com.tallerapp.data.repository.IngresoRepositoryImpl
 import com.tallerapp.domain.repository.AgendaRepository
 import com.tallerapp.domain.repository.CategoriaRepository
@@ -27,7 +29,19 @@ import com.tallerapp.domain.usecase.MarcarAgendaHechoUseCase
 import com.tallerapp.domain.usecase.EliminarAgendaItemUseCase
 import com.tallerapp.domain.usecase.ObservarContactosUseCase
 import com.tallerapp.domain.repository.EgresoRepository
+import com.tallerapp.domain.repository.FacturaRepository
+import com.tallerapp.domain.repository.ProductoRepository
 import com.tallerapp.domain.repository.IngresoRepository
+import com.tallerapp.domain.usecase.EliminarFacturaUseCase
+import com.tallerapp.domain.usecase.EliminarProductoUseCase
+import com.tallerapp.domain.usecase.EmitirFacturaUseCase
+import com.tallerapp.domain.usecase.GuardarProductoUseCase
+import com.tallerapp.domain.usecase.ObservarFacturasUseCase
+import com.tallerapp.domain.usecase.ObservarProductosUseCase
+import com.tallerapp.domain.usecase.ObtenerFacturaUseCase
+import com.tallerapp.domain.usecase.ObtenerProductoUseCase
+import com.tallerapp.domain.usecase.ProductoPorCodigoUseCase
+import com.tallerapp.domain.usecase.SiguienteNumeroFacturaUseCase
 import com.tallerapp.domain.usecase.EliminarCategoriaUseCase
 import com.tallerapp.domain.usecase.EliminarCuentaUseCase
 import com.tallerapp.domain.usecase.EliminarMetaUseCase
@@ -99,6 +113,10 @@ class AppContainer(context: Context) {
         AgendaRepositoryImpl(database.agendaDao())
     private val negocioRepository: NegocioRepository =
         NegocioRepositoryImpl(database.negocioDao())
+    private val productoRepository: ProductoRepository =
+        ProductoRepositoryImpl(database.productoDao())
+    private val facturaRepository: FacturaRepository =
+        FacturaRepositoryImpl(database.facturaDao())
 
     // Ingresos.
     val registrarIngreso = RegistrarIngresoUseCase(ingresoRepository)
@@ -175,6 +193,20 @@ class AppContainer(context: Context) {
     val renombrarNegocio = RenombrarNegocioUseCase(negocioRepository)
     val eliminarNegocio = com.tallerapp.domain.usecase.EliminarNegocioUseCase(negocioRepository, observarNegocios)
     val asegurarNegocioInicial = AsegurarNegocioInicialUseCase(negocioRepository)
+
+    // Catálogo de productos (Pro).
+    val observarProductos = ObservarProductosUseCase(productoRepository)
+    val obtenerProducto = ObtenerProductoUseCase(productoRepository)
+    val productoPorCodigo = ProductoPorCodigoUseCase(productoRepository)
+    val guardarProducto = GuardarProductoUseCase(productoRepository)
+    val eliminarProducto = EliminarProductoUseCase(productoRepository)
+
+    // Facturas (Pro). Emitir toca stock y caja, así que junta los tres repositorios.
+    val observarFacturas = ObservarFacturasUseCase(facturaRepository)
+    val obtenerFactura = ObtenerFacturaUseCase(facturaRepository)
+    val siguienteNumeroFactura = SiguienteNumeroFacturaUseCase(facturaRepository)
+    val emitirFactura = EmitirFacturaUseCase(facturaRepository, productoRepository, ingresoRepository)
+    val eliminarFactura = EliminarFacturaUseCase(facturaRepository)
 
     // Agenda (tareas, turnos y productos).
     val observarAgenda = ObservarAgendaUseCase(agendaRepository)

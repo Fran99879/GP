@@ -20,11 +20,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tallerapp.core.ui.theme.Azul
 import com.tallerapp.core.ui.theme.MetaCompleta
@@ -61,6 +67,42 @@ fun TarjetaApp(
     ) {
         Column(modifier = Modifier.padding(padding), content = contenido)
     }
+}
+
+/**
+ * Cifra que se achica hasta entrar en una sola línea.
+ *
+ * Las tarjetas del inicio son angostas (dos por fila) y un importe de siete u ocho dígitos
+ * partía en dos renglones, cortando los centavos ("$ 19.210.000,0 / 0"). Acá se mide el
+ * texto y, si se pasa de ancho, se reduce un 8% y se vuelve a medir, hasta el 55% del
+ * tamaño original. Converge en dos o tres pasadas y no necesita saber el ancho de antemano.
+ */
+@Composable
+fun CifraAjustable(
+    texto: String,
+    estilo: TextStyle,
+    color: Color,
+    modifier: Modifier = Modifier,
+    fontWeight: FontWeight = FontWeight.Bold,
+) {
+    // La escala se reinicia con cada cifra nueva: si el monto se achica, el texto vuelve a crecer.
+    var escala by remember(texto) { mutableFloatStateOf(1f) }
+    Text(
+        texto,
+        modifier = modifier,
+        style = estilo,
+        fontSize = estilo.fontSize * escala,
+        // La altura de línea acompaña al tamaño; si no, la cifra chica queda descentrada.
+        lineHeight = estilo.fontSize * escala * 1.2f,
+        fontWeight = fontWeight,
+        color = color,
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Ellipsis,
+        onTextLayout = { resultado ->
+            if (resultado.hasVisualOverflow && escala > 0.55f) escala *= 0.92f
+        },
+    )
 }
 
 /** Título de pantalla (equivale al estilo `H1`: 22sp bold). */
@@ -144,11 +186,10 @@ fun TarjetaMetrica(
             style = MaterialTheme.typography.bodySmall,
             color = if (destacada) Tostado else MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Text(
-            valor,
-            modifier = Modifier.padding(top = 6.dp),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
+        CifraAjustable(
+            texto = valor,
+            modifier = Modifier.padding(top = 6.dp).fillMaxWidth(),
+            estilo = MaterialTheme.typography.titleLarge,
             color = if (destacada) Color.White else colorValor,
         )
         if (subtitulo != null) {
@@ -190,7 +231,12 @@ fun BloqueResumen3(
 fun RowScope.MetricaResumen(etiqueta: String, valor: String, color: Color) {
     Column(modifier = Modifier.weight(1f)) {
         TextoMuted(etiqueta)
-        Text(valor, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, color = color)
+        CifraAjustable(
+            texto = valor,
+            modifier = Modifier.fillMaxWidth(),
+            estilo = MaterialTheme.typography.titleMedium,
+            color = color,
+        )
     }
 }
 

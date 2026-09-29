@@ -1,7 +1,10 @@
 package com.tallerapp.features.perfil
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.padding as paddingLayout
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import com.tallerapp.core.ui.components.AvatarPerfil
+import com.tallerapp.core.ui.components.AvataresApp
+import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.theme.TemaApp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +44,8 @@ fun PerfilScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     var nombre by remember { mutableStateOf(TemaApp.nombre) }
     var guardado by remember { mutableStateOf(false) }
+    // Se lee del estado global: al tocar otro avatar, la barra superior también cambia.
+    val avatarActual = TemaApp.avatar
 
     Scaffold(
         topBar = {
@@ -49,10 +60,16 @@ fun PerfilScreen(onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box(
-                modifier = Modifier.size(80.dp).background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
-                contentAlignment = Alignment.Center,
-            ) { Text("👤", style = MaterialTheme.typography.displaySmall) }
+            AvatarPerfil(id = avatarActual, lado = 88.dp)
+
+            TextoMuted("Elegí tu foto")
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                // El primero saca la foto y vuelve al marcador genérico.
+                OpcionAvatar("", avatarActual) { TemaApp.cambiarAvatar(context, "") }
+                AvataresApp.todos.forEach { (id, _) ->
+                    OpcionAvatar(id, avatarActual) { TemaApp.cambiarAvatar(context, id) }
+                }
+            }
 
             if (nombre.isNotBlank()) {
                 Text("Hola, $nombre", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -70,10 +87,24 @@ fun PerfilScreen(onBack: () -> Unit) {
             ) { Text(if (guardado) "Guardado ✓" else "Guardar") }
 
             Text(
-                "Tu nombre se guarda solo en este teléfono. La foto de perfil llega en una próxima versión.",
+                "Tu nombre y tu foto se guardan solo en este teléfono.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
+}
+
+/** Un avatar del selector, con anillo cuando es el elegido. */
+@Composable
+private fun OpcionAvatar(id: String, elegido: String, onClick: () -> Unit) {
+    val seleccionado = id == elegido
+    val borde = if (seleccionado) MaterialTheme.colorScheme.primary else Color.Transparent
+    AvatarPerfil(
+        id = id,
+        lado = 52.dp,
+        modifier = Modifier
+            .border(width = if (seleccionado) 3.dp else 0.dp, color = borde, shape = CircleShape)
+            .clickable(onClick = onClick),
+    )
 }

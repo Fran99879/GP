@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.ui.components.AvatarPerfil
+import com.tallerapp.core.ui.components.BarraPlan
 import com.tallerapp.core.ui.components.BotonGhost
 import com.tallerapp.core.ui.components.FilaMeta
 import com.tallerapp.core.ui.components.TextoMuted
@@ -60,6 +62,9 @@ fun DashboardScreen(
     onVerCalculadora: () -> Unit = {},
     onVerMetas: () -> Unit = {},
     onVerAgenda: () -> Unit = {},
+    onVerPlanes: () -> Unit = {},
+    onVerProductos: () -> Unit = {},
+    onVerFacturas: () -> Unit = {},
 ) {
     val s by viewModel.state.collectAsStateWithLifecycle()
     val metas by viewModel.metas.collectAsStateWithLifecycle()
@@ -72,14 +77,7 @@ fun DashboardScreen(
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
                 actions = {
                     SelectorNegocioTopBar()
-                    IconButton(onClick = onVerPerfil) {
-                        Box(
-                            modifier = Modifier
-                                .size(34.dp)
-                                .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
-                            contentAlignment = Alignment.Center,
-                        ) { Text("👤") }
-                    }
+                    IconButton(onClick = onVerPerfil) { AvatarPerfil(lado = 34.dp) }
                 },
             )
         },
@@ -92,6 +90,9 @@ fun DashboardScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            // Días que le quedan al plan: lo primero que se ve al abrir la app.
+            BarraPlan(onVerPlanes = onVerPlanes)
+
             TituloPantalla("Resumen de $mes")
 
             // Tarjetas de resumen (en el escritorio son 4 en fila; acá 2×2).
@@ -181,6 +182,10 @@ fun DashboardScreen(
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 BotonGhost("📅  Agenda", onVerAgenda, modifier = Modifier.weight(1f))
                 BotonGhost("🧮  Calculadora", onVerCalculadora, modifier = Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                BotonGhost("📦  Productos", onVerProductos, modifier = Modifier.weight(1f))
+                BotonGhost("🧾  Facturas", onVerFacturas, modifier = Modifier.weight(1f))
             }
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 BotonGhost("⚙️  Configuración", onVerAjustes, modifier = Modifier.weight(1f))

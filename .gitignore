@@ -10,6 +10,7 @@ LICENSING-SETUP.md
 /local.properties
 .idea/
 build/
+app/build/
 /captures
 .externalNativeBuild
 .cxx

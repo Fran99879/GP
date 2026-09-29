@@ -19,11 +19,19 @@ object EstadoPlan {
     private val _plan = MutableStateFlow(Plan.GRATIS)
     val plan: StateFlow<Plan> = _plan.asStateFlow()
 
+    /**
+     * Días que le quedan al período en curso, para la barra de la pantalla de inicio.
+     * Es informativo: el acceso lo decide [plan], no esto (ver [Suscripcion]).
+     */
+    private val _suscripcion = MutableStateFlow(Suscripcion.GRATIS)
+    val suscripcion: StateFlow<Suscripcion> = _suscripcion.asStateFlow()
+
     val actual: Plan get() = _plan.value
     val esPro: Boolean get() = _plan.value.esPro
 
     /** Lo llama [FacturacionPlay] con lo que responde Google Play. */
-    internal fun actualizar(nuevo: Plan) {
+    internal fun actualizar(nuevo: Plan, suscripcion: Suscripcion = Suscripcion.GRATIS) {
         _plan.value = nuevo
+        _suscripcion.value = suscripcion
     }
 }

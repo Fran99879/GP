@@ -23,6 +23,7 @@ object TemaApp {
     private const val KEY_ACCENT = "accent"
     private const val KEY_ONBOARDING = "onboarding_visto"
     private const val KEY_NOMBRE = "perfil_nombre"
+    private const val KEY_AVATAR = "perfil_avatar"
 
     /** Monedas disponibles: (símbolo, etiqueta). */
     val monedas = listOf("$" to "Peso ($)", "US$" to "Dólar (US$)", "€" to "Euro (€)", "R$" to "Real (R$)", "Gs" to "Guaraní (Gs)")
@@ -44,6 +45,10 @@ object TemaApp {
     var nombre by mutableStateOf("")
         private set
 
+    /** Id del avatar elegido, o "" para el marcador genérico. Ver `AvataresApp`. */
+    var avatar by mutableStateOf("")
+        private set
+
     /** Color de acento actual como ARGB Long. */
     val accentColor: Long get() = acentos.firstOrNull { it.first == accent }?.second ?: 0xFF023A5DL
 
@@ -57,6 +62,7 @@ object TemaApp {
         accent = p.getString(KEY_ACCENT, "Azul") ?: "Azul"
         onboardingVisto = p.getBoolean(KEY_ONBOARDING, false)
         nombre = p.getString(KEY_NOMBRE, "") ?: ""
+        avatar = p.getString(KEY_AVATAR, "") ?: ""
         Dinero.simbolo = moneda
         Dinero.simboloSecundario = p.getString(KEY_MONEDA_SEC, "US$") ?: "US$"
         Dinero.tasa = p.getString(KEY_TASA, "0")?.toDoubleOrNull() ?: 0.0
@@ -87,6 +93,11 @@ object TemaApp {
     fun cambiarNombre(context: Context, nuevo: String) {
         nombre = nuevo
         prefs(context).edit().putString(KEY_NOMBRE, nuevo).apply()
+    }
+
+    fun cambiarAvatar(context: Context, id: String) {
+        avatar = id
+        prefs(context).edit().putString(KEY_AVATAR, id).apply()
     }
 
     fun cambiarConversion(context: Context, monedaSec: String, tasa: Double, mostrar: Boolean) {

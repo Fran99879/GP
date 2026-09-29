@@ -56,18 +56,22 @@ llega a considerar pagar.
 | **Vista combinada** en Reportes | Todos los negocios juntos |
 | **Remitos PDF** | Herramienta de trabajo |
 | **Exportar PDF / Excel** | Para el contador |
+| **Catálogo de productos** | Alta por código de barras con la cámara, foto, precio con descuento en %, stock y aviso de stock bajo |
+| **Facturas** | Comprobante interno en PDF, con descuento por línea y general; al emitir puede registrar el cobro como ingreso y descontar el stock |
 
 ### Por construir ⛔
 
 | Función | Nota |
 |---|---|
-| **Control de stock** | Productos, cantidades, alertas de reposición |
 | **Clientes** | Ficha, historial de compras, cuenta corriente |
 | **Proveedores** | Ficha, historial de compras, deudas a pagar |
 | **Estadísticas avanzadas** | Rentabilidad, producto más vendido, mejor cliente |
 
-Estas cuatro son el argumento para que Pro **siga valiendo la suscripción mes a mes**. Sin
+Estas tres son el argumento para que Pro **siga valiendo la suscripción mes a mes**. Sin
 ellas, Pro es "pagar por más negocios" y la gente cancela después del primer mes.
+
+> El **control de stock** quedó cubierto con el catálogo de productos: cada producto lleva
+> cantidad y mínimo, y facturar descuenta lo vendido.
 
 > Dato útil: **clientes y proveedores** son la base de stock y de las estadísticas. Conviene
 > hacerlos primero. Y ya existe la tabla `contacto` (hoy solo autocompleta deudas), así que

@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.billing.EstadoPlan
 import com.tallerapp.core.billing.FacturacionPlay
 import com.tallerapp.core.billing.OfertaPro
+import com.tallerapp.core.ui.components.BarraPlan
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
@@ -51,6 +52,8 @@ private val PRO = listOf(
     "Negocios ilimitados",
     "Comparativa entre negocios",
     "Ver todos los negocios combinados",
+    "Catálogo de productos con código de barras",
+    "Facturas en PDF, con descuentos y control de stock",
     "Remitos en PDF",
     "Exportar a PDF y Excel",
 )
@@ -89,6 +92,9 @@ fun PlanesScreen(facturacion: FacturacionPlay, onBack: () -> Unit) {
                 TituloPantalla("Pasá a Pro")
                 TextoMuted("Uso personal gratis. Para tu negocio, Pro.")
             }
+
+            // Los días que quedan del período, arriba de la comparativa.
+            BarraPlan(onVerPlanes = {}, conAccion = false)
 
             if (pendiente) {
                 TarjetaApp(

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
+import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Cuenta
 
@@ -131,12 +132,7 @@ private fun CuentaDialog(
                         Text(em, modifier = Modifier.clickable { icono = em }.padding(4.dp))
                     }
                 }
-                OutlinedTextField(
-                    value = saldo,
-                    onValueChange = { saldo = it },
-                    label = { Text("Saldo inicial") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                )
+                CampoMonto(valor = saldo, onChange = { saldo = it }, etiqueta = "Saldo inicial")
             }
         },
         confirmButton = {

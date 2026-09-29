@@ -34,6 +34,7 @@ import com.tallerapp.core.export.ItemRemito
 import com.tallerapp.core.export.Remito
 import com.tallerapp.core.export.RemitoPdf
 import com.tallerapp.core.ui.components.BotonGhost
+import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
@@ -137,12 +138,10 @@ fun RemitoScreen(negocioNombre: String, onBack: () -> Unit) {
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                                 modifier = Modifier.weight(1f),
                             )
-                            OutlinedTextField(
-                                value = fila.precio,
-                                onValueChange = { fila.precio = it },
-                                label = { Text("P. unitario") },
-                                singleLine = true,
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            CampoMonto(
+                                valor = fila.precio,
+                                onChange = { fila.precio = it },
+                                etiqueta = "P. unitario",
                                 modifier = Modifier.weight(1f),
                             )
                         }

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Categoria
 
@@ -163,11 +164,10 @@ private fun CategoriaDialog(
                     }
                 }
                 if (inicial.tipo == "egreso") {
-                    OutlinedTextField(
-                        value = presupuesto,
-                        onValueChange = { presupuesto = it },
-                        label = { Text("Presupuesto mensual (opcional)") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    CampoMonto(
+                        valor = presupuesto,
+                        onChange = { presupuesto = it },
+                        etiqueta = "Presupuesto mensual (opcional)",
                     )
                 }
             }

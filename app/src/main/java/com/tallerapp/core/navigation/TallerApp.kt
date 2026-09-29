@@ -33,6 +33,12 @@ import com.tallerapp.features.metas.MetasViewModel
 import com.tallerapp.features.negocios.NegociosScreen
 import com.tallerapp.features.negocios.NegociosViewModel
 import com.tallerapp.features.negocios.recordarNombreNegocioActual
+import com.tallerapp.features.facturas.FacturaFormScreen
+import com.tallerapp.features.facturas.FacturaFormViewModel
+import com.tallerapp.features.facturas.FacturasScreen
+import com.tallerapp.features.facturas.FacturasViewModel
+import com.tallerapp.features.productos.ProductosScreen
+import com.tallerapp.features.productos.ProductosViewModel
 import com.tallerapp.features.remito.RemitoScreen
 import com.tallerapp.features.perfil.PerfilScreen
 import com.tallerapp.features.planes.PlanesScreen
@@ -72,9 +78,13 @@ fun TallerApp() {
     fun irA(destino: String) {
         scope.launch { drawerState.close() }
         navController.navigate(destino) {
-            popUpTo(Destination.DASHBOARD) { saveState = true }
+            // Sin saveState/restoreState a propósito. Con ellos, al salir de un destino
+            // secundario (Agenda, Negocios…) el sub-stack quedaba guardado bajo la clave de
+            // Inicio, y tocar "Inicio" en la barra lo restauraba: el usuario apretaba Inicio
+            // y aterrizaba en Agenda. Las pantallas releen de Room, así que no hay estado
+            // que valga la pena conservar.
+            popUpTo(Destination.DASHBOARD)
             launchSingleTop = true
-            restoreState = true
         }
     }
 
@@ -112,6 +122,9 @@ fun TallerApp() {
                 onVerCalculadora = { navController.navigate(Destination.CALCULADORA) },
                 onVerMetas = { navController.navigate(Destination.METAS) },
                 onVerAgenda = { navController.navigate(Destination.AGENDA) },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
+                onVerProductos = { navController.navigate(Destination.PRODUCTOS) },
+                onVerFacturas = { navController.navigate(Destination.FACTURAS) },
             )
         }
 
@@ -155,6 +168,72 @@ fun TallerApp() {
             )
         }
 
+        composable(Destination.PRODUCTOS) {
+            val container = rememberAppContainer()
+            val vm: ProductosViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        ProductosViewModel(
+                            container.observarProductos,
+                            container.guardarProducto,
+                            container.eliminarProducto,
+                            container.productoPorCodigo,
+                        )
+                    }
+                },
+            )
+            ProductosScreen(
+                viewModel = vm,
+                onBack = { navController.popBackStack() },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
+            )
+        }
+
+        composable(Destination.FACTURAS) {
+            val container = rememberAppContainer()
+            val vm: FacturasViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        FacturasViewModel(
+                            container.observarFacturas,
+                            container.obtenerFactura,
+                            container.eliminarFactura,
+                        )
+                    }
+                },
+            )
+            FacturasScreen(
+                viewModel = vm,
+                negocioNombre = recordarNombreNegocioActual(),
+                onBack = { navController.popBackStack() },
+                onNuevaFactura = { navController.navigate(Destination.FACTURA_NUEVA) },
+            )
+        }
+
+        composable(Destination.FACTURA_NUEVA) {
+            val container = rememberAppContainer()
+            val vm: FacturaFormViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        FacturaFormViewModel(
+                            container.observarProductos,
+                            container.observarCuentas,
+                            container.emitirFactura,
+                            container.obtenerFactura,
+                            container.productoPorCodigo,
+                            container.siguienteNumeroFactura,
+                        )
+                    }
+                },
+            )
+            FacturaFormScreen(
+                viewModel = vm,
+                negocioNombre = recordarNombreNegocioActual(),
+                onBack = { navController.popBackStack() },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
+            )
+        }
+
         composable(Destination.CALCULADORA) {
             CalculadoraScreen(onBack = { navController.popBackStack() })
         }
@@ -168,6 +247,8 @@ fun TallerApp() {
                 onVerRecurrentes = { navController.navigate(Destination.RECURRENTES) },
                 onVerNegocios = { navController.navigate(Destination.NEGOCIOS) },
                 onVerAgenda = { navController.navigate(Destination.AGENDA) },
+                onVerProductos = { navController.navigate(Destination.PRODUCTOS) },
+                onVerFacturas = { navController.navigate(Destination.FACTURAS) },
             )
         }
 

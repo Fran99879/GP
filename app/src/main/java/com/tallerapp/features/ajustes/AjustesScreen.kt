@@ -58,6 +58,8 @@ fun AjustesScreen(
     onVerRecurrentes: () -> Unit = {},
     onVerNegocios: () -> Unit = {},
     onVerAgenda: () -> Unit = {},
+    onVerProductos: () -> Unit = {},
+    onVerFacturas: () -> Unit = {},
 ) {
     val context = LocalContext.current
 
@@ -115,6 +117,10 @@ fun AjustesScreen(
             TarjetaApp(modifier = Modifier.fillMaxWidth(), padding = 0.dp) {
                 EtiquetaGrupo("HERRAMIENTAS", modifier = Modifier.padding(start = 16.dp, top = 16.dp))
                 FilaHerramienta("🏪", "Negocios", onVerNegocios)
+                HorizontalDivider()
+                FilaHerramienta("📦", "Productos", onVerProductos)
+                HorizontalDivider()
+                FilaHerramienta("🧾", "Facturas", onVerFacturas)
                 HorizontalDivider()
                 FilaHerramienta("📅", "Agenda", onVerAgenda)
                 HorizontalDivider()

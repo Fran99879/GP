@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Meta
 
@@ -97,14 +98,8 @@ private fun MetaDialog(inicial: Meta, onCerrar: () -> Unit, onGuardar: (Meta) ->
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(value = nombre, onValueChange = { nombre = it }, label = { Text("Nombre") })
-                OutlinedTextField(
-                    value = objetivo, onValueChange = { objetivo = it }, label = { Text("Objetivo") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                )
-                OutlinedTextField(
-                    value = actual, onValueChange = { actual = it }, label = { Text("Ya ahorrado") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                )
+                CampoMonto(valor = objetivo, onChange = { objetivo = it }, etiqueta = "Objetivo")
+                CampoMonto(valor = actual, onChange = { actual = it }, etiqueta = "Ya ahorrado")
             }
         },
         confirmButton = {

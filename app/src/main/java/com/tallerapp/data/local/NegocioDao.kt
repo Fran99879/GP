@@ -41,6 +41,15 @@ interface NegocioDao {
     @Query("DELETE FROM agenda WHERE negocioId = :ng")
     suspend fun borrarAgenda(ng: Long)
 
+    @Query("DELETE FROM producto WHERE negocioId = :ng")
+    suspend fun borrarProductos(ng: Long)
+
+    @Query("DELETE FROM factura_item WHERE facturaId IN (SELECT id FROM factura WHERE negocioId = :ng)")
+    suspend fun borrarItemsDeFacturas(ng: Long)
+
+    @Query("DELETE FROM factura WHERE negocioId = :ng")
+    suspend fun borrarFacturas(ng: Long)
+
     @Query("DELETE FROM negocio WHERE id = :id")
     suspend fun borrarNegocio(id: Long)
 
@@ -55,6 +64,12 @@ interface NegocioDao {
         borrarDeudas(ng)
         borrarRecurrentes(ng)
         borrarAgenda(ng)
+        // Los ítems primero: cuelgan de la factura y quedarían huérfanos.
+        borrarItemsDeFacturas(ng)
+        borrarFacturas(ng)
+        // Las fotos de los productos quedan en filesDir: son unos pocos KB por archivo y
+        // borrarlas necesita Context, que el DAO no tiene.
+        borrarProductos(ng)
         borrarNegocio(ng)
     }
 }

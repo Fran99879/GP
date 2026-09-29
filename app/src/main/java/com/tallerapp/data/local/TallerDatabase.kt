@@ -10,13 +10,14 @@ import androidx.room.RoomDatabase
  * v2 agrega Ingresos y Egresos. v3 agregó datos del taller (ya retirado).
  * v4 retira la tabla de trabajos del taller y agrega Deudas ("quién te debe").
  * v13 retira el método de pago del ingreso: la cuenta ya respondía lo mismo.
+ * v14 agrega el catálogo de productos y las facturas (comprobante interno).
  *
  * Las actualizaciones preservan los datos mediante migraciones reales
  * (ver Migraciones.kt). Solo se recurre a un borrado en caso de downgrade.
  */
 @Database(
-    entities = [IngresoEntity::class, EgresoEntity::class, DeudaEntity::class, CategoriaEntity::class, CuentaEntity::class, MetaEntity::class, RecurrenteEntity::class, ContactoEntity::class, NegocioEntity::class, AgendaEntity::class],
-    version = 13,
+    entities = [IngresoEntity::class, EgresoEntity::class, DeudaEntity::class, CategoriaEntity::class, CuentaEntity::class, MetaEntity::class, RecurrenteEntity::class, ContactoEntity::class, NegocioEntity::class, AgendaEntity::class, ProductoEntity::class, FacturaEntity::class, FacturaItemEntity::class],
+    version = 14,
     exportSchema = false,
 )
 abstract class TallerDatabase : RoomDatabase() {
@@ -31,6 +32,8 @@ abstract class TallerDatabase : RoomDatabase() {
     abstract fun contactoDao(): ContactoDao
     abstract fun negocioDao(): NegocioDao
     abstract fun agendaDao(): AgendaDao
+    abstract fun productoDao(): ProductoDao
+    abstract fun facturaDao(): FacturaDao
 
     companion object {
         @Volatile
@@ -43,7 +46,7 @@ abstract class TallerDatabase : RoomDatabase() {
                     TallerDatabase::class.java,
                     "tallerapp.db",
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14)
                     .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
                     .also { instancia = it }

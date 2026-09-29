@@ -332,3 +332,72 @@ val MIGRATION_12_13 = object : Migration(12, 13) {
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_ingreso_fecha` ON `ingreso` (`fecha`)")
     }
 }
+
+/**
+ * v13 → v14: catálogo de productos y facturas (comprobante interno).
+ *
+ * Tres tablas nuevas, ningún dato existente se toca. Los nombres de los índices son los
+ * mismos que declaran `ProductoEntity`, `FacturaEntity` y `FacturaItemEntity`: Room valida
+ * los índices al abrir la base y un nombre distinto aborta el arranque (ver Lecciones, 1).
+ */
+val MIGRATION_13_14 = object : Migration(13, 14) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `producto` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `negocioId` INTEGER NOT NULL,
+                `nombre` TEXT NOT NULL,
+                `codigoBarras` TEXT NOT NULL,
+                `descripcion` TEXT NOT NULL,
+                `precioCentavos` INTEGER NOT NULL,
+                `descuentoPct` REAL NOT NULL,
+                `stock` REAL NOT NULL,
+                `stockMinimo` REAL NOT NULL,
+                `imagen` TEXT NOT NULL,
+                `createdAt` INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `ix_producto_negocio` ON `producto` (`negocioId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `ix_producto_codigo` ON `producto` (`codigoBarras`)")
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `factura` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `negocioId` INTEGER NOT NULL,
+                `numero` TEXT NOT NULL,
+                `cliente` TEXT NOT NULL,
+                `documento` TEXT NOT NULL,
+                `fecha` INTEGER NOT NULL,
+                `descuentoPct` REAL NOT NULL,
+                `subtotalCentavos` INTEGER NOT NULL,
+                `totalCentavos` INTEGER NOT NULL,
+                `notas` TEXT NOT NULL,
+                `cuenta` TEXT NOT NULL,
+                `ingresoId` INTEGER,
+                `createdAt` INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `ix_factura_negocio` ON `factura` (`negocioId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `ix_factura_fecha` ON `factura` (`fecha`)")
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `factura_item` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `facturaId` INTEGER NOT NULL,
+                `productoId` INTEGER,
+                `descripcion` TEXT NOT NULL,
+                `cantidad` REAL NOT NULL,
+                `precioUnitCentavos` INTEGER NOT NULL,
+                `descuentoPct` REAL NOT NULL,
+                `subtotalCentavos` INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `ix_factura_item_factura` ON `factura_item` (`facturaId`)")
+    }
+}
