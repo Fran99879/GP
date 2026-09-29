@@ -18,6 +18,7 @@ fun FacturaEntity.toDomain(items: List<ItemFactura> = emptyList()): Factura = Fa
     notas = notas,
     cuenta = cuenta,
     ingresoId = ingresoId,
+    clienteId = clienteId,
     createdAt = createdAt,
     items = items,
 )
@@ -35,6 +36,7 @@ fun Factura.toEntity(): FacturaEntity = FacturaEntity(
     notas = notas,
     cuenta = cuenta,
     ingresoId = ingresoId,
+    clienteId = clienteId,
     createdAt = if (createdAt == 0L) System.currentTimeMillis() else createdAt,
 )
 

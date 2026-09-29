@@ -27,7 +27,11 @@ import com.tallerapp.domain.usecase.ObservarAgendaUseCase
 import com.tallerapp.domain.usecase.GuardarAgendaItemUseCase
 import com.tallerapp.domain.usecase.MarcarAgendaHechoUseCase
 import com.tallerapp.domain.usecase.EliminarAgendaItemUseCase
+import com.tallerapp.domain.usecase.EliminarContactoUseCase
+import com.tallerapp.domain.usecase.GuardarContactoUseCase
+import com.tallerapp.domain.usecase.ObservarContactosPorTipoUseCase
 import com.tallerapp.domain.usecase.ObservarContactosUseCase
+import com.tallerapp.domain.usecase.ObtenerContactoUseCase
 import com.tallerapp.domain.repository.EgresoRepository
 import com.tallerapp.domain.repository.FacturaRepository
 import com.tallerapp.domain.repository.ProductoRepository
@@ -183,9 +187,13 @@ class AppContainer(context: Context) {
     val eliminarRecurrente = EliminarRecurrenteUseCase(recurrenteRepository)
     val generarRecurrentes = GenerarRecurrentesUseCase(recurrenteRepository, ingresoRepository, egresoRepository)
 
-    // Contactos frecuentes.
+    // Clientes y proveedores (la ficha es Pro; el alta rápida por nombre, no).
     val observarContactos = ObservarContactosUseCase(contactoRepository)
+    val observarContactosPorTipo = ObservarContactosPorTipoUseCase(contactoRepository)
+    val obtenerContacto = ObtenerContactoUseCase(contactoRepository)
     val agregarContacto = AgregarContactoUseCase(contactoRepository)
+    val guardarContacto = GuardarContactoUseCase(contactoRepository)
+    val eliminarContacto = EliminarContactoUseCase(contactoRepository)
 
     // Negocios (multi-negocio).
     val observarNegocios = ObservarNegociosUseCase(negocioRepository)
@@ -205,7 +213,8 @@ class AppContainer(context: Context) {
     val observarFacturas = ObservarFacturasUseCase(facturaRepository)
     val obtenerFactura = ObtenerFacturaUseCase(facturaRepository)
     val siguienteNumeroFactura = SiguienteNumeroFacturaUseCase(facturaRepository)
-    val emitirFactura = EmitirFacturaUseCase(facturaRepository, productoRepository, ingresoRepository)
+    val emitirFactura =
+        EmitirFacturaUseCase(facturaRepository, productoRepository, ingresoRepository, agregarContacto)
     val eliminarFactura = EliminarFacturaUseCase(facturaRepository)
 
     // Agenda (tareas, turnos y productos).

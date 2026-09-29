@@ -53,6 +53,7 @@ private val PRO = listOf(
     "Comparativa entre negocios",
     "Ver todos los negocios combinados",
     "Catálogo de productos con código de barras",
+    "Clientes y proveedores, con ficha y datos de contacto",
     "Facturas en PDF, con descuentos y control de stock",
     "Remitos en PDF",
     "Exportar a PDF y Excel",

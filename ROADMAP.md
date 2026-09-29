@@ -1,7 +1,7 @@
 # Roadmap — Clientes y Proveedores
 
-> Plan de trabajo. **Todavía no está construido**: este archivo define qué se va a hacer,
-> en qué orden y con qué decisiones ya tomadas, para poder arrancar sin volver a pensarlo.
+> Plan de trabajo. **Fase 1 hecha el 29/09/2026** (ver al final de cada fase); las fases 2
+> y 3 siguen pendientes. Las decisiones tomadas acá son las que se implementaron.
 >
 > Otros roadmaps del repo (`AUDITORIA-Y-ROADMAP-MOVIL.md`,
 > `UI-ESCRITORIO-ANALISIS-Y-ROADMAP-MOVIL.md`) están cerrados y son de otra etapa.
@@ -104,7 +104,7 @@ idéntico al de la migración o la app crashea al arrancar, y el compilador no l
 Cada fase se termina, se prueba **en emulador** (no solo compila) y recién ahí empieza la
 siguiente.
 
-### Fase 1 — Ficha y listado
+### Fase 1 — Ficha y listado ✅ (29/09/2026)
 
 - Entidad, DAO, mapper, repositorio y casos de uso de `contacto`, copiando el vertical de
   productos.
@@ -118,6 +118,27 @@ siguiente.
 
 **Hecho cuando**: se carga un cliente, se lo elige al facturar, y la factura queda
 vinculada; borrar el negocio se lleva todo.
+
+**Cómo quedó.** Base **v15** con `MIGRATION_14_15`: `contacto` recreada (negocio, tipo y
+datos de contacto, único por `(negocioId, nombre)`), más `factura.clienteId`,
+`egreso.proveedorId` y `deuda.contactoId`, los tres opcionales y en NULL. Los contactos que
+había pasaron al negocio 1 como clientes.
+
+Una sola pantalla (`features/contactos/`) para las dos listas, con el tipo como parámetro
+del ViewModel. En el menú, Clientes y Proveedores entraron al bloque Pro, que además ahora
+scrollea: con cuatro filas el menú ya no entra en un teléfono y Facturas quedaba fuera.
+
+El **alta automática** quedó en `EmitirFacturaUseCase`: al emitir se crea la ficha con el
+nombre escrito y la factura guarda su `clienteId`. Si el nombre ya existía se reusa, y si
+estaba cargado como proveedor pasa a "ambos" en vez de duplicarse. Esa alta rápida **no**
+pide Pro (anotar a quién le fiaste es parte del uso personal); el candado está en la ficha
+completa.
+
+Borrar un contacto deja los vínculos en NULL y no toca el historial: la factura sigue
+mostrando el nombre con el que se emitió.
+
+Probado en emulador: migración sobre la base con datos, alta y borrado de ficha, y una
+factura que creó sola el cliente "Panaderia-Ana".
 
 ### Fase 2 — Historial y cuenta corriente
 

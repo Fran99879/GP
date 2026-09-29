@@ -39,6 +39,8 @@ data class FacturaEntity(
     /** Cuenta donde entró la plata, cuando se registró el ingreso. */
     val cuenta: String,
     val ingresoId: Long?,
+    /** Cliente de la ficha, si se eligió uno. El nombre queda igual guardado en [cliente]. */
+    val clienteId: Long? = null,
     val createdAt: Long,
 )
 

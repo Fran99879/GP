@@ -30,6 +30,8 @@ object Destination {
     const val CALCULADORA = "calculadora"
     const val REMITO = "remito"
     const val PRODUCTOS = "productos"
+    const val CLIENTES = "clientes"
+    const val PROVEEDORES = "proveedores"
     const val FACTURAS = "facturas"
     const val FACTURA_NUEVA = "facturas/nueva"
     const val AGENDA = "agenda"

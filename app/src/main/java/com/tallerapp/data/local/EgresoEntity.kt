@@ -16,4 +16,6 @@ data class EgresoEntity(
     @ColumnInfo(defaultValue = "1") val negocioId: Long = 1,
     val fecha: Long,
     val fechaRegistro: Long,
+    /** Proveedor al que se le compró, si se eligió uno. */
+    val proveedorId: Long? = null,
 )

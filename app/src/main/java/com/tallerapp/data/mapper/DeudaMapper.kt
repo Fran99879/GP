@@ -14,6 +14,7 @@ fun DeudaEntity.toDomain(): Deuda = Deuda(
     fechaCobro = fechaCobro,
     fechaRegistro = fechaRegistro,
     fechaLimite = fechaLimite,
+    contactoId = contactoId,
 )
 
 fun Deuda.toEntity(): DeudaEntity = DeudaEntity(
@@ -26,5 +27,6 @@ fun Deuda.toEntity(): DeudaEntity = DeudaEntity(
     fechaCobro = fechaCobro,
     fechaRegistro = fechaRegistro,
     fechaLimite = fechaLimite,
+    contactoId = contactoId,
     negocioId = NegocioActual.value,
 )

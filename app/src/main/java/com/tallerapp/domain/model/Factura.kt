@@ -29,6 +29,8 @@ data class Factura(
     val notas: String = "",
     val cuenta: String = "",
     val ingresoId: Long? = null,
+    /** Cliente de la ficha, cuando se eligió uno. [cliente] guarda el nombre igual. */
+    val clienteId: Long? = null,
     val createdAt: Long = 0,
     val items: List<ItemFactura> = emptyList(),
 ) {

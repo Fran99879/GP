@@ -1,6 +1,8 @@
 package com.tallerapp.core.navigation
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -30,7 +32,14 @@ fun AppDrawer(rutaActual: String?, onNavegar: (String) -> Unit) {
     val plan by EstadoPlan.plan.collectAsStateWithLifecycle()
 
     ModalDrawerSheet {
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        // Scroll: con el bloque de negocio el menú ya no entra en una pantalla de teléfono,
+        // y sin esto las últimas filas quedan fuera y no hay forma de llegar.
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+        ) {
             Text("Mis Finanzas", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text(
                 "Finanzas + Negocios",

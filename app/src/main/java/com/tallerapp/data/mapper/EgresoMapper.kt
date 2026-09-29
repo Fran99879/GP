@@ -12,6 +12,7 @@ fun EgresoEntity.toDomain(): Egreso = Egreso(
     cuenta = cuenta,
     fecha = fecha,
     fechaRegistro = fechaRegistro,
+    proveedorId = proveedorId,
 )
 
 fun Egreso.toEntity(): EgresoEntity = EgresoEntity(
@@ -22,5 +23,6 @@ fun Egreso.toEntity(): EgresoEntity = EgresoEntity(
     cuenta = cuenta,
     fecha = fecha,
     fechaRegistro = fechaRegistro,
+    proveedorId = proveedorId,
     negocioId = NegocioActual.value,
 )

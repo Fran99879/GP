@@ -63,6 +63,16 @@ object IconosApp {
         "IcPackage",
         "M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5 M12 12l8 -4.5 M12 12l0 9 M12 12l-8 -4.5 M16 5.25l-8 4.5",
     )
+    val Clientes = iconoLinea(
+        "IcUserCircle",
+        "M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0 -18 M9 10a3 3 0 1 0 6 0a3 3 0 0 0 -6 0 " +
+            "M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855",
+    )
+    val Proveedores = iconoLinea(
+        "IcTruck",
+        "M5 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0 M15 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0 " +
+            "M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5",
+    )
     val Facturas = iconoLinea(
         "IcReceipt",
         "M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2 " +

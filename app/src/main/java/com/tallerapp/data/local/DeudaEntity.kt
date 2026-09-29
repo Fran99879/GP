@@ -18,4 +18,6 @@ data class DeudaEntity(
     val fechaRegistro: Long,
     val fechaLimite: Long? = null,
     @ColumnInfo(defaultValue = "1") val negocioId: Long = 1,
+    /** Contacto que debe, si se eligió de la ficha. [nombre] se conserva igual. */
+    val contactoId: Long? = null,
 )

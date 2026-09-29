@@ -33,6 +33,8 @@ import com.tallerapp.features.metas.MetasViewModel
 import com.tallerapp.features.negocios.NegociosScreen
 import com.tallerapp.features.negocios.NegociosViewModel
 import com.tallerapp.features.negocios.recordarNombreNegocioActual
+import com.tallerapp.features.contactos.ContactosScreen
+import com.tallerapp.features.contactos.ContactosViewModel
 import com.tallerapp.features.facturas.FacturaFormScreen
 import com.tallerapp.features.facturas.FacturaFormViewModel
 import com.tallerapp.features.facturas.FacturasScreen
@@ -183,6 +185,51 @@ fun TallerApp() {
                 },
             )
             ProductosScreen(
+                viewModel = vm,
+                onBack = { navController.popBackStack() },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
+            )
+        }
+
+        // Clientes y proveedores comparten pantalla: cambia el tipo con el que se arma el VM.
+        composable(Destination.CLIENTES) {
+            val container = rememberAppContainer()
+            val vm: ContactosViewModel = viewModel(
+                key = "contactos-cliente",
+                factory = viewModelFactory {
+                    initializer {
+                        ContactosViewModel(
+                            com.tallerapp.domain.model.TipoContacto.CLIENTE,
+                            container.observarContactosPorTipo,
+                            container.guardarContacto,
+                            container.eliminarContacto,
+                        )
+                    }
+                },
+            )
+            ContactosScreen(
+                viewModel = vm,
+                onBack = { navController.popBackStack() },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
+            )
+        }
+
+        composable(Destination.PROVEEDORES) {
+            val container = rememberAppContainer()
+            val vm: ContactosViewModel = viewModel(
+                key = "contactos-proveedor",
+                factory = viewModelFactory {
+                    initializer {
+                        ContactosViewModel(
+                            com.tallerapp.domain.model.TipoContacto.PROVEEDOR,
+                            container.observarContactosPorTipo,
+                            container.guardarContacto,
+                            container.eliminarContacto,
+                        )
+                    }
+                },
+            )
+            ContactosScreen(
                 viewModel = vm,
                 onBack = { navController.popBackStack() },
                 onVerPlanes = { navController.navigate(Destination.PLANES) },

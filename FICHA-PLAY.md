@@ -75,11 +75,15 @@ REPORTES QUE SE ENTIENDEN
 • Exportá a PDF o Excel para mandarle a tu contador
 
 
-PARA TU NEGOCIO
+PARA TU NEGOCIO (plan Pro)
 
 • Separá tus finanzas personales de las de tu negocio
 • Manejá varios negocios y cambiá entre ellos con un toque
 • Comparativa entre negocios para ver cuál rinde más
+• Catálogo de productos: cargalos escaneando el código de barras con la cámara, con foto,
+  precio con descuento y control de stock
+• Facturas en PDF con descuentos, que descuentan el stock y registran el cobro
+• Clientes y proveedores con su ficha, que se dan de alta solos al facturar
 • Generá remitos en PDF y compartilos al instante
 • Agenda de tareas, turnos y productos
 
@@ -93,13 +97,24 @@ ADEMÁS
 • Varias monedas, con equivalencia
 
 
+GRATIS Y PRO
+
+La app es gratis para tus finanzas personales, con un negocio y sin límite de movimientos.
+El plan Pro agrega las herramientas comerciales: negocios ilimitados, catálogo de productos
+con código de barras, facturas, clientes y proveedores, remitos y exportación.
+Se puede probar 14 días gratis.
+
+
 TU INFORMACIÓN ES TUYA
 
-Mis Finanzas no pide ningún permiso, no accede a internet y no tiene publicidad ni
-rastreadores. Tus datos no se suben a ningún lado porque, sencillamente, no hay a dónde
-subirlos: viven en tu teléfono y nada más.
+Mis Finanzas no pide ningún permiso, no tiene publicidad ni rastreadores, y tus datos no se
+suben a ningún lado: viven en tu teléfono y nada más.
 
-Funciona completa sin conexión.
+El lector de códigos de barras usa la cámara a través de Google Play Services, así que la
+app ni siquiera necesita el permiso de cámara. Las compras del plan Pro las procesa Google
+Play.
+
+Funciona sin conexión.
 
 
 Consultas y sugerencias: misfinanzass.app@gmail.com
@@ -154,3 +169,63 @@ Cuando Play lo pida, las respuestas son directas porque la app no recopila nada:
 - ¿Los datos están cifrados en tránsito? → No aplica (no hay tránsito)
 - ¿Los usuarios pueden pedir que se eliminen sus datos? → **Sí** (desinstalando, o borrando
   desde la app)
+
+---
+
+## Suscripción Pro — textos de Play Console
+
+> Estos textos se editan en **Monetizar con Play → Productos → Suscripciones → `pro`**.
+> Los ids (`pro`, `mensual`, `anual`, `prueba-14-dias`) **no se pueden cambiar**.
+
+### Nombre de la suscripción (máx. 55)
+
+```
+Mis Finanzas Pro
+```
+
+### Descripción (máx. 80)
+
+```
+Negocios ilimitados, productos, clientes, facturas y exportación.
+```
+
+### Beneficios (hasta 4, máx. 40 caracteres cada uno)
+
+```
+Negocios ilimitados y comparativa
+```
+```
+Catálogo con código de barras
+```
+```
+Facturas y remitos en PDF
+```
+```
+Clientes, proveedores y exportación
+```
+
+---
+
+## Qué revisar en Play Console al subir el versionCode 6
+
+| Sección | Qué cambia | Por qué |
+|---|---|---|
+| Ficha principal → Descripción completa | Pegar la de arriba | Suma productos, facturas, clientes y proveedores |
+| Suscripción `pro` → nombre, descripción y beneficios | Pegar los de arriba | Hoy no nombran las funciones nuevas |
+| Novedades de la versión | Ver abajo | Es lo que ve quien ya la tiene instalada |
+| Capturas | Subir `play-assets/capturas/7-productos.png` y `8-facturas.png` | Ya están sacadas; las anteriores eran solo de finanzas personales |
+| Seguridad de los datos | **Sin cambios**: sigue sin recopilar nada | El escáner corre en Play Services y las fotos quedan en el teléfono |
+| Permisos | **Sin cambios**: la app sigue sin pedir permisos | El escáner no usa el permiso de cámara; las fotos entran por el selector del sistema |
+| Funciones financieras | **Sin cambios**: ninguna | Facturar un comprobante interno no mueve plata ni conecta con bancos |
+
+### Novedades de esta versión (máx. 500)
+
+```
+• Catálogo de productos: cargalos escaneando el código de barras con la cámara, con foto,
+  precio con descuento y stock.
+• Facturas en PDF, con descuentos por ítem y generales. Al emitir pueden descontar el stock
+  y registrar el cobro como ingreso.
+• Clientes y proveedores con su ficha; se dan de alta solos al facturar.
+• Barra con los días que le quedan a tu plan.
+• Los montos ahora se escriben con separador de miles y ya no se cortan en pantalla.
+```

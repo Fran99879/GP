@@ -22,11 +22,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 
-/** Filtro de movimientos: rango de fechas + texto de búsqueda. */
+/** Qué movimientos se muestran en la lista. */
+enum class VistaMov { TODOS, INGRESOS, GASTOS }
+
+/** Filtro de movimientos: rango de fechas, texto y qué lista se muestra. */
 data class FiltroMov(
-    val desde: Long = Fechas.hoyInicioMillis(),
-    val hasta: Long = Fechas.hoyInicioMillis(),
+    // Arranca en el mes en curso, no en el día: lo que se quiere ver al abrir es cómo viene
+    // el mes, y el movimiento de hoy igual aparece primero en la lista.
+    val desde: Long = Fechas.rangoDelMesActual().first,
+    val hasta: Long = Fechas.rangoDelMesActual().second - 86_400_000L,
     val texto: String = "",
+    val vista: VistaMov = VistaMov.TODOS,
 )
 
 /** Hub de Finanzas con búsqueda y filtros por rango de fechas. */
@@ -47,21 +53,29 @@ class FinanzasViewModel(
     val ingresos: StateFlow<List<Ingreso>> =
         _filtro.flatMapLatest { f ->
             observarIngresosRango(f.desde, finExclusivo(f.hasta)).map { lista ->
-                if (f.texto.isBlank()) lista
+                val filtrada = if (f.texto.isBlank()) lista
                 else lista.filter {
                     it.concepto.contains(f.texto, true) || it.cuenta.contains(f.texto, true)
                 }
+                // Lo último arriba: primero por fecha del movimiento y, dentro del mismo día,
+                // por orden de carga, así lo que se acaba de anotar queda a la vista.
+                filtrada.sortedWith(
+                    compareByDescending<Ingreso> { it.fecha }.thenByDescending { it.fechaRegistro },
+                )
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val egresos: StateFlow<List<Egreso>> =
         _filtro.flatMapLatest { f ->
             observarEgresosRango(f.desde, finExclusivo(f.hasta)).map { lista ->
-                if (f.texto.isBlank()) lista
+                val filtrada = if (f.texto.isBlank()) lista
                 else lista.filter {
                     it.concepto.contains(f.texto, true) || it.categoria.contains(f.texto, true) ||
                         it.cuenta.contains(f.texto, true)
                 }
+                filtrada.sortedWith(
+                    compareByDescending<Egreso> { it.fecha }.thenByDescending { it.fechaRegistro },
+                )
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
@@ -74,7 +88,15 @@ class FinanzasViewModel(
     fun setHasta(millis: Long) = _filtro.update { it.copy(hasta = millis, desde = minOf(it.desde, millis)) }
     fun setTexto(texto: String) = _filtro.update { it.copy(texto = texto) }
 
-    fun filtrarHoy() = _filtro.update { FiltroMov() }
+    /** Tocar la vista activa vuelve a mostrar todo: el botón hace de interruptor. */
+    fun setVista(vista: VistaMov) = _filtro.update {
+        it.copy(vista = if (it.vista == vista) VistaMov.TODOS else vista)
+    }
+
+    fun filtrarHoy() = _filtro.update {
+        it.copy(desde = Fechas.hoyInicioMillis(), hasta = Fechas.hoyInicioMillis())
+    }
+
     fun filtrarEsteMes() {
         val (ini, fin) = Fechas.rangoDelMes(YearMonth.now())
         _filtro.update { it.copy(desde = ini, hasta = fin - 86_400_000L) }

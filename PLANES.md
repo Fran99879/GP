@@ -57,21 +57,23 @@ llega a considerar pagar.
 | **Remitos PDF** | Herramienta de trabajo |
 | **Exportar PDF / Excel** | Para el contador |
 | **Catálogo de productos** | Alta por código de barras con la cámara, foto, precio con descuento en %, stock y aviso de stock bajo |
+| **Clientes y proveedores** | Ficha con documento, teléfono, correo y dirección. Se dan de alta solos al facturar |
 | **Facturas** | Comprobante interno en PDF, con descuento por línea y general; al emitir puede registrar el cobro como ingreso y descontar el stock |
 
 ### Por construir ⛔
 
 | Función | Nota |
 |---|---|
-| **Clientes** | Ficha, historial de compras, cuenta corriente |
-| **Proveedores** | Ficha, historial de compras, deudas a pagar |
-| **Estadísticas avanzadas** | Rentabilidad, producto más vendido, mejor cliente |
+| **Historial y cuenta corriente** | Fase 2 de `ROADMAP.md`: qué le vendiste a cada cliente y cuánto te debe |
+| **Estadísticas avanzadas** | Rentabilidad, producto más vendido, mejor cliente (fase 3) |
 
-Estas tres son el argumento para que Pro **siga valiendo la suscripción mes a mes**. Sin
+Estas dos son el argumento para que Pro **siga valiendo la suscripción mes a mes**. Sin
 ellas, Pro es "pagar por más negocios" y la gente cancela después del primer mes.
 
 > El **control de stock** quedó cubierto con el catálogo de productos: cada producto lleva
-> cantidad y mínimo, y facturar descuenta lo vendido.
+> cantidad y mínimo, y facturar descuenta lo vendido. Las **fichas** de clientes y
+> proveedores están hechas (fase 1 de `ROADMAP.md`); falta el historial y la cuenta
+> corriente.
 
 > Dato útil: **clientes y proveedores** son la base de stock y de las estadísticas. Conviene
 > hacerlos primero. Y ya existe la tabla `contacto` (hoy solo autocompleta deudas), así que

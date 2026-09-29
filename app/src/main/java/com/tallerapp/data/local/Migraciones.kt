@@ -401,3 +401,58 @@ val MIGRATION_13_14 = object : Migration(13, 14) {
         db.execSQL("CREATE INDEX IF NOT EXISTS `ix_factura_item_factura` ON `factura_item` (`facturaId`)")
     }
 }
+
+
+/**
+ * v14 → v15: clientes y proveedores (ver `ROADMAP.md`).
+ *
+ * `contacto` se **recrea**: hasta acá era una lista de nombres global, con índice único por
+ * nombre, que solo servía para autocompletar deudas. Con multi-negocio ese único global
+ * impide que dos negocios tengan cada uno su "Juan", y hacía falta guardar teléfono,
+ * documento y demás. SQLite anterior a 3.35 no soporta DROP COLUMN ni cambiar un índice en
+ * el lugar, y minSdk es 26, así que se copia a una tabla nueva.
+ *
+ * Los contactos que ya existen se conservan: pasan al negocio 1 con tipo "cliente", que es
+ * para lo único que se usaban (deudas a cobrar).
+ *
+ * Las tres columnas de vínculo son opcionales y arrancan en NULL: el historial ya emitido
+ * sigue mostrando el nombre que guardó en su momento, y nada se reescribe.
+ */
+val MIGRATION_14_15 = object : Migration(14, 15) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `contacto_nuevo` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `negocioId` INTEGER NOT NULL,
+                `nombre` TEXT NOT NULL,
+                `tipo` TEXT NOT NULL,
+                `documento` TEXT NOT NULL,
+                `telefono` TEXT NOT NULL,
+                `email` TEXT NOT NULL,
+                `direccion` TEXT NOT NULL,
+                `nota` TEXT NOT NULL,
+                `createdAt` INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            INSERT INTO `contacto_nuevo`
+                (`id`,`negocioId`,`nombre`,`tipo`,`documento`,`telefono`,`email`,`direccion`,`nota`,`createdAt`)
+            SELECT `id`, 1, `nombre`, 'cliente', '', '', '', '', '', `createdAt` FROM `contacto`
+            """.trimIndent(),
+        )
+        db.execSQL("DROP TABLE `contacto`")
+        db.execSQL("ALTER TABLE `contacto_nuevo` RENAME TO `contacto`")
+        db.execSQL(
+            "CREATE UNIQUE INDEX IF NOT EXISTS `ix_contacto_negocio_nombre` " +
+                "ON `contacto` (`negocioId`, `nombre`)",
+        )
+
+        // Vínculos opcionales con el contacto. ADD COLUMN sí lo soporta SQLite viejo.
+        db.execSQL("ALTER TABLE `factura` ADD COLUMN `clienteId` INTEGER")
+        db.execSQL("ALTER TABLE `egreso` ADD COLUMN `proveedorId` INTEGER")
+        db.execSQL("ALTER TABLE `deuda` ADD COLUMN `contactoId` INTEGER")
+    }
+}

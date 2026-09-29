@@ -23,4 +23,6 @@ data class Deuda(
     val fechaRegistro: Long = 0,
     /** Fecha para cobrar (recordatorio), opcional. */
     val fechaLimite: Long? = null,
+    /** Contacto que debe, cuando se eligió de la ficha. [nombre] se guarda igual. */
+    val contactoId: Long? = null,
 )

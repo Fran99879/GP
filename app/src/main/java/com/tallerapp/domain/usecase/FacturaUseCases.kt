@@ -5,6 +5,7 @@ import com.tallerapp.domain.model.Factura
 import com.tallerapp.domain.model.Ingreso
 import com.tallerapp.domain.model.OrigenIngreso
 import com.tallerapp.domain.model.Precios
+import com.tallerapp.domain.model.TipoContacto
 import com.tallerapp.domain.repository.FacturaRepository
 import com.tallerapp.domain.repository.IngresoRepository
 import com.tallerapp.domain.repository.ProductoRepository
@@ -55,6 +56,7 @@ class EmitirFacturaUseCase(
     private val facturas: FacturaRepository,
     private val productos: ProductoRepository,
     private val ingresos: IngresoRepository,
+    private val agregarContacto: AgregarContactoUseCase,
 ) {
     suspend operator fun invoke(
         factura: Factura,
@@ -65,9 +67,14 @@ class EmitirFacturaUseCase(
         if (factura.items.isEmpty()) return ResultadoEmitirFactura.SinItems
         if (factura.cliente.isBlank()) return ResultadoEmitirFactura.SinCliente
 
+        // El cliente se da de alta solo con el nombre que se escribió, y la factura queda
+        // vinculada a esa ficha. Si ya existía, se reusa: no se duplica por facturar de nuevo.
+        val clienteId = factura.clienteId ?: agregarContacto(factura.cliente, TipoContacto.CLIENTE)
+
         val subtotal = factura.items.sumOf { it.subtotalCentavos }
         val total = Precios.conDescuento(subtotal, factura.descuentoPct)
         val aGuardar = factura.copy(
+            clienteId = clienteId,
             cliente = factura.cliente.trim(),
             numero = factura.numero.trim(),
             subtotalCentavos = subtotal,

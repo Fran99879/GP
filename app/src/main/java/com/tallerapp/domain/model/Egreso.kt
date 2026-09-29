@@ -16,4 +16,6 @@ data class Egreso(
     val cuenta: String = "Efectivo",
     val fecha: Long,
     val fechaRegistro: Long,
+    /** Proveedor al que se le compró, cuando se eligió de la ficha. */
+    val proveedorId: Long? = null,
 )

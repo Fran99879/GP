@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -95,8 +96,13 @@ fun FinanzasScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            val periodo = if (filtro.desde == filtro.hasta) Fechas.formatear(filtro.desde)
-            else "${Fechas.formatear(filtro.desde)} → ${Fechas.formatear(filtro.hasta)}"
+            val (iniMes, finMes) = Fechas.rangoDelMesActual()
+            val esMesActual = filtro.desde == iniMes && filtro.hasta == finMes - 86_400_000L
+            val periodo = when {
+                esMesActual -> Fechas.etiquetaMes(Fechas.mesActual())
+                filtro.desde == filtro.hasta -> Fechas.formatear(filtro.desde)
+                else -> "${Fechas.formatear(filtro.desde)} → ${Fechas.formatear(filtro.hasta)}"
+            }
 
             TituloPantalla("Movimientos")
             TextoMuted(periodo)
@@ -116,6 +122,19 @@ fun FinanzasScreen(
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         TextButton(onClick = viewModel::filtrarHoy) { Text("Hoy") }
                         TextButton(onClick = viewModel::filtrarEsteMes) { Text("Este mes") }
+                    }
+                    // Ver una sola lista. Tocar la que ya está activa vuelve a mostrar las dos.
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FilterChip(
+                            selected = filtro.vista == VistaMov.INGRESOS,
+                            onClick = { viewModel.setVista(VistaMov.INGRESOS) },
+                            label = { Text("Ingresos") },
+                        )
+                        FilterChip(
+                            selected = filtro.vista == VistaMov.GASTOS,
+                            onClick = { viewModel.setVista(VistaMov.GASTOS) },
+                            label = { Text("Gastos") },
+                        )
                     }
                 }
             }
@@ -146,6 +165,7 @@ fun FinanzasScreen(
                 BotonGhost(if (esPro) "🧾 Facturas" else "🔒 Facturas", if (esPro) onVerFacturas else onVerPlanes)
             }
 
+            if (filtro.vista != VistaMov.GASTOS) {
             TituloSeccion("Ingresos")
             if (ingresos.isEmpty()) {
                 Text("Sin ingresos en este período.", color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -165,7 +185,9 @@ fun FinanzasScreen(
                     )
                 }
             }
+            }
 
+            if (filtro.vista != VistaMov.INGRESOS) {
             TituloSeccion("Gastos")
             if (egresos.isEmpty()) {
                 Text("Sin gastos en este período.", color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -183,6 +205,7 @@ fun FinanzasScreen(
                         onEliminar = { pendiente = PendienteEliminar(TipoMov.EGRESO, egreso.id) },
                     )
                 }
+            }
             }
         }
     }
