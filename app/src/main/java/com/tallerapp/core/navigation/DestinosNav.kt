@@ -18,9 +18,19 @@ val DESTINOS_RAIZ = listOf(
 val DESTINOS_SECUNDARIOS = listOf(
     DestinoNav("Agenda", Destination.AGENDA, IconosApp.Agenda),
     DestinoNav("Negocios", Destination.NEGOCIOS, IconosApp.Negocios),
-    DestinoNav("Productos", Destination.PRODUCTOS, IconosApp.Negocios),
-    DestinoNav("Facturas", Destination.FACTURAS, IconosApp.Movimientos),
     DestinoNav("Calculadora", Destination.CALCULADORA, IconosApp.Calculadora),
-    DestinoNav("Planes", Destination.PLANES, IconosApp.Movimientos),
+    DestinoNav("Planes", Destination.PLANES, IconosApp.Planes),
     DestinoNav("Configuración", Destination.AJUSTES, IconosApp.Configuracion),
+)
+
+/**
+ * Herramientas de uso comercial: van juntas en su propio bloque del menú, con candado
+ * mientras el plan sea Gratis. El bloque se muestra siempre — nadie compra lo que no sabe
+ * que existe — y al tocar una con candado se abre Planes.
+ *
+ * Acá van a sumarse Clientes y Proveedores cuando estén (ver el roadmap Pro).
+ */
+val DESTINOS_PRO = listOf(
+    DestinoNav("Productos", Destination.PRODUCTOS, IconosApp.Productos),
+    DestinoNav("Facturas", Destination.FACTURAS, IconosApp.Facturas),
 )

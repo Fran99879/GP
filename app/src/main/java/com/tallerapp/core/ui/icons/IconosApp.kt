@@ -59,6 +59,19 @@ object IconosApp {
         "M3 21l18 0 M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4 " +
             "M5 21l0 -10.15 M19 21l0 -10.15 M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4",
     )
+    val Productos = iconoLinea(
+        "IcPackage",
+        "M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5 M12 12l8 -4.5 M12 12l0 9 M12 12l-8 -4.5 M16 5.25l-8 4.5",
+    )
+    val Facturas = iconoLinea(
+        "IcReceipt",
+        "M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2 " +
+            "M9 7h6 M9 11h6 M9 15h4",
+    )
+    val Planes = iconoLinea(
+        "IcCrown",
+        "M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4z",
+    )
     val Configuracion = iconoLinea(
         "IcSettings",
         "M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37" +

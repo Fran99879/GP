@@ -249,6 +249,7 @@ fun TallerApp() {
                 onVerAgenda = { navController.navigate(Destination.AGENDA) },
                 onVerProductos = { navController.navigate(Destination.PRODUCTOS) },
                 onVerFacturas = { navController.navigate(Destination.FACTURAS) },
+                onVerPlanes = { navController.navigate(Destination.PLANES) },
             )
         }
 
@@ -363,6 +364,7 @@ fun TallerApp() {
                 onVerRecurrentes = { navController.navigate(Destination.RECURRENTES) },
                 onVerMetas = { navController.navigate(Destination.METAS) },
                 onVerRemito = { navController.navigate(Destination.REMITO) },
+                onVerFacturas = { navController.navigate(Destination.FACTURAS) },
                 onVerPlanes = { navController.navigate(Destination.PLANES) },
             )
         }

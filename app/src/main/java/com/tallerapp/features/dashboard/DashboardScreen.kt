@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.billing.EstadoPlan
 import com.tallerapp.core.ui.components.AvatarPerfil
 import com.tallerapp.core.ui.components.BarraPlan
 import com.tallerapp.core.ui.components.BotonGhost
@@ -67,6 +68,8 @@ fun DashboardScreen(
     onVerFacturas: () -> Unit = {},
 ) {
     val s by viewModel.state.collectAsStateWithLifecycle()
+    val plan by EstadoPlan.plan.collectAsStateWithLifecycle()
+    val esPro = plan.esPro
     val metas by viewModel.metas.collectAsStateWithLifecycle()
     val mes = Fechas.etiquetaMes(Fechas.mesActual())
 
@@ -183,9 +186,18 @@ fun DashboardScreen(
                 BotonGhost("📅  Agenda", onVerAgenda, modifier = Modifier.weight(1f))
                 BotonGhost("🧮  Calculadora", onVerCalculadora, modifier = Modifier.weight(1f))
             }
+            // Mismo criterio que el menú: con plan Gratis muestran candado y llevan a Planes.
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                BotonGhost("📦  Productos", onVerProductos, modifier = Modifier.weight(1f))
-                BotonGhost("🧾  Facturas", onVerFacturas, modifier = Modifier.weight(1f))
+                BotonGhost(
+                    if (esPro) "📦  Productos" else "🔒  Productos",
+                    if (esPro) onVerProductos else onVerPlanes,
+                    modifier = Modifier.weight(1f),
+                )
+                BotonGhost(
+                    if (esPro) "🧾  Facturas" else "🔒  Facturas",
+                    if (esPro) onVerFacturas else onVerPlanes,
+                    modifier = Modifier.weight(1f),
+                )
             }
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 BotonGhost("⚙️  Configuración", onVerAjustes, modifier = Modifier.weight(1f))

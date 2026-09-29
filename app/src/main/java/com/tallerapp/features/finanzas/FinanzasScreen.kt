@@ -65,6 +65,7 @@ fun FinanzasScreen(
     onVerRecurrentes: () -> Unit = {},
     onVerMetas: () -> Unit = {},
     onVerRemito: () -> Unit = {},
+    onVerFacturas: () -> Unit = {},
     onVerPlanes: () -> Unit = {},
 ) {
     val ingresos by viewModel.ingresos.collectAsStateWithLifecycle()
@@ -141,7 +142,8 @@ fun FinanzasScreen(
                 BotonGhost("🔁 Recurrentes", onVerRecurrentes)
                 BotonGhost("🎯 Metas", onVerMetas)
                 // Con candado en vez de oculto: el usuario tiene que saber que existe.
-                BotonGhost(if (esPro) "🧾 Remito" else "🔒 Remito", if (esPro) onVerRemito else onVerPlanes)
+                BotonGhost(if (esPro) "📄 Remito" else "🔒 Remito", if (esPro) onVerRemito else onVerPlanes)
+                BotonGhost(if (esPro) "🧾 Facturas" else "🔒 Facturas", if (esPro) onVerFacturas else onVerPlanes)
             }
 
             TituloSeccion("Ingresos")

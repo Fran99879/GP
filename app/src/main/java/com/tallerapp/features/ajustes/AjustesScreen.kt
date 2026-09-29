@@ -41,6 +41,8 @@ import com.tallerapp.core.ui.components.SelectorOpciones
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
+import com.tallerapp.core.billing.EstadoPlan
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.theme.TemaApp
 import com.tallerapp.core.ui.theme.TemaModo
 
@@ -60,8 +62,11 @@ fun AjustesScreen(
     onVerAgenda: () -> Unit = {},
     onVerProductos: () -> Unit = {},
     onVerFacturas: () -> Unit = {},
+    onVerPlanes: () -> Unit = {},
 ) {
     val context = LocalContext.current
+    val plan by EstadoPlan.plan.collectAsStateWithLifecycle()
+    val esPro = plan.esPro
 
     Scaffold(
         topBar = {
@@ -118,9 +123,16 @@ fun AjustesScreen(
                 EtiquetaGrupo("HERRAMIENTAS", modifier = Modifier.padding(start = 16.dp, top = 16.dp))
                 FilaHerramienta("🏪", "Negocios", onVerNegocios)
                 HorizontalDivider()
-                FilaHerramienta("📦", "Productos", onVerProductos)
+                // Con plan Gratis quedan con candado y llevan a Planes, igual que en el menú.
+                FilaHerramienta(
+                    if (esPro) "📦" else "🔒", "Productos",
+                    if (esPro) onVerProductos else onVerPlanes,
+                )
                 HorizontalDivider()
-                FilaHerramienta("🧾", "Facturas", onVerFacturas)
+                FilaHerramienta(
+                    if (esPro) "🧾" else "🔒", "Facturas",
+                    if (esPro) onVerFacturas else onVerPlanes,
+                )
                 HorizontalDivider()
                 FilaHerramienta("📅", "Agenda", onVerAgenda)
                 HorizontalDivider()
