@@ -43,6 +43,12 @@ import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.billing.EstadoPlan
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Context
+import android.content.Intent
+import androidx.compose.material3.AlertDialog
+import com.tallerapp.core.backup.CopiaSeguridad
 import com.tallerapp.core.ui.theme.TemaApp
 import com.tallerapp.core.ui.theme.TemaModo
 
@@ -67,6 +73,32 @@ fun AjustesScreen(
     val context = LocalContext.current
     val plan by EstadoPlan.plan.collectAsStateWithLifecycle()
     val esPro = plan.esPro
+
+    var avisoCopia by remember { mutableStateOf<String?>(null) }
+    var confirmarRestaurar by remember { mutableStateOf(false) }
+
+    // Selector del sistema: el usuario elige dónde guardar y la app no pide permisos.
+    val exportar = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/zip"),
+    ) { uri ->
+        if (uri != null) {
+            avisoCopia = when (val r = CopiaSeguridad.exportar(context, uri)) {
+                is CopiaSeguridad.Resultado.Exito -> r.mensaje
+                is CopiaSeguridad.Resultado.Error -> r.mensaje
+            }
+        }
+    }
+
+    val importar = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        if (uri != null) {
+            when (val r = CopiaSeguridad.restaurar(context, uri)) {
+                is CopiaSeguridad.Resultado.Exito -> reiniciarApp(context)
+                is CopiaSeguridad.Resultado.Error -> avisoCopia = r.mensaje
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -145,6 +177,23 @@ fun AjustesScreen(
                 FilaHerramienta("🔁", "Movimientos recurrentes", onVerRecurrentes)
             }
 
+            // COPIA DE SEGURIDAD
+            TarjetaApp(modifier = Modifier.fillMaxWidth(), padding = 0.dp) {
+                EtiquetaGrupo(
+                    "COPIA DE SEGURIDAD",
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+                )
+                FilaHerramienta("💾", "Guardar una copia", { exportar.launch(CopiaSeguridad.nombreSugerido()) })
+                HorizontalDivider()
+                FilaHerramienta("♻️", "Restaurar una copia", { confirmarRestaurar = true })
+                TextoMuted(
+                    "Los datos viven solo en este teléfono: si desinstalás la app, se borran. " +
+                        "Guardá la copia donde quieras (Drive, WhatsApp, la tarjeta SD) y usala " +
+                        "para pasarlos a otro teléfono. Las fotos de los productos no entran en la copia.",
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                )
+            }
+
             // APLICACIÓN
             TarjetaApp(modifier = Modifier.fillMaxWidth()) {
                 EtiquetaGrupo("APLICACIÓN")
@@ -153,6 +202,53 @@ fun AjustesScreen(
             }
         }
     }
+
+    // Restaurar pisa todo: se avisa antes de abrir el selector, no después.
+    if (confirmarRestaurar) {
+        AlertDialog(
+            onDismissRequest = { confirmarRestaurar = false },
+            title = { Text("Restaurar una copia") },
+            text = {
+                Text(
+                    "Los datos que tenés ahora en el teléfono se reemplazan por los de la copia. " +
+                        "Esto no se puede deshacer. " +
+                        "Si querés conservarlos, guardá una copia primero.",
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmarRestaurar = false
+                        importar.launch(arrayOf("application/zip", "application/octet-stream"))
+                    },
+                ) { Text("Elegir archivo") }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmarRestaurar = false }) { Text("Cancelar") }
+            },
+        )
+    }
+
+    avisoCopia?.let { mensaje ->
+        AlertDialog(
+            onDismissRequest = { avisoCopia = null },
+            title = { Text("Copia de seguridad") },
+            text = { Text(mensaje) },
+            confirmButton = { TextButton(onClick = { avisoCopia = null }) { Text("Entendido") } },
+        )
+    }
+}
+
+/**
+ * Reinicia la app después de restaurar. Room mantiene en memoria la base que se acaba de
+ * reemplazar, y las pantallas siguen mostrando los datos viejos hasta que el proceso arranca
+ * de nuevo; con los datos del usuario en juego, es preferible el reinicio a un estado a medias.
+ */
+private fun reiniciarApp(context: Context) {
+    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+    intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    context.startActivity(intent)
+    Runtime.getRuntime().exit(0)
 }
 
 /** Título de grupo en mayúsculas (estilo `Muted` del escritorio). */

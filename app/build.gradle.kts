@@ -15,8 +15,8 @@ android {
         applicationId = "com.tallerapp"
         minSdk = 26
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.2"
+        versionCode = 8
+        versionName = "1.4"
 
     }
 
@@ -84,6 +84,9 @@ dependencies {
 
     // Cobro de suscripciones (plan Pro) vía Google Play.
     implementation("com.android.billingclient:billing-ktx:9.1.0")
+
+    // Aviso de actualización disponible (In-App Updates de Play).
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 
     // Lectura de códigos de barras con la interfaz de Google Play Services: no pide permiso
     // de CAMARA y el módulo se descarga a demanda, así que no suma peso al APK.

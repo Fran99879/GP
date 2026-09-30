@@ -1,4 +1,4 @@
-# Roadmap — Clientes y Proveedores
+# Roadmap — Clientes, Proveedores y copia en la nube
 
 > Plan de trabajo. **Fase 1 hecha el 29/09/2026** (ver al final de cada fase); las fases 2
 > y 3 siguen pendientes. Las decisiones tomadas acá son las que se implementaron.
@@ -198,3 +198,46 @@ enviada así.
    producto; conviene decidirlo antes de empezar la fase 2 para no migrar dos veces.
 4. **Alcance.** Clientes y proveedores son la puerta a un CRM entero. Lo que sostiene la
    suscripción es saber a quién le vendés y cuánto te debe, no un embudo de ventas.
+
+---
+
+## 9. Pendiente — copia automática a Google Drive
+
+> Anotado el 30/09/2026. **No empezado.** La copia manual (`core/backup/CopiaSeguridad.kt`,
+> exportar/restaurar un `.zip`) ya está y resuelve el caso grave: no perder los datos al
+> reinstalar o cambiar de teléfono. Esto es el paso siguiente, que es comodidad.
+
+### Qué sería
+
+El usuario entra con su cuenta de Google y la app sube **el mismo `.zip` que ya genera** a
+`appDataFolder`, una carpeta oculta de **su** Drive. Una vez por semana, con WorkManager.
+
+`appDataFolder` y no una carpeta normal: no ocupa la cuota visible del usuario, no aparece
+mezclada con sus archivos, y ninguna otra app puede leerla. Tampoco la vemos nosotros: no
+hay servidor de por medio.
+
+### Trabajo
+
+| Parte | Esfuerzo |
+|---|---|
+| Código: sign-in, subida a `appDataFolder`, WorkManager semanal, elegir copia al restaurar | 2-3 h |
+| Google Cloud Console: proyecto, pantalla de consentimiento OAuth, **SHA-1 de la firma de Play** (el de Google, no el del keystore local, porque la firma de apps está aceptada) | Trámite |
+| Posible **verificación de OAuth**: `drive.appdata` puede caer como scope sensible (video de demostración, semanas de espera) | Trámite, bloquea producción |
+| Play: rehacer **Seguridad de los datos** (hoy declara "no recopila nada"), sumar el permiso de red, actualizar la política de privacidad | Trámite |
+
+El código es lo barato. Lo que puede demorar semanas son la verificación de OAuth y la
+revisión de Play, y hasta que eso pase la función no puede salir a producción.
+
+### Alternativa de bajo costo (hacer primero si hay poco tiempo)
+
+Un **recordatorio semanal** con WorkManager: una notificación "guardá una copia" que abre
+directo el selector de exportación. Sin red, sin OAuth, sin tocar ninguna declaración de
+Play, y cubre el mismo riesgo para quien se acuerde de tocar la notificación. Media hora.
+
+### Cuando se haga
+
+- Que la subida no sea silenciosa: hay que poder ver cuándo fue la última copia y apagarla.
+- Guardar dos o tres copias rotativas, no una sola: una copia semanal que pise a la anterior
+  también propaga un borrado accidental.
+- Si Play pide declarar recopilación de datos, decirlo con todas las letras en la ficha: el
+  argumento de venta hoy es que la app no manda nada a ningún lado.

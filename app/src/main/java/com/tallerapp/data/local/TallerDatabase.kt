@@ -37,6 +37,9 @@ abstract class TallerDatabase : RoomDatabase() {
     abstract fun facturaDao(): FacturaDao
 
     companion object {
+        /** Versión del esquema, para que la copia de seguridad sepa qué guardó. */
+        const val VERSION_ESQUEMA = 15
+
         @Volatile
         private var instancia: TallerDatabase? = null
 
@@ -52,5 +55,17 @@ abstract class TallerDatabase : RoomDatabase() {
                     .build()
                     .also { instancia = it }
             }
+
+        /**
+         * Cierra la base y suelta el singleton. Solo lo usa la restauración de una copia, que
+         * pisa el archivo: con la base abierta, SQLite seguiría escribiendo sobre lo viejo.
+         * Después de esto hay que reiniciar la app.
+         */
+        fun cerrar() {
+            synchronized(this) {
+                instancia?.close()
+                instancia = null
+            }
+        }
     }
 }

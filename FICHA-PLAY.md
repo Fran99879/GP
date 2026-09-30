@@ -105,6 +105,13 @@ con código de barras, facturas, clientes y proveedores, remitos y exportación.
 Se puede probar 14 días gratis.
 
 
+COPIA DE SEGURIDAD
+
+Desde Configuración podés guardar todos tus datos en un archivo y volver a cargarlos cuando
+quieras: si cambiás de teléfono o reinstalás la app, no perdés nada. El archivo queda donde
+vos elijas (Drive, WhatsApp, la tarjeta SD); no se sube a ningún lado solo.
+
+
 TU INFORMACIÓN ES TUYA
 
 Mis Finanzas no pide ningún permiso, no tiene publicidad ni rastreadores, y tus datos no se
@@ -226,6 +233,8 @@ Clientes, proveedores y exportación
 • Facturas en PDF, con descuentos por ítem y generales. Al emitir pueden descontar el stock
   y registrar el cobro como ingreso.
 • Clientes y proveedores con su ficha; se dan de alta solos al facturar.
+• Copia de seguridad: guardá todos tus datos en un archivo y restauralos en otro teléfono
+  o después de reinstalar.
 • Barra con los días que le quedan a tu plan.
 • Los montos ahora se escriben con separador de miles y ya no se cortan en pantalla.
 ```
