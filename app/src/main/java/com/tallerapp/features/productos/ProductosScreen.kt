@@ -35,6 +35,7 @@ import com.tallerapp.core.scan.recordarEscaner
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.ImagenProducto
@@ -91,6 +92,7 @@ fun ProductosScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .anchoContenido()
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {

@@ -43,6 +43,7 @@ import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Precios
 
@@ -103,6 +104,7 @@ fun FacturaFormScreen(
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -406,7 +408,7 @@ private fun LineaManualDialog(
         onDismissRequest = onCerrar,
         title = { Text("Línea a mano") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = descripcion,
                     onValueChange = { descripcion = it },

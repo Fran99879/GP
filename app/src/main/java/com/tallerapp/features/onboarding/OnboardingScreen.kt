@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
+import com.tallerapp.core.ui.components.anchoContenido
 
 private data class Tip(val titulo: String, val texto: String)
 
@@ -71,6 +72,7 @@ fun OnboardingScreen(onEmpezar: () -> Unit) {
                 // contenido quedaba debajo de la barra de estado.
                 .safeDrawingPadding()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

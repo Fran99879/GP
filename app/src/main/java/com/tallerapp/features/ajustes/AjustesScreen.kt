@@ -49,6 +49,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.material3.AlertDialog
 import com.tallerapp.core.backup.CopiaSeguridad
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.TemaApp
 import com.tallerapp.core.ui.theme.TemaModo
 
@@ -113,6 +114,7 @@ fun AjustesScreen(
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

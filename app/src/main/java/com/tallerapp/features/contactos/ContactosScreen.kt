@@ -33,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.domain.model.Contacto
 import com.tallerapp.domain.model.TipoContacto
 
@@ -81,6 +82,7 @@ fun ContactosScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .anchoContenido()
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {

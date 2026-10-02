@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloSeccion
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Fechas
 import com.tallerapp.domain.model.AgendaItem
 import com.tallerapp.domain.model.TipoAgenda
@@ -85,6 +86,7 @@ fun AgendaScreen(viewModel: AgendaViewModel, onOpenMenu: () -> Unit = {}, onBack
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -285,7 +287,7 @@ private fun DialogoAgenda(
         onDismissRequest = onCerrar,
         title = { Text(if (inicial.id == 0L) "Nueva entrada" else "Editar entrada") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     TipoAgenda.todos.forEach { t ->
                         FilterChip(

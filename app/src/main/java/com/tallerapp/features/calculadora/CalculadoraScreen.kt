@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tallerapp.core.ui.components.anchoContenido
 
 /**
  * Calculadora simple estilo teléfono (para no tener que salir de la app al anotar montos).
@@ -61,6 +62,7 @@ fun CalculadoraScreen(onBack: () -> Unit) {
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {

@@ -24,6 +24,7 @@ import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.ui.components.SelectorOpciones
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.features.finanzas.ingreso.IngresoFormViewModel
 
 /** Formulario de alta/edición de ingreso (Frozen Spec 9.5, validaciones V-2/V-6). */
@@ -52,6 +53,7 @@ fun IngresoFormScreen(
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.SelectorOpciones
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
 import com.tallerapp.core.ui.components.CampoMonto
@@ -55,7 +56,7 @@ fun RecurrentesScreen(viewModel: RecurrentesViewModel, onBack: () -> Unit) {
         },
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            modifier = Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).anchoContenido().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Text("Sueldo, alquiler, suscripciones… se cargan solos cada mes el día que elijas.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.CampoMonto
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Meta
 
@@ -49,7 +50,7 @@ fun MetasScreen(viewModel: MetasViewModel, onBack: () -> Unit) {
         },
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            modifier = Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).anchoContenido().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             TextButton(onClick = { editando = Meta(nombre = "", objetivoCentavos = 0) }) { Text("+ Nueva meta") }
@@ -96,7 +97,7 @@ private fun MetaDialog(inicial: Meta, onCerrar: () -> Unit, onGuardar: (Meta) ->
         onDismissRequest = onCerrar,
         title = { Text(if (inicial.id == 0L) "Nueva meta" else "Editar meta") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(value = nombre, onValueChange = { nombre = it }, label = { Text("Nombre") })
                 CampoMonto(valor = objetivo, onChange = { objetivo = it }, etiqueta = "Objetivo")
                 CampoMonto(valor = actual, onChange = { actual = it }, etiqueta = "Ya ahorrado")

@@ -39,6 +39,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.CampoMonto
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Categoria
 
@@ -72,6 +73,7 @@ fun CategoriasScreen(viewModel: CategoriasViewModel, onBack: () -> Unit) {
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -131,7 +133,7 @@ private fun CategoriaDialog(
         onDismissRequest = onCerrar,
         title = { Text(if (inicial.id == 0L) "Nueva categoría" else "Editar categoría") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(value = nombre, onValueChange = { nombre = it }, label = { Text("Nombre") })
                 Text("Ícono", style = MaterialTheme.typography.labelMedium)
                 Row(

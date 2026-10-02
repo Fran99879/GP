@@ -36,6 +36,7 @@ import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TarjetaMetrica
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Deuda
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
@@ -90,6 +91,7 @@ fun DashboardScreen(
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

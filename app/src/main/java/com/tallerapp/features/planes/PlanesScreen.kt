@@ -34,6 +34,7 @@ import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.MetaCompleta
 
 /** Funciones de cada plan, en el orden en que se muestran. */
@@ -80,6 +81,7 @@ fun PlanesScreen(facturacion: FacturacionPlay, onBack: () -> Unit) {
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

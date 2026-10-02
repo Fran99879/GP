@@ -40,6 +40,7 @@ import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
 
 /** Una fila editable del remito (texto crudo; se parsea al generar). */
@@ -88,6 +89,7 @@ fun RemitoScreen(negocioNombre: String, onBack: () -> Unit) {
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

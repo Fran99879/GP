@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
 import com.tallerapp.core.ui.components.CampoMonto
@@ -59,6 +60,7 @@ fun CuentasScreen(viewModel: CuentasViewModel, onBack: () -> Unit) {
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -125,7 +127,7 @@ private fun CuentaDialog(
         onDismissRequest = onCerrar,
         title = { Text(if (inicial.id == 0L) "Nueva cuenta" else "Editar cuenta") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 OutlinedTextField(value = nombre, onValueChange = { nombre = it }, label = { Text("Nombre") })
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Emojis.forEach { em ->

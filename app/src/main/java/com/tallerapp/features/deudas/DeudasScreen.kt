@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material3.AlertDialog
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Deuda
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.core.util.Fechas
@@ -69,6 +70,7 @@ fun DeudasScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

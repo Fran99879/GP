@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import com.tallerapp.core.ui.components.AvatarPerfil
 import com.tallerapp.core.ui.components.AvataresApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.TemaApp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +57,7 @@ fun PerfilScreen(onBack: () -> Unit) {
         },
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding).fillMaxSize().padding(24.dp),
+            modifier = Modifier.padding(padding).fillMaxSize().anchoContenido().padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

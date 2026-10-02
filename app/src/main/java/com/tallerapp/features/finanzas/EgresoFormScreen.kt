@@ -24,6 +24,7 @@ import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.ui.components.SelectorOpciones
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.features.finanzas.egreso.EgresoFormViewModel
 
 /** Formulario de alta/edición de egreso (Frozen Spec 9.6, validación V-3). */
@@ -52,6 +53,7 @@ fun EgresoFormScreen(
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {

@@ -25,6 +25,7 @@ import com.tallerapp.core.ui.components.CampoTexto
 import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.PrimaryButton
+import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.features.deudas.form.DeudaFormViewModel
 
 /** Formulario de alta/edición de una deuda a favor ("quién te debe"). */
@@ -54,6 +55,7 @@ fun DeudaFormScreen(
                 .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .anchoContenido()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
