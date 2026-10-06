@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.SelectorOpciones
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Gasto
@@ -69,8 +70,8 @@ fun RecurrentesScreen(viewModel: RecurrentesViewModel, onBack: () -> Unit) {
                 Card(modifier = Modifier.fillMaxWidth().clickable { editando = r }) {
                     Row(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(r.concepto, fontWeight = FontWeight.SemiBold)
-                            Text(
+                            TextoFila(r.concepto, fontWeight = FontWeight.SemiBold)
+                            TextoFila(
                                 "${if (r.tipo == "ingreso") "Ingreso" else "Gasto"} · día ${r.diaMes}${if (r.activo) "" else " · (inactivo)"}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -80,6 +81,8 @@ fun RecurrentesScreen(viewModel: RecurrentesViewModel, onBack: () -> Unit) {
                             (if (r.tipo == "ingreso") "+" else "−") + Dinero.formatear(r.montoCentavos),
                             fontWeight = FontWeight.Bold,
                             color = if (r.tipo == "ingreso") Ingreso else Gasto,
+                            maxLines = 1,
+                            softWrap = false,
                         )
                     }
                 }

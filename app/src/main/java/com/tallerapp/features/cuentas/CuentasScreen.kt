@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Gasto
@@ -85,11 +86,17 @@ fun CuentasScreen(viewModel: CuentasViewModel, onBack: () -> Unit) {
                     Row(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(c.icono, style = MaterialTheme.typography.titleLarge)
                         Spacer(Modifier.size(12.dp))
-                        Text(c.nombre, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                        TextoFila(
+                            c.nombre,
+                            modifier = Modifier.weight(1f),
+                            fontWeight = FontWeight.SemiBold,
+                        )
                         Text(
                             Dinero.formatear(c.saldoCentavos),
                             fontWeight = FontWeight.Bold,
                             color = if (c.saldoCentavos < 0) Gasto else Ingreso,
+                            maxLines = 1,
+                            softWrap = false,
                         )
                     }
                 }

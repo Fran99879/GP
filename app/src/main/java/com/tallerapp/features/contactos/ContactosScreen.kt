@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.TarjetaApp
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
@@ -212,10 +213,21 @@ private fun FilaContacto(contacto: Contacto, onClick: () -> Unit) {
             Text(TipoContacto.icono(contacto.tipo), style = MaterialTheme.typography.titleLarge)
             Spacer(Modifier.size(12.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(contacto.nombre, fontWeight = FontWeight.SemiBold)
-                if (contacto.detalle.isNotBlank()) TextoMuted(contacto.detalle)
+                TextoFila(contacto.nombre, fontWeight = FontWeight.SemiBold)
+                if (contacto.detalle.isNotBlank()) {
+                    TextoFila(
+                        contacto.detalle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
                 if (contacto.tipo == TipoContacto.AMBOS) {
-                    TextoMuted(TipoContacto.etiqueta(contacto.tipo))
+                    TextoFila(
+                        TipoContacto.etiqueta(contacto.tipo),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                    )
                 }
             }
         }

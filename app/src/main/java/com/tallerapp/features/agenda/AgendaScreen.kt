@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.TarjetaApp
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloSeccion
@@ -256,7 +257,7 @@ private fun FilaAgenda(item: AgendaItem, onToggle: () -> Unit, onClick: () -> Un
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(checked = item.hecho, onCheckedChange = { onToggle() })
             Column(modifier = Modifier.weight(1f).clickable(onClick = onClick)) {
-                Text(
+                TextoFila(
                     "${TipoAgenda.icono(item.tipo)}  ${item.titulo}",
                     fontWeight = FontWeight.SemiBold,
                     textDecoration = if (item.hecho) TextDecoration.LineThrough else null,
@@ -266,7 +267,11 @@ private fun FilaAgenda(item: AgendaItem, onToggle: () -> Unit, onClick: () -> Un
                     item.hora.takeIf { it.isNotBlank() },
                     item.descripcion.takeIf { it.isNotBlank() },
                 ).joinToString(" · ")
-                TextoMuted(detalle)
+                TextoFila(
+                    detalle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }

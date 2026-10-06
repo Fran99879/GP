@@ -123,11 +123,13 @@
 
 ### B3. Pantallas de Clientes y Proveedores — ✅ HECHO (2026-10-03)
 
-- [x] `Views/ContactosWindow.xaml(.cs)`: **una sola ventana parametrizada** por tipo
-  (`new ContactosWindow(TipoContacto.Cliente | TipoContacto.Proveedor)`), con el patrón de
-  `CategoriasWindow` (clase `Fila` interna, `HuboCambios`, `Refrescar()`). Cambian el título, el
-  subtítulo, el texto del botón de alta y el mensaje de lista vacía; el resto es el mismo contenido,
-  igual que la `ContactosScreen` de Android.
+- [x] `Views/ContactosView.xaml(.cs)`: **una sola vista parametrizada** por tipo
+  (`Mostrar(TipoContacto.Cliente | TipoContacto.Proveedor)`). Cambian el título, el subtítulo, el texto
+  del botón de alta y el mensaje de lista vacía; el resto es el mismo contenido, igual que la
+  `ContactosScreen` de Android.
+- [x] **Es una página dentro de la ventana principal, no una ventana aparte** (corregido tras tu
+  observación): se muestra en el `Host` como Inicio, Movimientos o Reportes. La **calculadora es la única
+  que se abre aparte**, porque se usa mientras se mira otra pantalla.
 - [x] Lista con ícono por tipo (🧑 🚚 🔁), nombre, `Detalle` (se oculta solo cuando no hay datos, con un
   `DataTrigger`) y la etiqueta del tipo. Editar y Eliminar por fila.
 - [x] Buscador en vivo (`TextChanged`) por nombre, documento o teléfono, con botón **Limpiar** que
@@ -223,7 +225,8 @@
 
 ### C3. Pantalla de Productos — ✅ HECHO (2026-10-03)
 
-- [x] `Views/ProductosWindow.xaml(.cs)`: lista con foto (o 📦 cuando no hay), nombre, código y
+- [x] `Views/ProductosView.xaml(.cs)` — **página dentro de la ventana principal**, no una ventana aparte
+  (corregido tras tu observación): lista con foto (o 📦 cuando no hay), nombre, código y
   descripción, **precio de lista tachado** cuando hay descuento con el final al lado, y stock en rojo
   con ⚠ cuando está bajo. El stock se muestra sin decimales inútiles (12, no 12,00).
 - [x] Buscador en vivo por nombre, código o descripción, con **Limpiar** condicional, y mensajes de lista
@@ -242,7 +245,8 @@
 - [x] **Eliminar** avisa que las facturas ya emitidas no se tocan (conservan descripción y precio).
 - [x] **Entrada Productos en la barra lateral**, arriba de Clientes dentro de **TU NEGOCIO · PRO**, con
   candado 🔒. El candado se unificó en `MainWindow.PermiteUsoComercial(que)`, que es el único lugar a
-  cambiar cuando exista la pantalla de Planes (E1).
+  cambiar cuando exista la pantalla de Planes (E1). Si el candado corta la navegación, la sección activa
+  del menú **vuelve a la anterior** en vez de quedar marcada en una página que no se abrió.
 - [x] **Verificado:** `dotnet build -c Release` sin errores y `dotnet test` → **81/81**.
 - [ ] **Pendiente de revisión visual tuya**: la ventana y el diálogo no los pude abrir (la app estaba
   corriendo y pide login). Mirá sobre todo la fila del catálogo con foto y con descuento.

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.NegocioActual
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.domain.model.Negocio
@@ -100,12 +101,13 @@ fun NegociosScreen(
                         Text(if (seleccionado) "🏪" else "🏬", style = MaterialTheme.typography.titleLarge)
                         Spacer(Modifier.size(12.dp))
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(n.nombre, fontWeight = FontWeight.SemiBold)
+                            TextoFila(n.nombre, fontWeight = FontWeight.SemiBold)
                             if (seleccionado) {
-                                Text(
+                                TextoFila(
                                     "Activo",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
+                                    maxLines = 1,
                                 )
                             }
                         }

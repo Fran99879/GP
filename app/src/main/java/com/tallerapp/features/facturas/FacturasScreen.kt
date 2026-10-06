@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.export.Compartir
 import com.tallerapp.core.export.FacturaPdf
 import com.tallerapp.core.ui.components.TarjetaApp
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
@@ -98,19 +99,30 @@ fun FacturasScreen(
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(
+                                    TextoFila(
                                         if (f.numero.isBlank()) f.cliente else "N° ${f.numero} · ${f.cliente}",
                                         fontWeight = FontWeight.SemiBold,
                                     )
-                                    TextoMuted(Fechas.formatear(f.fecha))
+                                    TextoFila(
+                                        Fechas.formatear(f.fecha),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 1,
+                                    )
                                     if (!f.registradaEnCaja) {
-                                        TextoMuted("Sin registrar en caja")
+                                        TextoFila(
+                                            "Sin registrar en caja",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
                                     }
                                 }
                                 Text(
                                     Dinero.formatear(f.totalCentavos),
                                     fontWeight = FontWeight.Bold,
                                     style = MaterialTheme.typography.titleSmall,
+                                    maxLines = 1,
+                                    softWrap = false,
                                 )
                             }
                         }
@@ -174,13 +186,20 @@ private fun DetalleFacturaDialog(
                 factura.items.forEach { item ->
                     Row(modifier = Modifier.padding(top = 4.dp)) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(item.descripcion, style = MaterialTheme.typography.bodyMedium)
-                            TextoMuted(
+                            TextoFila(item.descripcion, style = MaterialTheme.typography.bodyMedium)
+                            TextoFila(
                                 "${cantidad(item.cantidad)} × ${Dinero.formatear(item.precioUnitCentavos)}" +
                                     if (item.descuentoPct > 0) "  ·  -${cantidad(item.descuentoPct)}%" else "",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                        Text(Dinero.formatear(item.subtotalCentavos), fontWeight = FontWeight.SemiBold)
+                        Text(
+                            Dinero.formatear(item.subtotalCentavos),
+                            fontWeight = FontWeight.SemiBold,
+                            maxLines = 1,
+                            softWrap = false,
+                        )
                     }
                 }
 

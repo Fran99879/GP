@@ -39,6 +39,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.CampoMonto
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
@@ -110,7 +111,11 @@ private fun Seccion(titulo: String, items: List<Categoria>, onNueva: () -> Unit,
             ) {
                 Box(modifier = Modifier.size(16.dp).background(parseColor(cat.color), CircleShape))
                 Spacer(Modifier.size(10.dp))
-                Text(cat.display, fontWeight = FontWeight.SemiBold)
+                TextoFila(
+                    cat.display,
+                    modifier = Modifier.weight(1f),
+                    fontWeight = FontWeight.SemiBold,
+                )
             }
         }
     }

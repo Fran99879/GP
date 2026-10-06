@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.scan.recordarEscaner
 import com.tallerapp.core.ui.components.TarjetaApp
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
@@ -236,25 +237,29 @@ private fun FilaProducto(producto: Producto, onClick: () -> Unit) {
             FotoProducto(producto.imagen)
             Spacer(Modifier.size(12.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(producto.nombre, fontWeight = FontWeight.SemiBold)
+                // Con tope de renglones: en una pantalla angosta el nombre se corta con "…" en vez
+                // de partirse letra por letra (ver FilaLista).
+                TextoFila(producto.nombre, fontWeight = FontWeight.SemiBold)
                 if (producto.codigoBarras.isNotBlank()) {
-                    TextoMuted(producto.codigoBarras)
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        "Stock: ${textoCantidad(producto.stock)}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (producto.stockBajo) Gasto else MaterialTheme.colorScheme.onSurfaceVariant,
+                    TextoFila(
+                        producto.codigoBarras,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
                     )
-                    if (producto.stockBajo) {
-                        Text(
-                            "  · stock bajo",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Gasto,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
                 }
+                // El stock y el aviso, en un solo texto: así no compiten por el ancho entre sí.
+                val stock = buildString {
+                    append("Stock: ${textoCantidad(producto.stock)}")
+                    if (producto.stockBajo) append("  · stock bajo")
+                }
+                TextoFila(
+                    stock,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (producto.stockBajo) Gasto else MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = if (producto.stockBajo) FontWeight.SemiBold else null,
+                    maxLines = 1,
+                )
             }
             Column(horizontalAlignment = Alignment.End) {
                 if (producto.tieneDescuento) {
@@ -263,12 +268,16 @@ private fun FilaProducto(producto: Producto, onClick: () -> Unit) {
                         style = MaterialTheme.typography.labelSmall,
                         textDecoration = TextDecoration.LineThrough,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        softWrap = false,
                     )
                 }
                 Text(
                     Dinero.formatear(producto.precioFinalCentavos),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    softWrap = false,
                 )
                 if (producto.tieneDescuento) {
                     Text(

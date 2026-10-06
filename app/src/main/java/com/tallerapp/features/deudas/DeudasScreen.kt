@@ -33,6 +33,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material3.AlertDialog
+import com.tallerapp.core.ui.components.FilaLista
+import com.tallerapp.core.ui.components.TextoFila
 import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Deuda
@@ -137,57 +139,42 @@ private fun DeudaRow(
     onEditar: () -> Unit,
     onEliminar: () -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Checkbox(checked = deuda.cobrada, onCheckedChange = onToggleCobrada)
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    deuda.nombre,
-                    fontWeight = FontWeight.SemiBold,
-                    textDecoration = if (deuda.cobrada) TextDecoration.LineThrough else null,
-                )
-                val detalle = buildString {
-                    append("Desde ${Fechas.formatear(deuda.fecha)}")
-                    if (deuda.nota.isNotBlank()) append(" · ${deuda.nota}")
+    val detalle = buildString {
+        append("Desde ${Fechas.formatear(deuda.fecha)}")
+        if (deuda.nota.isNotBlank()) append(" · ${deuda.nota}")
+    }
+
+    FilaLista(
+        titulo = deuda.nombre,
+        subtitulo = detalle,
+        tachado = deuda.cobrada,
+        inicio = { Checkbox(checked = deuda.cobrada, onCheckedChange = onToggleCobrada) },
+        valor = Dinero.formatear(deuda.montoCentavos),
+        valorColor = if (deuda.cobrada) MaterialTheme.colorScheme.onSurfaceVariant else Deuda,
+        extra = {
+            if (!deuda.cobrada && deuda.fechaLimite != null) {
+                val dias = ((deuda.fechaLimite!! - Fechas.hoyInicioMillis()) / 86_400_000L).toInt()
+                val aviso = when {
+                    dias < 0 -> "⚠ Cobro vencido (hace ${-dias} día${if (-dias == 1) "" else "s"})"
+                    dias == 0 -> "🔔 Hoy es la fecha para cobrar"
+                    dias <= 7 -> "🔔 Falta${if (dias == 1) "" else "n"} $dias día${if (dias == 1) "" else "s"} para cobrar"
+                    else -> ""
                 }
-                Text(
-                    detalle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                if (!deuda.cobrada && deuda.fechaLimite != null) {
-                    val dias = ((deuda.fechaLimite!! - Fechas.hoyInicioMillis()) / 86_400_000L).toInt()
-                    val aviso = when {
-                        dias < 0 -> "⚠ Cobro vencido (hace ${-dias} día${if (-dias == 1) "" else "s"})"
-                        dias == 0 -> "🔔 Hoy es la fecha para cobrar"
-                        dias <= 7 -> "🔔 Falta${if (dias == 1) "" else "n"} $dias día${if (dias == 1) "" else "s"} para cobrar"
-                        else -> ""
-                    }
-                    if (aviso.isNotEmpty()) {
-                        Text(
-                            aviso,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = if (dias < 0) com.tallerapp.core.ui.theme.Gasto else Deuda,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                if (aviso.isNotEmpty()) {
+                    TextoFila(
+                        aviso,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (dias < 0) com.tallerapp.core.ui.theme.Gasto else Deuda,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
-            Text(
-                Dinero.formatear(deuda.montoCentavos),
-                fontWeight = FontWeight.Bold,
-                color = if (deuda.cobrada) MaterialTheme.colorScheme.onSurfaceVariant else Deuda,
-            )
+        },
+        acciones = {
             if (!deuda.cobrada) {
                 TextButton(onClick = onEditar) { Text("Editar") }
             }
             TextButton(onClick = onEliminar) { Text("✕") }
-        }
-    }
+        },
+    )
 }
