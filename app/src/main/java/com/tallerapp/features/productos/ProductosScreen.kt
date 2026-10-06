@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.scan.recordarEscaner
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Gasto
@@ -75,7 +76,7 @@ fun ProductosScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Productos") },
+                title = { TituloBarra("Productos") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
                 actions = { TextButton(onClick = escanear) { Text("Escanear") } },
             )

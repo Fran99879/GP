@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Gasto
 import com.tallerapp.core.ui.theme.Ingreso
@@ -50,7 +51,7 @@ fun CuentasScreen(viewModel: CuentasViewModel, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Cuentas") },
+                title = { TituloBarra("Cuentas") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

@@ -35,6 +35,7 @@ import com.tallerapp.core.export.Compartir
 import com.tallerapp.core.export.FacturaPdf
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
@@ -60,7 +61,7 @@ fun FacturasScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Facturas") },
+                title = { TituloBarra("Facturas") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

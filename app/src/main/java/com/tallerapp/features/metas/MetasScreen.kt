@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.CampoMonto
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Meta
@@ -44,7 +45,7 @@ fun MetasScreen(viewModel: MetasViewModel, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Metas de ahorro") },
+                title = { TituloBarra("Metas de ahorro") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

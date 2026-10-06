@@ -41,6 +41,7 @@ import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.ui.components.SelectorOpciones
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
 import com.tallerapp.core.ui.components.anchoContenido
@@ -93,7 +94,7 @@ fun FacturaFormScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Nueva factura") },
+                title = { TituloBarra("Nueva factura") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
                 actions = { TextButton(onClick = escanear) { Text("Escanear") } },
             )

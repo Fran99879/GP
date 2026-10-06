@@ -19,4 +19,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "TallerApp"
 include(":app")
+include(":baselineprofile")
 

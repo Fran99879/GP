@@ -39,6 +39,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.CampoMonto
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Dinero
 import com.tallerapp.domain.model.Categoria
@@ -63,7 +64,7 @@ fun CategoriasScreen(viewModel: CategoriasViewModel, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Categorías") },
+                title = { TituloBarra("Categorías") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

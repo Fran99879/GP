@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material3.AlertDialog
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.Deuda
 import com.tallerapp.core.util.Dinero
@@ -56,7 +57,7 @@ fun DeudasScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Quién me debe") },
+                title = { TituloBarra("Quién me debe") },
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
             )
         },

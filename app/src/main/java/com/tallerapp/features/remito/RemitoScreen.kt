@@ -38,6 +38,7 @@ import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
 import com.tallerapp.core.ui.components.anchoContenido
@@ -79,7 +80,7 @@ fun RemitoScreen(negocioNombre: String, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Remito") },
+                title = { TituloBarra("Remito") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

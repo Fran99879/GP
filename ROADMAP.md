@@ -23,14 +23,30 @@ Orden de trabajo, los primeros tres en una sola tanda:
 | 1 | Ancho máximo del contenido en las 23 pantallas | 12, Paso 1 | ✅ hecho el 01/10/2026 |
 | 2 | Diálogos con scroll | 12, transversal | ✅ hecho el 01/10/2026 |
 | 3 | `LazyColumn` en Finanzas | 13, Paso 1 | ✅ hecho el 01/10/2026 |
-| 4 | Revisión con el texto del sistema al 200 % | 12, transversal | ⛔ falta: pide emulador |
-| 5 | Baseline Profile | 13, Paso 2 | ⛔ configuración |
+| 4 | Revisión con el texto del sistema al 200 % | 12, transversal | ✅ hecho el 03/10/2026 |
+| 5 | Baseline Profile | 13, Paso 2 | ✅ hecho el 03/10/2026 |
 | 6 | `WindowSizeClass` y grillas | 12, Paso 2 | ⛔ diseño por pantalla |
-| 7 | Medición (`macrobenchmark`, estabilidad de Compose) | 13, Paso 3 | ⛔ sesión propia |
+| 7 | Medición (`macrobenchmark`, estabilidad de Compose) | 13, Paso 3 | ✅ hecho el 03/10/2026 |
 | 8 | Navegación adaptativa (`NavigationRail`) | 12, Paso 3 | ⛔ último: es el que rompe la navegación |
 
-Los puntos 1 a 3 **compilan pero todavía no se vieron corriendo**: no hay emulador levantado.
-Antes de seguir con el 5 hay que abrir la app en un emulador de tablet y en un teléfono.
+Los puntos 1 a 4 se vieron corriendo en un emulador de teléfono (Pixel 7, API 36) el
+03/10/2026, con el plan Pro y con el plan Gratis. Falta verlos en una tablet.
+
+**Lo que salió del punto 4** (revisión a `font_scale 2.0`), ya arreglado el mismo día:
+
+| Qué se rompía | Dónde | Cómo quedó |
+|---|---|---|
+| El título de la barra superior se iba a dos renglones y el segundo quedaba tapado: se leía "Movimient" | las 23 pantallas | `TituloBarra`, con tope de escala y ellipsis |
+| La fila de movimientos dejaba al concepto cuatro letras por renglón ("Sue / ldo", "Ban / co · / 03/1 / 0/20 / 26") | `MovimientoRow` | se apila: concepto arriba, monto y "Anular" abajo |
+| Las fechas del filtro se partían a mitad de número ("01/10/20" y abajo "26"), que se lee como otra fecha | `FinanzasScreen`, `FechaPicker` | los dos selectores se apilan a todo el ancho; el texto nunca parte |
+| Las etiquetas de la barra inferior se partían ("Movimi / entos") | `BarraInferior` | tope de escala más bajo: palabra entera y chica antes que grande y cortada |
+
+El umbral vive una sola vez en `ESCALA_APILADO` (`core/ui/components/EscalaTexto.kt`), así la
+app cambia de forma toda junta. Reportes aguanta el 200 % sin tocar nada: dona, leyenda y
+barras de 12 meses escalan bien.
+
+La fila de accesos de Finanzas (Cuentas, Categorías, Recurrentes…) **no** es un defecto: tiene
+`horizontalScroll` y el corte contra el borde derecho es el indicador de que hay más.
 
 Las secciones 9, 10 y 11 (Drive, códigos promocionales, modo viaje) quedan **detrás** de
 esto. La Fase 2 arranca cuando los puntos 1 a 5 estén probados en emulador.
@@ -481,13 +497,75 @@ negocios del usuario, las categorías con presupuesto y los 12 meses del gráfic
 cientos de filas, así que un `Column` con scroll alcanza y convertirlo era mover una pantalla
 grande sin ganancia medible.
 
-**Paso 2 — Baseline Profile.** Sumar `androidx.profileinstaller`, generar el perfil con el
-recorrido de arranque (abrir, Dashboard, un listado) y que entre en el AAB. Es configuración,
-no diseño.
+**Paso 2 — Baseline Profile.** ✅ **Hecho el 03/10/2026.**
 
-**Paso 3 — Medir.** Un módulo `macrobenchmark` con arranque en frío y scroll de Finanzas, más
-una corrida de los informes de estabilidad del compilador de Compose para ver qué clases de
-estado no son estables. Recién con esos números tiene sentido tocar recomposiciones.
+- `androidx.profileinstaller:profileinstaller:1.4.1` en `:app`, para que el perfil se aplique
+  también en Android 7 y 8 y mientras Play todavía no mandó el perfil de la nube.
+- Módulo `:baselineprofile` (`com.android.test` + plugin `androidx.baselineprofile` 1.4.1,
+  compatible con AGP 9.3.3) con `GeneradorPerfilInicio`: arranque, cierre de la guía rápida,
+  Movimientos, Reportes y vuelta a Inicio, con `includeInStartupProfile = true`.
+- Perfil generado en `app/src/release/generated/baselineProfiles/` (`baseline-prof.txt` y
+  `startup-prof.txt`, 22.798 reglas, 1.687 de `com.tallerapp`). **Va al repositorio**: así el
+  release se arma con el perfil sin tener que regenerarlo en cada máquina.
+- Verificado dentro del APK de release: `assets/dexopt/baseline.prof` y `baseline.profm`.
+
+Para regenerarlo cuando cambie el arranque:
+
+```
+ANDROID_SERIAL=<emulador> gradlew :app:generateReleaseBaselineProfile
+```
+
+Dos cosas que cuestan un rato si no se saben:
+
+1. Hay que **desinstalar la app del dispositivo** antes. El generador instala una variante
+   firmada distinta y si no falla con `INSTALL_FAILED_UPDATE_INCOMPATIBLE`. Eso **borra los
+   datos** de ese dispositivo: si son datos de prueba que importan, copiarlos antes.
+2. `ANDROID_SERIAL` no es opcional con más de un emulador conectado: sin eso intenta instalar
+   en todos.
+
+No hizo falta un emulador con root ni una imagen sin Play Store: con API 36 el perfil se
+recolecta igual.
+
+**Paso 3 — Medir.** ✅ **Hecho el 03/10/2026.**
+
+`ArranqueBenchmark` vive en `:baselineprofile` (la variante `benchmarkRelease` que arma el
+plugin ya viene minificada y no depurable, que es lo que pide Macrobenchmark). 10 iteraciones
+por caso, en el emulador `Pixel_7_gratis` (API 36, 4 núcleos):
+
+| Arranque en frío (`timeToInitialDisplayMs`) | Mínimo | Mediana | Máximo |
+|---|---|---|---|
+| Sin Baseline Profile | 1249,8 | 1317,7 | **3536,2** |
+| Con Baseline Profile | 1173,9 | **1260,4** | **1620,3** |
+
+La mediana baja 57 ms (4,4 %). Lo que de verdad cambia es el **peor caso**: de 3,5 s a 1,6 s,
+menos de la mitad. Es el arranque de alguien que acaba de instalar, que es justo el que decide
+si la app se queda en el teléfono.
+
+En emulador los números sirven para comparar entre sí, no como tiempo real de un teléfono. Por
+eso el módulo lleva `androidx.benchmark.suppressErrors = EMULATOR`: medir ahí está mal para
+publicar un número, bien para comparar la misma app con y sin perfil en la misma máquina.
+
+```
+ANDROID_SERIAL=<emulador> gradlew :baselineprofile:connectedBenchmarkReleaseAndroidTest
+```
+
+**Informes de estabilidad de Compose**, con `gradlew :app:compileReleaseKotlin
+-Pcompose.informes=true --rerun` (salen en `app/build/compose_compiler/`):
+
+- **85 de 85 composables restartables son skippable.** Ninguno se recompone de más por una
+  firma mal puesta. No hay nada que arreglar acá.
+- 56 clases marcadas inestables, casi todas ruido: los `*Dao_Impl` de Room, los ViewModels y
+  los `object` globales. Nunca viajan como parámetro de un composable, así que no cuentan.
+- Las que sí viajan como estado son `CategoriasState`, `EgresoFormState`, `IngresoFormState`,
+  `ReporteMensual`, `Factura` y `Remito`, y todas por lo mismo: tienen campos `List<T>`, que
+  para Compose es inestable porque la interfaz podría ser mutable. Como los composables ya son
+  skippable igual, **no se tocó nada**: se arregla el día que una medición muestre un problema,
+  con un `stabilityConfigurationFile` o con listas inmutables.
+
+**Pendiente del paso**: el scroll de Movimientos. El test `scrollMovimientosConPerfil` está
+escrito pero sale sin métricas, porque instalar `benchmarkRelease` borra los datos y la variante
+no es depurable, así que no se le puede empujar una base con `run-as`. Hay que cargar
+movimientos a mano (o restaurar una copia desde Configuración → Datos) antes de correrlo.
 
 **Paso 4 — Lo puntual.** Sacar los formateadores de las composiciones, `remember` donde hace
 falta y `derivedStateOf` donde el cálculo depende de otro estado.

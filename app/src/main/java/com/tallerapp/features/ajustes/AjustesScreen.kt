@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.tallerapp.core.ui.components.SelectorOpciones
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.billing.EstadoPlan
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -104,7 +105,7 @@ fun AjustesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Configuración") },
+                title = { TituloBarra("Configuración") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

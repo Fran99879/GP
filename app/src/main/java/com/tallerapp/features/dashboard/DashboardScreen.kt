@@ -34,6 +34,7 @@ import com.tallerapp.core.ui.components.BotonGhost
 import com.tallerapp.core.ui.components.FilaMeta
 import com.tallerapp.core.ui.components.TextoMuted
 import com.tallerapp.core.ui.components.TarjetaMetrica
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
 import com.tallerapp.core.ui.components.anchoContenido
@@ -77,7 +78,7 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Mis Finanzas") },
+                title = { TituloBarra("Mis Finanzas") },
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
                 actions = {
                     SelectorNegocioTopBar()

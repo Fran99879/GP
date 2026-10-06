@@ -32,6 +32,7 @@ import com.tallerapp.core.billing.OfertaPro
 import com.tallerapp.core.ui.components.BarraPlan
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
 import com.tallerapp.core.ui.components.anchoContenido
@@ -71,7 +72,7 @@ fun PlanesScreen(facturacion: FacturacionPlay, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Planes") },
+                title = { TituloBarra("Planes") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },
@@ -150,8 +151,10 @@ fun PlanesScreen(facturacion: FacturacionPlay, onBack: () -> Unit) {
                 } else {
                     if (ofertas.isEmpty()) {
                         TextoMuted(
-                            "No se pudieron cargar los precios. Revisá tu conexión e " +
-                                "intentá de nuevo.",
+                            // Las dos causas posibles: sin internet, o sin sesión de Google Play
+                            // en el teléfono (ahí Billing ni siquiera conecta).
+                            "No se pudieron cargar los precios. Revisá tu conexión y que " +
+                                "tengas la sesión iniciada en Google Play.",
                             modifier = Modifier.padding(top = 12.dp),
                         )
                     } else {

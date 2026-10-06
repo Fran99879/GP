@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloSeccion
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.util.Fechas
@@ -71,7 +72,7 @@ fun AgendaScreen(viewModel: AgendaViewModel, onOpenMenu: () -> Unit = {}, onBack
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Agenda") },
+                title = { TituloBarra("Agenda") },
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
             )
         },

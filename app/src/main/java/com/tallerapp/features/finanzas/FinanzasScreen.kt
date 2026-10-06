@@ -25,15 +25,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.billing.EstadoPlan
 import com.tallerapp.core.ui.components.BloqueResumen3
 import com.tallerapp.core.ui.components.BotonGhost
 import com.tallerapp.core.ui.components.CampoTexto
+import com.tallerapp.core.ui.components.ESCALA_APILADO
 import com.tallerapp.core.ui.components.MetricaResumen
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.TituloSeccion
 import com.tallerapp.core.ui.components.FechaPicker
@@ -85,7 +88,7 @@ fun FinanzasScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Movimientos") },
+                title = { TituloBarra("Movimientos") },
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
                 actions = { SelectorNegocioTopBar() },
             )
@@ -120,12 +123,22 @@ fun FinanzasScreen(
                     TarjetaApp(modifier = Modifier.fillMaxWidth(), padding = 12.dp) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             CampoTexto(valor = filtro.texto, onChange = viewModel::setTexto, etiqueta = "Buscar (concepto, categoría, cuenta)")
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Column(modifier = Modifier.weight(1f)) {
+                            // Lado a lado cada selector se queda con media pantalla, y con el texto
+                            // del sistema grande ahí no entra una fecha. Desde ese tamaño van uno
+                            // debajo del otro, a todo el ancho.
+                            if (LocalDensity.current.fontScale >= ESCALA_APILADO) {
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                     FechaPicker(fechaMillis = filtro.desde, onFechaChange = viewModel::setDesde)
-                                }
-                                Column(modifier = Modifier.weight(1f)) {
                                     FechaPicker(fechaMillis = filtro.hasta, onFechaChange = viewModel::setHasta)
+                                }
+                            } else {
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        FechaPicker(fechaMillis = filtro.desde, onFechaChange = viewModel::setDesde)
+                                    }
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        FechaPicker(fechaMillis = filtro.hasta, onFechaChange = viewModel::setHasta)
+                                    }
                                 }
                             }
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

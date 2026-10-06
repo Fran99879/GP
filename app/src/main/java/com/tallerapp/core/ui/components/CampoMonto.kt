@@ -33,7 +33,7 @@ fun CampoMonto(
 ) {
     OutlinedTextField(
         value = valor,
-        onValueChange = { onChange(filtrarMonto(it)) },
+        onValueChange = { onChange(filtrarMonto(it, valor)) },
         label = { Text(etiqueta) },
         isError = error != null,
         enabled = habilitado,
@@ -51,12 +51,22 @@ fun CampoMonto(
  *
  * Con esto el usuario no puede escribir "1.2.3" ni pegar texto raro, y los puntos de miles
  * que ve en pantalla nunca entran al valor.
+ *
+ * [anterior] es el valor que tenía el campo. Sirve para distinguir un **pegado** (entran varios
+ * caracteres de una) de un **tipeo** (entra uno solo): los puntos de miles se interpretan solo al
+ * pegar, así "1.500" copiado de un resumen vale 1500. Al tipear se ignoran, porque si no, escribir
+ * "1.50" y tocar un 0 de más saltaría a 1.500 en vez de descartar la tecla.
+ *
+ * Límite conocido: si se pega **sobre texto seleccionado** y el largo no cambia, se toma como tipeo.
  */
-internal fun filtrarMonto(texto: String): String {
+internal fun filtrarMonto(texto: String, anterior: String = ""): String {
+    val entrada =
+        if (texto.length - anterior.length > 1) Dinero.quitarSeparadorDeMiles(texto) else texto
+
     val salida = StringBuilder()
     var haySeparador = false
     var decimales = 0
-    for (c in texto) {
+    for (c in entrada) {
         when {
             c.isDigit() -> {
                 if (!haySeparador) {

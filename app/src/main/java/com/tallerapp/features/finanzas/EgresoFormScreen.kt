@@ -24,6 +24,7 @@ import com.tallerapp.core.ui.components.CampoMonto
 import com.tallerapp.core.ui.components.FechaPicker
 import com.tallerapp.core.ui.components.PrimaryButton
 import com.tallerapp.core.ui.components.SelectorOpciones
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.features.finanzas.egreso.EgresoFormViewModel
 
@@ -43,7 +44,7 @@ fun EgresoFormScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(state.titulo) },
+                title = { TituloBarra(state.titulo) },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

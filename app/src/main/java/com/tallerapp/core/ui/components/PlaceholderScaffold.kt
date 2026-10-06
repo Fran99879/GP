@@ -31,7 +31,7 @@ fun PlaceholderScaffold(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(title) },
+                title = { TituloBarra(title) },
                 navigationIcon = {
                     if (onBack != null) {
                         TextButton(onClick = onBack) { Text("← Atrás") }

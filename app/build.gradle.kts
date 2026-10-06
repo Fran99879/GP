@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
+    id("androidx.baselineprofile")
 }
 
 android {
@@ -66,6 +67,17 @@ android {
     }
 }
 
+// Informes de estabilidad del compilador de Compose (ROADMAP sección 13, Paso 3). Dicen qué
+// clases de estado no son estables, que es lo que obliga a recomponer de más. Se piden a mano:
+//   gradlew :app:assembleRelease -Pcompose.informes=true
+// y salen en app/build/compose_compiler/.
+if (project.findProperty("compose.informes") == "true") {
+    composeCompiler {
+        reportsDestination = layout.buildDirectory.dir("compose_compiler")
+        metricsDestination = layout.buildDirectory.dir("compose_compiler")
+    }
+}
+
 dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2025.06.01")
     implementation(composeBom)
@@ -98,6 +110,13 @@ dependencies {
     implementation("androidx.room:room-runtime:2.7.2")
     implementation("androidx.room:room-ktx:2.7.2")
     ksp("androidx.room:room-compiler:2.7.2")
+
+    // Instala el Baseline Profile al arrancar. Sin esto el perfil que viaja en el AAB no se
+    // aplica en Android 7..8 ni cuando Play todavía no mandó el perfil en la nube.
+    implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+
+    // Módulo que genera el perfil (no entra en el APK).
+    baselineProfile(project(":baselineprofile"))
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 

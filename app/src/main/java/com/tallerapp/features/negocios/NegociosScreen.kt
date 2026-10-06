@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.NegocioActual
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.domain.model.Negocio
 
@@ -54,7 +55,7 @@ fun NegociosScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Negocios") },
+                title = { TituloBarra("Negocios") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

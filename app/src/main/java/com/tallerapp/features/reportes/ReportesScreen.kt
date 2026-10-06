@@ -45,6 +45,7 @@ import com.tallerapp.core.ui.components.Porcion
 import com.tallerapp.core.ui.components.BotonGhost
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloSeccion
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.CategoriaColores
@@ -78,7 +79,7 @@ fun ReportesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Reportes") },
+                title = { TituloBarra("Reportes") },
                 navigationIcon = { TextButton(onClick = onOpenMenu) { Text("☰") } },
                 actions = { SelectorNegocioTopBar() },
             )

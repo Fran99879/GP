@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import com.tallerapp.core.util.Fechas
 
 /**
@@ -32,7 +33,14 @@ fun FechaPicker(
         onClick = { abierto = true },
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Text("Fecha: ${Fechas.formatear(fechaMillis)}")
+        // Sin partir: con el texto del sistema grande, "01/10/2026" se cortaba a mitad de número
+        // ("01/10/20" y abajo "26"), que se lee como otra fecha.
+        Text(
+            "Fecha: ${Fechas.formatear(fechaMillis)}",
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 
     if (abierto) {

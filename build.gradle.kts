@@ -7,4 +7,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21" apply false
     // KSP 2.0.21-1.0.25: última que conserva KSP1 (Room 2.6.1 no soporta KSP2).
     id("com.google.devtools.ksp") version "2.3.6" apply false
+    // Genera el Baseline Profile (ROADMAP sección 13, Paso 2).
+    id("androidx.baselineprofile") version "1.4.1" apply false
 }

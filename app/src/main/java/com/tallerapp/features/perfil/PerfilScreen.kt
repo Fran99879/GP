@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import com.tallerapp.core.ui.components.AvatarPerfil
 import com.tallerapp.core.ui.components.AvataresApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.core.ui.theme.TemaApp
 
@@ -51,7 +52,7 @@ fun PerfilScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Perfil") },
+                title = { TituloBarra("Perfil") },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },

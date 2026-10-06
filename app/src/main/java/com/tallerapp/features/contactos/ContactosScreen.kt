@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.ui.components.TarjetaApp
 import com.tallerapp.core.ui.components.TextoMuted
+import com.tallerapp.core.ui.components.TituloBarra
 import com.tallerapp.core.ui.components.TituloPantalla
 import com.tallerapp.core.ui.components.anchoContenido
 import com.tallerapp.domain.model.Contacto
@@ -66,7 +67,7 @@ fun ContactosScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(titulo) },
+                title = { TituloBarra(titulo) },
                 navigationIcon = { TextButton(onClick = onBack) { Text("← Atrás") } },
             )
         },
