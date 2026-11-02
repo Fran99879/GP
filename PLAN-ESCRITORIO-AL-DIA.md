@@ -302,73 +302,131 @@
   separación por negocio.
 - [x] **Verificado:** `dotnet build -c Release` sin errores y `dotnet test` → **91/91**.
 
-### D3. Pantallas de Facturas
+### D3. Pantallas de Facturas — ✅ HECHO (2026-10-06)
 
-- [ ] `Views/FacturasWindow.xaml(.cs)`: listado del negocio (número, cliente, fecha, total, marca de
-  "registrada en caja"), con ver PDF y eliminar.
-- [ ] `Views/FacturaDialog.xaml(.cs)`: cabecera (número sugerido, cliente con selector de contacto,
-  documento, fecha, cuenta, descuento general, notas) + grilla de ítems.
-- [ ] Ítems: **agregar desde el catálogo** (trae precio y descuento del producto; si se agrega el mismo
-  artículo otra vez, **suma cantidad**) y **línea libre** escrita a mano (flete, mano de obra).
-- [ ] Dos casillas al emitir: "Descontar del stock" y "Registrar el cobro como ingreso".
-- [ ] Totales en vivo: subtotal, descuento, total.
-- [ ] **Aceptación:** emitir una factura con ítems de catálogo y libres, con las dos casillas en cada
-  combinación, y que el resultado en stock y en Movimientos sea el esperado.
+- [x] `Views/FacturasView.xaml(.cs)`: **página** dentro de la ventana principal (no una ventana aparte).
+  Lista del negocio con `N° — cliente`, fecha, documento y cuenta, total, el subtotal y el descuento
+  cuando hay, y una chapita **"En caja"** en las que generaron ingreso. Resumen arriba con la cantidad
+  emitida y el total acumulado.
+- [x] **Entrada Facturas** al final del bloque **TU NEGOCIO · PRO** de la barra lateral, con candado 🔒
+  (orden del menú de Android: Productos · Clientes · Proveedores · Facturas).
+- [x] `Views/FacturaDialog.xaml(.cs)`: cabecera (cliente con autocompletado de contactos, documento,
+  número sugerido, fecha), alta de líneas y `DataGrid` editable con descripción, cantidad, precio,
+  descuento % y subtotal calculado.
+- [x] **Agregar del catálogo**: toma precio y descuento del producto, y **agregar el mismo artículo otra
+  vez suma cantidad** en vez de repetir la línea — equivalente a volver a escanear en Android. Las líneas
+  libres (flete, mano de obra) se agregan con su propio botón.
+- [x] Totales en vivo: subtotal, descuento general y total, recalculados en cada tecla con
+  `Precios.Subtotal` y `Precios.ConDescuento`.
+- [x] Dos casillas al emitir: **descontar stock** (apagada por defecto, porque no todos inventarían) y
+  **registrar el cobro** (encendida). Con las dos apagadas la factura es solo un documento.
+- [x] Las líneas sin descripción, sin cantidad o sin precio **se descartan** al emitir en vez de facturar
+  un vacío.
+- [x] **Ver una factura emitida abre el mismo diálogo en solo lectura**: campos deshabilitados, grilla
+  bloqueada y sin botón de emitir. El historial no se reescribe.
+- [x] **Eliminar** avisa, con el texto ajustado según haya generado ingreso o no, que no se devuelve el
+  stock ni se borra el cobro.
+- [x] **Verificado:** `dotnet build -c Release` sin errores y `dotnet test` → **91/91**.
+- [ ] **Pendiente de revisión visual tuya**: el `DataGrid` de líneas y el ancho del diálogo (820×680).
 
-### D4. PDF del comprobante
+### D4. PDF del comprobante — ✅ HECHO (2026-10-06)
 
-- [ ] `Services/Exportar.cs`: `FacturaPdf(Factura, string negocio, string path)` con QuestPDF, tomando
-  `RemitoPdf` como base (logo opcional del negocio).
-- [ ] Contenido: datos del negocio, número y fecha, cliente y documento, tabla de ítems (descripción,
-  cantidad, precio unitario, descuento, subtotal), descuento general, total, notas.
-- [ ] Salida a `Rutas.Exports` y abrir el archivo al terminar.
-- [ ] **Aceptación:** el PDF se genera para una factura ya emitida y para una recién creada, y los números
-  del PDF coinciden con los guardados.
+- [x] `Services/Exportar.cs`: `FacturaPdf(factura, negocio, emisor, logoPath, path)` con QuestPDF,
+  tomando `RemitoPdf` como base para que los dos papeles se vean de la misma familia (misma cabecera con
+  logo opcional, misma tabla, mismos colores de marca `#023A5D` / `#E2DACB`).
+- [x] Contenido: negocio y emisor, **FACTURA** con número y fecha, cliente y documento, tabla con
+  descripción, cantidad, precio, **descuento por línea** y subtotal, el bloque de totales y las notas.
+- [x] El descuento general **solo aparece si lo hubo**: una factura sin descuento no muestra una línea en
+  cero que invite a preguntar qué es.
+- [x] **Los importes salen de lo guardado, no de un recálculo**: reimprimir una factura dentro de un año
+  tiene que dar exactamente el mismo papel que el día que se emitió, aunque el precio del producto haya
+  cambiado diez veces desde entonces.
+- [x] UI: botón **PDF** en cada fila de `FacturasView`, y al emitir se ofrece generarlo en el momento. El
+  archivo va a `Rutas.Exports` como `factura-<número>.pdf` y se abre con el visor del sistema. El número
+  lo escribe el usuario, así que los caracteres inválidos para un nombre de archivo se reemplazan por `-`.
+- [x] Fallo controlado: si la generación falla, queda registrado en el log y el usuario ve un aviso, no un
+  stack trace.
+- [x] **Tests nuevos** (2): el PDF se genera, pesa más de 1 KB y arranca con la firma `%PDF`; y una
+  factura sin descuento ni notas también sale (son las ramas opcionales del layout). Los tests fijan
+  `QuestPDF.Settings.License`, que en la app la setea `App.OnStartup`.
+- [x] **Verificado:** `dotnet test` → **93/93**, y se generó un PDF de muestra para revisarlo a ojo.
 
----
+> Bloque D completo. El escritorio ya factura: catálogo, líneas libres, descuentos por línea y general,
+> stock, caja y PDF.
 
 ## Bloque E — Paridad de producto (sin riesgo de datos)
 
-### E1. Pantalla de Planes / licencia visible
+### E1. Pantalla de Planes / licencia visible — ✅ HECHO (2026-10-06)
 
-> Incluye agregar la entrada **Planes** a la barra lateral (en Android va entre Calculadora y
-> Configuración) y hacer que los candados del bloque TU NEGOCIO · PRO abran esa pantalla en lugar del
-> aviso provisorio que manda a Configuración → Licencia.
+- [x] `Views/PlanesView.xaml(.cs)`: **página** con el estado actual de la licencia (plan, tope de
+  negocios, días restantes o "sin vencimiento"), botón **Activar licencia / Actualizar plan** que abre
+  `ActivationWindow`, y la comparativa en dos columnas — **Gratis / Tus finanzas personales** contra
+  **Con licencia / Tu negocio** — con ✓ y 🔒.
+- [x] Entrada **Planes** 👑 en la barra lateral, entre Calculadora y Configuración, que es donde está en
+  el menú de Android.
+- [x] Al activar desde ahí se llama a `MainWindow.RefrescarPlan()`, así el menú, los candados y la barra
+  de días quedan al día sin reiniciar.
+- [x] **Cambio de criterio importante, para cumplir la regla de `PLANES.md`:** antes el candado cortaba
+  la **navegación** y no se podía ni entrar a Productos, Clientes, Proveedores o Facturas sin licencia.
+  Eso rompía *"lo que ya cargaste nunca se te bloquea"*. Ahora **siempre se entra**: lo cargado se ve, se
+  imprime y se exporta igual. Lo que pide licencia es **guardar algo nuevo**.
+- [x] El gate quedó en un solo lugar, `MainWindow.PermiteGuardarComercial(origen, que)`, que avisa, aclara
+  que lo cargado se sigue viendo y **ofrece abrir Planes**. Lo llaman:
+  - `ProductosView.Guardar` (y borra la foto que se eligió en el diálogo, que ya no referencia nadie),
+  - `ContactosView.Guardar`,
+  - `FacturasView.Nueva_Click` (las ya emitidas se ven e imprimen siempre).
+- [x] **El alta rápida de contactos sigue libre**: anotar a quién le fiaste al cargar una deuda o un
+  remito es uso personal, igual que en Android (`AgregarContactoUseCase` tampoco pide Pro).
+- [x] Bloque de recordatorio en la pantalla: *"Lo que ya cargaste nunca se te bloquea"*, con el motivo.
+- [x] **Verificado:** `dotnet build -c Release` sin errores y `dotnet test` → **93/93**.
+- [ ] **Pendiente de revisión visual tuya**: la comparativa en dos columnas y el bloque de estado.
 
+### E2. Modo de tema "Seguir al sistema" — ✅ HECHO (2026-10-06)
 
-- [ ] Hoy el escritorio solo tiene "Administrar licencia" en Configuración. Android tiene una pantalla de
-  Planes con la comparativa Gratis vs Pro.
-- [ ] `Views/PlanesView.xaml(.cs)` (o `PlanesWindow`): comparativa de funciones, estado de la licencia,
-  días restantes y botón de activación (reusa `ActivationWindow`).
-- [ ] **Las herramientas comerciales se muestran siempre, con candado 🔒** cuando no hay licencia, y al
-  tocarlas se abre Planes. Nunca se esconden ("nadie compra lo que no sabe que existe").
-- [ ] **Regla que no se rompe:** lo ya cargado **nunca** se bloquea. Sin licencia, Productos / Clientes /
-  Proveedores / Facturas se **ven y se exportan**; lo que se bloquea es **guardar** nuevo.
-- [ ] Implementación del candado: validar en `BaseDatos`/servicio al guardar (equivalente a
-  `RequierePro` de Android), no escondiendo botones.
-- [ ] **Aceptación:** sin licencia se puede navegar y exportar todo lo cargado, y al intentar guardar
-  aparece el aviso con acceso a Planes.
+- [x] `Services/Tema.cs`: `ModoActual` ahora acepta `"Sistema"` además de `"Claro"` y `"Oscuro"`.
+  `EsOscuro` resuelve: con `"Sistema"` manda Windows, si no, lo que eligió el usuario.
+- [x] `WindowsEnOscuro()` lee `AppsUseLightTheme` de
+  `HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize` (0 = oscuro). Si el registro no
+  se puede leer, **asume claro**: es el default de Windows y nunca deja la app ilegible.
+- [x] **Cambio en vivo**: `SystemEvents.UserPreferenceChanged` reaplica el tema cuando Windows cambia el
+  suyo, sin reiniciar. Solo actúa con el modo `"Sistema"` — si el usuario eligió Claro u Oscuro a mano,
+  su elección manda. La suscripción se hace en `Cargar()` con un `-=` previo, para no duplicarla.
+- [x] `SettingsView`: tercer botón **🖥 Sistema** junto a ☀ Claro y 🌙 Oscuro.
+- [x] El resaltado marca el modo **elegido**, no el aplicado: con `"Sistema"` puesto, el botón resaltado
+  es Sistema aunque Windows esté en oscuro.
+- [x] **Verificado:** `dotnet build -c Release` sin errores y `dotnet test` → **93/93**. La lectura del
+  registro se comprobó contra este equipo (`AppsUseLightTheme = 0`, Windows en oscuro).
+- [x] `Tema` no tiene tests unitarios porque escribe en `Application.Current.Resources`, que fuera de la
+  app WPF es null. Es la misma razón por la que no los tenía antes.
 
-### E2. Modo de tema "Seguir al sistema"
+### E3. Copia de seguridad en `.zip` con manifiesto — ✅ HECHO (2026-10-16)
 
-- [ ] `Services/Tema.cs`: `ModoActual` pasa a aceptar `"Sistema"` además de `"Claro"` / `"Oscuro"`, leyendo
-  `AppsUseLightTheme` de `HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize`.
-- [ ] `SettingsView`: tercer botón "🖥 Sistema" junto a Claro y Oscuro.
-- [ ] **Aceptación:** con "Sistema" elegido, cambiar el tema de Windows cambia la app (al menos al
-  reiniciarla; en vivo si se engancha el evento de preferencias).
+- [x] `BackupService.ExportarZip(destino)`: arma el **mismo formato que Android** —
+  `manifiesto.json` (`{app, esquema, fecha}`) + `base/misfinanzas.db` dentro de un `.zip`. La base se saca
+  con la **Backup API**, no copiando el archivo vivo, así que la copia es consistente aunque la app esté
+  escribiendo. Nombre sugerido `mis-finanzas-YYYY-MM-DD.zip`, igual que en el teléfono.
+- [x] `BackupService.RestaurarDesdeArchivo(path)`: acepta `.zip` **y** `.db` suelto, así nadie pierde el
+  respaldo que ya tenía. Del `.zip` toma cualquier entrada `.db`, de modo que también puede leer una copia
+  hecha por la otra app.
+- [x] **Rechaza una copia de un esquema más nuevo** que el de la build, con el mismo mensaje que Android:
+  abrirla sería perder datos, que es justo lo que esta función viene a evitar.
+- [x] `BaseDatos.SchemaVersion` pasó a ser **pública** (equivale a `VERSION_ESQUEMA` de Android): la
+  escribe el manifiesto y la compara la restauración.
+- [x] **No se tocó la copia automática a la carpeta externa (Google Drive / OneDrive)**: sigue usando el
+  `.db` suelto de `Crear()`, igual que antes. El `.db` queda como formato **interno** (copia previa a
+  migrar, lista de copias de esta PC, copia automática) y el `.zip` como formato **portable**.
+- [x] `SettingsView` → DATOS: **Guardar una copia (.zip)** con `SaveFileDialog` y **Restaurar desde un
+  archivo** con `OpenFileDialog` que acepta los dos formatos. La lista de copias automáticas de la PC
+  quedó aparte, con su propio botón **Crear ahora**.
+- [x] **Tests nuevos** (4): rechaza esquema más nuevo, rechaza un `.zip` sin base adentro, rechaza un
+  archivo inexistente, y el nombre sugerido lleva la fecha. No se prueba `ExportarZip` entero porque
+  escribiría sobre la base real de `%APPDATA%`; lo que se verifica es lo que la restauración exige, que es
+  la parte que decide si el usuario recupera o pierde sus datos.
+- [x] **Verificado:** `dotnet build -c Release` sin errores y `dotnet test` → **97/97**.
 
-### E3. Copia de seguridad en `.zip` con manifiesto
-
-- [ ] Objetivo: que una copia sea legible por las dos apps y que la restauración sepa de qué esquema viene.
-- [ ] `Services/BackupService.cs`: nuevo formato
-  `manifiesto.json` (`{ "app": "mis_finanzas_desktop", "esquema": <user_version>, "fecha": <epochMillis> }`)
-  + `base/misfinanzas.db` dentro de un `.zip`. Nombre sugerido `mis-finanzas-YYYY-MM-DD.zip`.
-- [ ] La base se mete con la **Backup API** (ya se usa), no copiando el archivo vivo.
-- [ ] Restauración: **rechazar** una copia con `esquema` mayor que el `SchemaVersion` de la build (mensaje:
-  "Actualizá Mis Finanzas y probá de nuevo"), y conservar el guardado de seguridad previo que ya existe.
-- [ ] **Compatibilidad:** seguir aceptando los `.db` sueltos de las copias viejas al restaurar.
-- [ ] **Aceptación:** crear y restaurar un `.zip`; restaurar un `.db` viejo; una copia con `esquema` mayor
-  se rechaza sin tocar los datos.
+> Ojo con la expectativa: el **formato** ya es común, pero los **contenidos** todavía no son
+> intercambiables entre las dos apps — el esquema del escritorio va por 9 y el de Android por 15, y las
+> fechas se guardan distinto. Eso se cierra en el bloque F (sobre todo F4).
 
 ### E4. Decidir avatar: catálogo vs foto
 
