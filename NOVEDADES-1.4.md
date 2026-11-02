@@ -1,10 +1,10 @@
-# Novedades de la versión 1.4 (versionCode 9)
+# Novedades de la versión 1.4 (versionCode 10)
 
 Qué recibe quien hoy tiene la **1.2** (`versionCode 6`), que es la que está publicada en la prueba
 cerrada. Documento de trabajo para preparar la subida al Play Console.
 
-> Estado al 05/10/2026: el código está listo y compila. **Todavía no se subió nada.** Los arreglos
-> de interfaz del 03 y el 05/10 están en el árbol de trabajo sin commitear (ver sección 6).
+> Estado al 06/10/2026: todo commiteado en `b0f9279`, árbol limpio, `versionCode 10`.
+> **Todavía no se subió nada al Play Console.**
 
 ---
 
@@ -78,7 +78,7 @@ Estas ya estaban en el repositorio pero nunca se publicaron:
 
 ## 3. Qué entra en el build
 
-- `versionName 1.4`, `versionCode 9`.
+- `versionName 1.4`, `versionCode 10`.
 - Baseline Profile en `app/src/release/generated/baselineProfiles/`. Entra solo al armar release;
   verificado dentro del APK como `assets/dexopt/baseline.prof`.
 - `androidx.profileinstaller:profileinstaller:1.4.1`.
@@ -86,10 +86,9 @@ Estas ya estaban en el repositorio pero nunca se publicaron:
 
 ### Antes de subir
 
-1. **Confirmar el `versionCode` en el Play Console.** Si alguna vez se subió un 7 u 8, Play rechaza
-   el 9 o lo toma como repetido. Mirar qué número figura como el más alto y subir desde ahí.
-2. Commitear lo que falta (sección 6).
-3. `gradlew :app:bundleRelease` con `keystore.properties` en su lugar.
+1. `gradlew :app:bundleRelease` con `keystore.properties` en su lugar.
+2. Si Play rechaza el `versionCode 10` por repetido, mirar cuál es el más alto que figura en la
+   consola y subir desde ahí. El `10` se eligió dejando lugar por si alguna vez se subió un 7, 8 o 9.
 
 ---
 
@@ -119,25 +118,7 @@ Para el campo de novedades (entra en el límite de 500 caracteres):
 
 ---
 
-## 6. Pendiente antes de compilar
-
-Los arreglos de interfaz del 05/10 están **sin commitear**. Archivos tocados:
-
-```
-app/src/main/java/com/tallerapp/core/ui/components/FilaLista.kt        (nuevo)
-app/src/main/java/com/tallerapp/features/agenda/AgendaScreen.kt
-app/src/main/java/com/tallerapp/features/categorias/CategoriasScreen.kt
-app/src/main/java/com/tallerapp/features/contactos/ContactosScreen.kt
-app/src/main/java/com/tallerapp/features/cuentas/CuentasScreen.kt
-app/src/main/java/com/tallerapp/features/deudas/DeudasScreen.kt
-app/src/main/java/com/tallerapp/features/facturas/FacturasScreen.kt
-app/src/main/java/com/tallerapp/features/finanzas/components/MovimientoRow.kt
-app/src/main/java/com/tallerapp/features/negocios/NegociosScreen.kt
-app/src/main/java/com/tallerapp/features/productos/ProductosScreen.kt
-app/src/main/java/com/tallerapp/features/recurrentes/RecurrentesScreen.kt
-```
-
-### Lo que se probó y lo que no
+## 6. Lo que se probó y lo que no
 
 Probado en el emulador a densidad 560 (el caso del teléfono donde apareció el problema):
 **Quién me debe**, **Movimientos** y **Agenda**. A densidad normal (420) todo queda igual que antes.

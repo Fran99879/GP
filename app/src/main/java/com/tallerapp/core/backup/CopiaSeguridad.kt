@@ -1,6 +1,7 @@
 package com.tallerapp.core.backup
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.util.Log
 import com.tallerapp.data.local.TallerDatabase
@@ -90,6 +91,11 @@ object CopiaSeguridad {
      * Se trabaja primero sobre un archivo temporal y recién cuando todo salió bien se pisa la
      * base: si la copia está rota o incompleta, el usuario se queda con lo que ya tenía.
      *
+     * Tres controles antes de que el usuario pueda perder algo:
+     * 1. El manifiesto no puede declarar un esquema más nuevo que el de la app.
+     * 2. El archivo tiene que pasar `PRAGMA integrity_check` y tener la tabla `negocio`.
+     * 3. Se guarda la base actual aparte; si la restaurada no abre, se vuelve a la anterior.
+     *
      * Devuelve éxito cuando los datos quedaron en su lugar; **la app tiene que reiniciarse**
      * después, porque Room ya tiene abierta la base vieja en memoria.
      */
@@ -131,20 +137,108 @@ object CopiaSeguridad {
             )
         }
 
+        // Antes de tocar nada: que lo que viene adentro del zip sea de verdad una base de esta
+        // app. Un archivo cualquiera renombrado dejaría la app sin abrir y sin datos.
+        if (!esBaseValida(base)) {
+            temporal.deleteRecursively()
+            return Resultado.Error("El archivo está dañado o no es una copia de Mis Finanzas.")
+        }
+
         // Desde acá se pisa lo que hay. La base se cierra para que no queden escrituras a medias.
         TallerDatabase.cerrar()
         val destinoBase = context.getDatabasePath(NOMBRE_BASE)
         destinoBase.parentFile?.mkdirs()
+
+        // Red de seguridad: si la copia resulta ilegible una vez puesta en su lugar, se vuelve a
+        // lo que el usuario tenía. Restaurar no puede dejarlo sin nada.
+        val respaldo = respaldarActual(context, destinoBase, temporal)
+
         base.copyTo(destinoBase, overwrite = true)
         // El WAL y el índice compartido son de la base vieja: si quedan, la corrompen.
         File(destinoBase.path + "-wal").delete()
         File(destinoBase.path + "-shm").delete()
+
+        if (!esBaseValida(destinoBase)) {
+            volverAtras(respaldo, destinoBase)
+            temporal.deleteRecursively()
+            return Resultado.Error("No se pudo restaurar. Tus datos quedaron como estaban.")
+        }
 
             temporal.deleteRecursively()
             Resultado.Exito("Datos restaurados. La app se va a reiniciar.")
         } catch (e: Exception) {
             Log.w(TAG, "Fallo al restaurar", e)
             Resultado.Error("No se pudo restaurar: ${e.message}")
+        }
+    }
+
+    /**
+     * ¿La base que está usando la app ahora mismo está sana?
+     *
+     * Room no lo comprueba: si el archivo se corrompió (corte de luz a mitad de una escritura,
+     * almacenamiento con fallas, una copia restaurada a mano), la app se entera recién cuando
+     * revienta al leer. Esto lo pregunta de entrada para poder avisar y ofrecer restaurar.
+     *
+     * Corre fuera del hilo principal: es un recorrido completo del archivo.
+     */
+    fun baseEstaSana(context: Context): Boolean {
+        val archivo = context.getDatabasePath(NOMBRE_BASE)
+        // Instalación nueva: todavía no hay archivo y eso no es un problema.
+        return !archivo.exists() || esBaseValida(archivo)
+    }
+
+    /**
+     * ¿Es una base SQLite sana y de esta app?
+     *
+     * Dos preguntas en una: `PRAGMA integrity_check` dice si el archivo es una base SQLite entera,
+     * y buscar la tabla `negocio` dice si es **nuestra** base y no la de otro programa. Se abre de
+     * solo lectura, así que esto no modifica el archivo ni crea uno nuevo si no existe.
+     */
+    private fun esBaseValida(archivo: File): Boolean = try {
+        SQLiteDatabase.openDatabase(archivo.path, null, SQLiteDatabase.OPEN_READONLY).use { db ->
+            val integra = db.rawQuery("PRAGMA integrity_check", null).use { c ->
+                c.moveToFirst() && c.getString(0).equals("ok", ignoreCase = true)
+            }
+            val esNuestra = db.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='negocio'",
+                null,
+            ).use { it.moveToFirst() }
+
+            integra && esNuestra
+        }
+    } catch (e: Exception) {
+        // Un archivo que no es SQLite tira acá mismo: eso ya es respuesta suficiente.
+        Log.w(TAG, "La copia no se pudo abrir como base", e)
+        false
+    }
+
+    /** Guarda la base actual (y sus archivos de WAL) en [temporal]. Devuelve null si no había. */
+    private fun respaldarActual(context: Context, actual: File, temporal: File): File? {
+        if (!actual.exists()) return null
+        return try {
+            val copia = File(temporal, "previa.db")
+            actual.copyTo(copia, overwrite = true)
+            copia
+        } catch (e: Exception) {
+            Log.w(TAG, "No se pudo respaldar la base actual", e)
+            null
+        }
+    }
+
+    /** Vuelve a la base que había antes de restaurar. */
+    private fun volverAtras(respaldo: File?, destino: File) {
+        try {
+            if (respaldo != null && respaldo.exists()) {
+                respaldo.copyTo(destino, overwrite = true)
+            } else {
+                // No había base previa: mejor sin archivo que con uno ilegible, así la app
+                // arranca de cero en vez de reventar al abrir.
+                destino.delete()
+            }
+            File(destino.path + "-wal").delete()
+            File(destino.path + "-shm").delete()
+        } catch (e: Exception) {
+            Log.w(TAG, "Fallo al volver atrás", e)
         }
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tallerapp.core.billing.EstadoPlan
 import com.tallerapp.core.ui.components.AvatarPerfil
+import com.tallerapp.core.ui.components.AvisoBaseDanada
 import com.tallerapp.core.ui.components.BarraPlan
 import com.tallerapp.core.ui.components.BotonGhost
 import com.tallerapp.core.ui.components.FilaMeta
@@ -96,6 +97,10 @@ fun DashboardScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            // Si la base está dañada va arriba de todo: cualquier otra cosa en pantalla puede
+            // estar incompleta y el usuario tiene que saberlo antes de seguir cargando datos.
+            AvisoBaseDanada(onVerAjustes = onVerAjustes)
+
             // Días que le quedan al plan: lo primero que se ve al abrir la app.
             BarraPlan(onVerPlanes = onVerPlanes)
 

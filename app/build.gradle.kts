@@ -104,7 +104,8 @@ dependencies {
     // de CAMARA y el módulo se descarga a demanda, así que no suma peso al APK.
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 
-    // SDK de licencias (módulo referenciado en settings.gradle.kts).
+    // El acceso a Pro lo decide Google Play Billing, acá arriba. El SDK de licencias Ed25519 que
+    // usa la app de escritorio no está en Android: se sacó junto con app/licensing.properties.
 
     // Persistencia local (Frozen Spec 6 / Arquitectura AD-4)
     implementation("androidx.room:room-runtime:2.7.2")

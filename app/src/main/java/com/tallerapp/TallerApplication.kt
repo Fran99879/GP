@@ -2,6 +2,7 @@ package com.tallerapp
 
 import android.app.Application
 import com.tallerapp.core.NegocioActual
+import com.tallerapp.core.backup.EstadoBase
 import com.tallerapp.core.di.AppContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,9 @@ class TallerApplication : Application() {
         NegocioActual.cargar(this)
         container = AppContainer(this)
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            // Primero el control de integridad: si la base está dañada, el resto del arranque va a
+            // fallar igual, y así la app puede avisar en vez de cerrarse sin explicación.
+            runCatching { EstadoBase.revisar(this@TallerApplication) }
             // Sincroniza el plan con Google Play (también restaura Pro tras reinstalar).
             runCatching { container.facturacion.conectar() }
             // Asegura el negocio inicial ("Personal") en instalaciones nuevas.
