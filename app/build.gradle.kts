@@ -16,8 +16,8 @@ android {
         applicationId = "com.tallerapp"
         minSdk = 26
         targetSdk = 36
-        versionCode = 11
-        versionName = "1.4"
+        versionCode = 12
+        versionName = "1.4.1"
 
     }
 
@@ -83,7 +83,13 @@ dependencies {
     implementation(composeBom)
 
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.activity:activity-compose:1.9.0")
+    // 1.9.0 usaba Window.setStatusBarColor / setNavigationBarColor por dentro de enableEdgeToEdge(),
+    // que Android 15 marcó obsoletas: Play lo reportaba como "APIs obsoletas para la vista de
+    // extremo a extremo" aunque la app nunca las llama.
+    implementation("androidx.activity:activity-compose:1.13.0")
+    // No se usa directo: lo trae play-services-basement (billing, escáner, actualizaciones) en la
+    // 1.1.0, que su autor marcó obsoleta. Declararlo acá fuerza la versión nueva para todos.
+    implementation("androidx.fragment:fragment:1.9.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
