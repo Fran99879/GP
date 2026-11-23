@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- La pantalla interna del escáner de ML Kit (GmsBarcodeScanningDelegateActivity) viene
+         fijada en vertical, y de eso Play deduce que la app exige pantalla vertical: la escondía de
+         Chromebooks y de los dispositivos que solo usan horizontal. La app funciona en las dos
+         orientaciones; el escáner, donde no haya vertical, se muestra con bandas. -->
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
+        android:required="false" />
+
     <application
         android:name=".TallerApplication"
         android:allowBackup="false"
